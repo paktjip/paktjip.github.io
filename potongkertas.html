@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penghitung Potongan Kertas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            position: relative;
+        }
+        .container {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            max-height: 90vh;
+            overflow-y: auto;
+            width: 800px; /* Menetapkan lebar kontainer */
+        }
+        .toggle-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .toggle-button:hover {
+            background-color: #0069d9;
+        }
+        div {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #555;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0069d9;
+        }
+        #hasil {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .parent-box {
+            position: relative;
+            margin-top: 20px;
+            background-color: rgba(255, 0, 0, 0.2); /* Warna merah dengan transparansi */
+        }
+        .child-table {
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-collapse: collapse;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 255, 0, 0.2); /* Warna hijau dengan transparansi */
+        }
+        table, th, td {
+            border: 1px solid #555;
+        }
+        th, td {
+            padding: 0;
+            text-align: center;
+        }
+        .cell {
+            background-color: rgba(0, 255, 0, 0.5); /* Warna hijau dengan transparansi */
+            border: 1px solid #555;
+        }
+        .light-mode {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .light-mode .container {
+            background-color: #f0f0f0;
+            color: #000000;
+        }
+        .light-mode input {
+            background-color: #ffffff;
+            color: #000000;
+            border: 1px solid #ccc;
+        }
+        .light-mode button {
+            background-color: #0069d9;
+        }
+        .light-mode button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle-button" onclick="toggleMode()">&#9788; Light Mode</button>
+    <div class="container">
+        <h1>Penghitung Potongan Kertas</h1>
+        <div>
+            <label for="panjangKertas">Panjang Kertas (cm):</label>
+            <input type="text" id="panjangKertas" required>
+        </div>
+        <div>
+            <label for="lebarKertas">Lebar Kertas (cm):</label>
+            <input type="text" id="lebarKertas" required>
+        </div>
+        <div>
+            <label for="panjangPotongan">Panjang Potongan (cm):</label>
+            <input type="text" id="panjangPotongan" required>
+        </div>
+        <div>
+            <label for="lebarPotongan">Lebar Potongan (cm):</label>
+            <input type="text" id="lebarPotongan" required>
+        </div>
+        <button onclick="hitungPotongan()">Hitung Potongan</button>
+        <div id="hasil"></div>
+        <div id="tabelHasil"></div>
+        <button onclick="resetForm()">Reset</button>
+    </div>
+    <script>
+        function hitungPotongan() {
+            const panjangKertas = parseFloat(document.getElementById('panjangKertas').value);
+            const lebarKertas = parseFloat(document.getElementById('lebarKertas').value);
+            const panjangPotongan = parseFloat(document.getElementById('panjangPotongan').value);
+            const lebarPotongan = parseFloat(document.getElementById('lebarPotongan').value);
+
+            if (panjangKertas && lebarKertas && panjangPotongan && lebarPotongan) {
+                const mode1 = hitungPotonganMode(panjangKertas, lebarKertas, panjangPotongan, lebarPotongan);
+                const mode2 = hitungPotonganMode(panjangKertas, lebarKertas, lebarPotongan, panjangPotongan);
+
+                const maxMode = mode1.total > mode2.total ? mode1 : mode2;
+
+                const areaDigunakanPanjang = maxMode.rows * (maxMode === mode1 ? panjangPotongan : lebarPotongan);
+                const areaDigunakanLebar = maxMode.columns * (maxMode === mode1 ? lebarPotongan : panjangPotongan);
+
+                document.getElementById('hasil').innerText = `Jumlah potongan maksimal: ${maxMode.total} (Menggunakan area ${areaDigunakanPanjang} cm x ${areaDigunakanLebar} cm)`;
+
+                let scaleFactor = 5; // Faktor skala untuk memperbesar ukuran tabel
+
+                // Membuat kotak parent dengan rasio ukuran kertas asli
+                let parentBox = `<div class="parent-box" style="width: ${lebarKertas * scaleFactor}px; height: ${panjangKertas * scaleFactor}px;">`;
+
+                // Membuat child table untuk potongan kertas
+                let childTable = '<table class="child-table">';
+                for (let i = 0; i < maxMode.rows; i++) {
+                    childTable += '<tr>';
+                    for (let j = 0; j < maxMode.columns; j++) {
+                        childTable += `<td class="cell" style="width: ${maxMode.cellWidth * scaleFactor}px; height: ${maxMode.cellHeight * scaleFactor}px;"></td>`;
+                    }
+                    childTable += '</tr>';
+                }
+                childTable += '</table>';
+                parentBox += childTable;
+                parentBox += '</div>';
+                
+                document.getElementById('tabelHasil').innerHTML = parentBox;
+            } else {
+                document.getElementById('hasil').innerText = 'Harap isi semua bidang input.';
+                document.getElementById('tabelHasil').innerHTML = '';
+            }
+        }
+
+        function hitungPotonganMode(panjangKertas, lebarKertas, panjangPotongan, lebarPotongan) {
+            const jumlahPotonganPanjang = Math.floor(panjangKertas / panjangPotongan);
+            const jumlahPotonganLebar = Math.floor(lebarKertas / lebarPotongan);
+            const total = jumlahPotonganPanjang * jumlahPotonganLebar;
+
+            return {
+                total: total,
+                rows: jumlahPotonganPanjang,
+                columns: jumlahPotonganLebar,
+                cellWidth: lebarPotongan,
+                cellHeight: panjangPotongan
+            };
+        }
+
+        function toggleMode() {
+            document.body.classList.toggle('light-mode');
+            const toggleButton = document.querySelector('.toggle-button');
+            if (document.body.classList.contains('light-mode')) {
+                toggleButton.innerHTML = '&#9790; Dark Mode'; // Ikon bulan untuk Dark Mode
+            } else {
+                toggleButton.innerHTML = '&#9788; Light Mode'; // Ikon matahari untuk Light Mode
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('panjangKertas').value = '';
+            document.getElementById('lebarKertas').value = '';
+            document.getElementById('panjangPotongan').value = '';
+            document.getElementById('lebarPotongan').value = '';
+            document.getElementById('hasil').innerText = '';
+            document.getElementById('tabelHasil').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

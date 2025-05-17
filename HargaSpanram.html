@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kalkulator Harga Spanram</title>
+  <style>
+     :root {
+      --bg-light: #F3F3E0;
+      --bg-dark: #030E13;
+      --text-light: #183B4E;
+      --text-dark: #F3F3E0;
+      --accent: #DDA853;
+      --primary: #27548A;
+    }
+
+    body {
+      font-family: monospace;
+      margin: 0;
+      padding: 20px;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .dark-mode {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .toggle-switch {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .switch-container {
+      position: relative;
+      width: 60px;
+      height: 30px;
+    }
+
+    .switch-input {
+      display: none;
+    }
+
+    .switch-label {
+      background-color: #ccc;
+      border-radius: 30px;
+      cursor: pointer;
+      display: block;
+      height: 100%;
+      position: relative;
+      transition: background-color 0.3s;
+      width: 100%;
+    }
+
+    .switch-label::before {
+      content: "";
+      background-color: white;
+      border-radius: 50%;
+      bottom: 3px;
+      left: 3px;
+      position: absolute;
+      height: 24px;
+      width: 24px;
+      transition: transform 0.3s;
+      z-index: 2;
+    }
+
+    .switch-label::after {
+      content: "🌞";
+      position: absolute;
+      left: 30px;
+      top: 5px;
+      z-index: 1;
+      font-size: 14px;
+      transition: opacity 0.3s;
+    }
+
+    .switch-input:checked + .switch-label {
+      background-color: var(--primary);
+    }
+
+    .switch-input:checked + .switch-label::before {
+      transform: translateX(30px);
+    }
+
+    .switch-input:checked + .switch-label::after {
+      content: "🌜";
+      left: 12px;
+    }
+
+    fieldset {
+      margin-bottom: 15px;
+      padding: 15px;
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    label {
+      flex: 1;
+    }
+
+    input[type="text"], input[type="number"] {
+      flex: 1;
+      padding: 5px;
+      font-family: monospace;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: var(--accent);
+      color: black;
+    }
+
+    #result {
+      display: none;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+
+    .small-text {
+      font-size: 0.9em;
+      font-style: italic;
+      color: gray;
+    }
+	.notext {
+      font-size: 0em;
+      font-style: italic;
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="toggle-switch">
+      <div class="switch-container">
+        <input type="checkbox" id="darkModeToggle" class="switch-input" onchange="toggleDarkMode()">
+        <label for="darkModeToggle" class="switch-label"></label>
+      </div>
+    </div>
+
+    <h1>Kalkulator Harga Spanram</h1>
+
+    <!-- Form harga -->
+    <fieldset>
+      <legend>Pengaturan Harga Dasar</legend>
+      <div class="row">
+        <label for="baseBannerReseller">Harga Banner Reseller:</label>
+        <input type="text" id="baseBannerReseller" value="Rp 16.000" oninput="formatInput(this)">
+      </div>
+      <div class="row">
+        <label for="baseBannerUmum">Harga Banner Umum:</label>
+        <input type="text" id="baseBannerUmum" value="Rp 25.000" oninput="formatInput(this)">
+      </div>
+      <div class="row">
+        <label for="baseSpanramReseller">Harga Spanram Reseller:</label>
+        <input type="text" id="baseSpanramReseller" value="Rp 40" oninput="formatInput(this)">
+      </div>
+      <div class="row">
+        <label for="baseSpanramUmum">Harga Spanram Umum:</label>
+        <input type="text" id="baseSpanramUmum" value="Rp 50" oninput="formatInput(this)">
+      </div>
+      <div class="row">
+        <label for="installationReseller">Jasa Pemasangan Reseller:</label>
+        <input type="text" id="installationReseller" value="Rp 5.000" oninput="formatInput(this)">
+      </div>
+      <div class="row">
+        <label for="installationUmum">Jasa Pemasangan Umum:</label>
+        <input type="text" id="installationUmum" value="Rp 10.000" oninput="formatInput(this)">
+      </div>
+    </fieldset>
+
+    <!-- Form ukuran banner -->
+    <fieldset>
+      <legend>Data Banner</legend>
+      <label for="bannerLength">Panjang (cm):</label>
+      <input type="number" id="bannerLength" required>
+      <label for="bannerWidth">Lebar (cm):</label>
+      <input type="number" id="bannerWidth" required>
+      <button onclick="calculatePrice()">Hitung Harga!</button>
+    </fieldset>
+
+    <!-- Hasil -->
+    <div id="result">
+      <h3>Perhitungan Harga:</h3>
+      <p class="bold">Harga Spanram (Umum)</p>
+      <p id="spanramUmum">Rp 0</p>
+      <p class="notext" id="detailSpanramUmum"></p>
+
+      <p class="bold">Harga Banner + Spanram (Umum)</p>
+      <p id="bannerSpanramUmum">Rp 0</p>
+      <p class="small-text" id="detailBannerSpanramUmum"></p>
+
+      <p class="bold">Harga Spanram (Reseller)</p>
+      <p id="spanramReseller">Rp 0</p>
+      <p class="notext" id="detailSpanramReseller"></p>
+
+      <p class="bold">Harga Banner + Spanram (Reseller)</p>
+      <p id="bannerSpanramReseller">Rp 0</p>
+      <p class="small-text" id="detailBannerSpanramReseller"></p>
+    </div>
+	<br>
+	        <footer>
+            Copyright &copy; 2025 PAKTJIP Digital Printing<br>
+            Developed by Lukas Ardianto
+        </footer>
+  </div>
+
+  <script>
+    function formatRupiah(number) {
+      return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(number);
+    }
+
+    function formatInput(inputElement) {
+      let rawValue = inputElement.value.replace(/\D/g, "");
+      let formattedValue = formatRupiah(Number(rawValue));
+      inputElement.value = formattedValue;
+    }
+
+    function parseRupiah(inputElement) {
+      return parseFloat(inputElement.value.replace(/\D/g, "")) || 0;
+    }
+
+    function calculatePrice() {
+      let bannerLength = parseFloat(document.getElementById("bannerLength").value);
+      let bannerWidth = parseFloat(document.getElementById("bannerWidth").value);
+
+      if (isNaN(bannerLength) || isNaN(bannerWidth)) {
+        alert("Masukkan panjang dan lebar yang valid!");
+        return;
+      }
+
+      let baseBannerReseller = parseRupiah(document.getElementById("baseBannerReseller"));
+      let baseBannerUmum = parseRupiah(document.getElementById("baseBannerUmum"));
+      let baseSpanramReseller = parseRupiah(document.getElementById("baseSpanramReseller"));
+      let baseSpanramUmum = parseRupiah(document.getElementById("baseSpanramUmum"));
+      let installationReseller = parseRupiah(document.getElementById("installationReseller"));
+      let installationUmum = parseRupiah(document.getElementById("installationUmum"));
+
+      let totalMaterial = bannerLength >= 300 ? bannerWidth * 5 :
+                          bannerLength >= 200 ? bannerWidth * 4 :
+                          bannerLength >= 100 ? bannerWidth * 3 : bannerWidth * 2;
+
+      let spanramReseller = (bannerLength * 2 + totalMaterial) * baseSpanramReseller;
+      let spanramUmum = (bannerLength * 2 + totalMaterial) * baseSpanramUmum;
+
+      let bannerReseller = ((bannerLength * bannerWidth) / 10000) * baseBannerReseller;
+      let bannerUmum = ((bannerLength * bannerWidth) / 10000) * baseBannerUmum;
+      let bannerSpanramReseller = bannerReseller + spanramReseller + installationReseller;
+      let bannerSpanramUmum = bannerUmum + spanramUmum + installationUmum;
+
+      document.getElementById("spanramReseller").textContent = formatRupiah(spanramReseller);
+      document.getElementById("spanramUmum").textContent = formatRupiah(spanramUmum);
+      document.getElementById("bannerSpanramReseller").textContent = formatRupiah(bannerSpanramReseller);
+      document.getElementById("bannerSpanramUmum").textContent = formatRupiah(bannerSpanramUmum);
+
+      document.getElementById("detailSpanramReseller").textContent = `Spanram ${formatRupiah(spanramReseller)}`;
+      document.getElementById("detailBannerSpanramReseller").textContent = `Spanram ${formatRupiah(spanramReseller)} + Banner ${formatRupiah(bannerReseller)} + Jasa Pemasangan ${formatRupiah(installationReseller)}`;
+
+      document.getElementById("detailSpanramUmum").textContent = `Spanram ${formatRupiah(spanramUmum)}`;
+      document.getElementById("detailBannerSpanramUmum").textContent = `Spanram ${formatRupiah(spanramUmum)} + Banner ${formatRupiah(bannerUmum)} + Jasa Pemasangan ${formatRupiah(installationUmum)}`;
+
+      document.getElementById("result").style.display = "block";
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+  </script>
+</body>
+</html>

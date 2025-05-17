@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAKTJIP Digital Printing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #edebd9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        h1 {
+            font-size: 24px;
+            color: #1c1f4c;
+        }
+        .link {
+            display: flex;
+            align-items: center;
+            background: #00848c;
+            color: #fff;
+            padding: 15px;
+            margin: 10px 0;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            justify-content: flex-start;
+            cursor: pointer;
+        }
+        .link:hover {
+            background: #037272;
+        }
+        .link .emoji {
+            flex-shrink: 0;
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        .link .text {
+            flex-grow: 1;
+            text-align: center;
+        }
+        p {
+            color: #fec20f;
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+        }
+        .password-container {
+            max-width: 300px;
+            margin: 100px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        button {
+            background: #00848c;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 10px auto 0;
+        }
+        button:hover {
+            background: #037272;
+        }
+    </style>
+    <script>
+        function encodePassword(password) {
+            return btoa(password);
+        }
+
+        function checkPassword() {
+            var password = document.getElementById("password").value;
+            var encodedInput = encodePassword(password);
+            const storedEncoded = "UEFLVEpJUDIwMjU="; 
+            
+            if (encodedInput === storedEncoded) {
+                document.querySelector(".password-container").style.display = "none";
+                document.querySelector(".container").style.display = "block";
+            } else {
+                alert("Password salah!");
+            }
+        }
+        
+        function showPopup() {
+            let confirmation = confirm("Login dengan akun Gmail stempelpaktjip@gmail.com untuk mengakses halaman ini.");
+            if (confirmation) {
+                window.location.href = "https://docs.google.com/spreadsheets/d/16Pc_rF0rKB0uXEwR_k9KOlbAk83GrJgDlYpFq9eS8vM/edit?usp=sharing";
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="password-container">
+        <h2>Masukkan Password</h2>
+        <input type="password" id="password" placeholder="Masukkan password">
+        <button onclick="checkPassword()">Submit</button>
+    </div>
+    
+    <div class="container">
+        <h1>PAKTJIP Digital Printing</h1>
+        
+        <a class="link" href="potongkertas.html">
+            <span class="emoji">📏</span>
+            <span class="text">Hitung Potongan Kertas</span>
+        </a>
+        
+        <div class="link" onclick="showPopup()">
+            <span class="emoji">📖</span>
+            <span class="text">Hitung Harga Buku</span>
+        </div>
+        
+        <a class="link" href="Hitung_Ganci_Akrilik.html">
+            <span class="emoji">🔑</span>
+            <span class="text">Hitung Harga Gantungan Kunci Akrilik</span>
+        </a>
+        
+        <p>More to coming soon!</p>
+        
+        <footer>
+            Copyright &copy; 2025 PAKTJIP Digital Printing<br>
+            Developed by Lukas Ardianto
+        </footer>
+    </div>
+</body>
+</html>

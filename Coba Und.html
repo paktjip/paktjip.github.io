@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Undangan Digital</title>
+</head>
+<body>
+  <h1>Selamat Datang, <span id="nama-tamu"></span>!</h1>
+
+  <script>
+    // Ambil parameter dari URL
+    const params = new URLSearchParams(window.location.search);
+    const nama = params.get("nama");
+
+    // Tampilkan ke halaman
+    if (nama) {
+      document.getElementById("nama-tamu").textContent = nama;
+    } else {
+      document.getElementById("nama-tamu").textContent = "Tamu Undangan";
+    }
+  </script>
+</body>
+</html>

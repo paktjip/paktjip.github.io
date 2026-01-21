@@ -17,10 +17,50 @@
     section {
       padding: 50px 20px;
       animation: fadeIn 2s ease;
+      display: none; /* disembunyikan dulu */
     }
 
     h1, h2, h3 {
       margin: 10px 0;
+    }
+
+    /* Popup overlay */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .popup {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      animation: fadeIn 1s ease;
+      max-width: 400px;
+    }
+
+    .popup h2 {
+      margin-bottom: 20px;
+    }
+
+    .popup button {
+      padding: 10px 20px;
+      background: #b23b3b;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    .popup button:hover {
+      background: #922d2d;
     }
 
     /* Animasi */
@@ -58,27 +98,33 @@
 </head>
 <body>
 
-  <!-- 1. Pembuka -->
-  <section>
+  <!-- Popup -->
+  <div class="overlay" id="overlay">
+    <div class="popup">
+      <h2>Halo, <span id="popup-nama"></span>!</h2>
+      <p>Anda diundang ke acara pernikahan kami.</p>
+      <button onclick="bukaUndangan()">Buka Undangan</button>
+    </div>
+  </div>
+
+  <!-- Isi Undangan -->
+  <section id="pembuka">
     <h1 class="slide">Selamat Datang, <span id="nama-tamu"></span>!</h1>
     <p>Dengan penuh sukacita kami mengundang Anda untuk hadir di hari bahagia kami.</p>
   </section>
 
-  <!-- 2. Nama Mempelai -->
-  <section>
-    <h2 class="slide">Lukas & Kezia</h2>
+  <section id="mempelai">
+    <h2 class="slide">Lukas & Maria</h2>
     <p>Dengan kasih dan doa, kami akan melangsungkan resepsi pernikahan.</p>
   </section>
 
-  <!-- 3. Countdown -->
-  <section>
+  <section id="resepsi">
     <h3 class="slide">Resepsi Pernikahan</h3>
     <p>21 Februari 2026, Temanggung</p>
     <div id="countdown" class="countdown"></div>
   </section>
 
-  <!-- 4. Rekening -->
-  <section>
+  <section id="rekening">
     <h3 class="slide">Kado & Sumbangan</h3>
     <div class="rekening">
       <p><strong>Bank BCA</strong></p>
@@ -90,8 +136,17 @@
   <script>
     // Ambil nama dari URL
     const params = new URLSearchParams(window.location.search);
-    const nama = params.get("nama");
-    document.getElementById("nama-tamu").textContent = nama ? nama : "Tamu Undangan";
+    const nama = params.get("nama") || "Tamu Undangan";
+
+    // Tampilkan nama di popup dan isi undangan
+    document.getElementById("popup-nama").textContent = nama;
+    document.getElementById("nama-tamu").textContent = nama;
+
+    // Fungsi buka undangan
+    function bukaUndangan() {
+      document.getElementById("overlay").style.display = "none";
+      document.querySelectorAll("section").forEach(sec => sec.style.display = "block");
+    }
 
     // Countdown
     const targetDate = new Date("Feb 21, 2026 10:00:00").getTime();

@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>Undangan Digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Playfair Display', serif;
       margin: 0;
       padding: 0;
-      background: #fdf6f0;
-      color: #333;
+      background: #e8f0e6 url('watercolor-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #2f3e2f;
       text-align: center;
       overflow-x: hidden;
     }
@@ -17,11 +19,18 @@
     section {
       padding: 50px 20px;
       animation: fadeIn 2s ease;
-      display: none; /* disembunyikan dulu */
+      display: none;
     }
 
     h1, h2, h3 {
       margin: 10px 0;
+    }
+
+    /* Nama mempelai dengan font script */
+    .nama-mempelai {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.5em;
+      color: #3b5d3b;
     }
 
     /* Popup overlay */
@@ -51,7 +60,7 @@
 
     .popup button {
       padding: 10px 20px;
-      background: #b23b3b;
+      background: #3b5d3b;
       color: #fff;
       border: none;
       border-radius: 5px;
@@ -60,7 +69,7 @@
     }
 
     .popup button:hover {
-      background: #922d2d;
+      background: #2f4a2f;
     }
 
     /* Animasi */
@@ -82,7 +91,7 @@
       font-size: 1.5em;
       font-weight: bold;
       margin-top: 20px;
-      color: #b23b3b;
+      color: #3b5d3b;
     }
 
     .rekening {
@@ -93,6 +102,38 @@
       width: 300px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       animation: fadeIn 2s ease;
+    }
+
+    /* Foto mempelai */
+    .foto-mempelai {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 30px;
+    }
+
+    .foto-mempelai img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 5px solid #3b5d3b;
+    }
+
+    /* Galeri foto */
+    .galeri {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .galeri img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 3px solid #3b5d3b;
     }
   </style>
 </head>
@@ -114,8 +155,16 @@
   </section>
 
   <section id="mempelai">
-    <h2 class="slide">Lukas & Kezia</h2>
-    <p>Dengan kasih dan doa, kami akan melangsungkan resepsi pernikahan.</p>
+    <h2 class="nama-mempelai">Lukas Ardianto, S.I.Kom</h2>
+    <p>Putra dari Bapak Yehezkiel Yulianto dan Ibu Elizabeth Suwarti ✝</p>
+    <h2 class="nama-mempelai">Kezia Yunita Santoso, S.Tr.I.Kom</h2>
+    <p>Putri dari Bapak Toni Aris Santoso dan Ibu Anita Setiawati</p>
+
+    <!-- Foto mempelai -->
+    <div class="foto-mempelai">
+      <img src="foto-lukas.jpg" alt="Foto Lukas">
+      <img src="foto-kezia.jpg" alt="Foto Kezia">
+    </div>
   </section>
 
   <section id="resepsi">
@@ -124,12 +173,24 @@
     <div id="countdown" class="countdown"></div>
   </section>
 
+  <section id="galeri">
+    <h3 class="slide">Galeri Foto</h3>
+    <div class="galeri">
+      <img src="galeri1.jpg" alt="Foto 1">
+      <img src="galeri2.jpg" alt="Foto 2">
+      <img src="galeri3.jpg" alt="Foto 3">
+      <img src="galeri4.jpg" alt="Foto 4">
+      <img src="galeri5.jpg" alt="Foto 5">
+      <img src="galeri6.jpg" alt="Foto 6">
+    </div>
+  </section>
+
   <section id="rekening">
     <h3 class="slide">Kado & Sumbangan</h3>
     <div class="rekening">
       <p><strong>Bank BCA</strong></p>
       <p>No. Rekening: 1234567890</p>
-      <p>a.n. Lukas</p>
+      <p>a.n. Lukas Ardianto</p>
     </div>
   </section>
 

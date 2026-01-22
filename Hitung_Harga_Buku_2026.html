@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Harga Buku PoD - PAKTJIP DIGIPRINT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a8c5a5 0%, #7fa87c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6b8e6b 0%, #4a6f4a 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            font-size: 1.3em;
+            color: #d4e8d4;
+            font-weight: 400;
+        }
+
+        .header p {
+            color: #b8d4b8;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #4a6f4a;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8f4e8;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        select, input {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #7fa87c;
+        }
+
+        .calculate-button {
+            background: linear-gradient(135deg, #4a6f4a 0%, #6b8e6b 100%);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.3em;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            max-width: 400px;
+            margin: 30px auto;
+            box-shadow: 0 4px 15px rgba(74, 111, 74, 0.3);
+        }
+
+        .calculate-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(74, 111, 74, 0.4);
+        }
+
+        .calculate-button:active {
+            transform: translateY(-1px);
+        }
+
+        .results-container {
+            display: none;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .results-container.show {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .price-display {
+            background: linear-gradient(135deg, #6b8e6b 0%, #4a6f4a 100%);
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 30px 0;
+            color: white;
+            animation: scaleIn 0.4s ease-out;
+        }
+
+        .price-label {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .price-value {
+            font-size: 3.5em;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .copy-button {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto 0;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .copy-button:hover {
+            background: #ff8555;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(255, 107, 53, 0.4);
+        }
+
+        .copy-button:active {
+            transform: translateY(0);
+        }
+
+        .copy-button.copied {
+            background: #4caf50;
+            color: white;
+        }
+
+        .reset-button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 300px;
+            margin: 30px auto 0;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+
+        .reset-button:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(220, 53, 69, 0.4);
+        }
+
+        .reset-button:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #7fa87c, transparent);
+            margin: 30px 0;
+        }
+
+        .hpp-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+            animation: slideIn 0.3s ease-out forwards;
+            opacity: 0;
+        }
+
+        .breakdown-item:nth-child(1) { animation-delay: 0.1s; }
+        .breakdown-item:nth-child(2) { animation-delay: 0.15s; }
+        .breakdown-item:nth-child(3) { animation-delay: 0.2s; }
+        .breakdown-item:nth-child(4) { animation-delay: 0.25s; }
+        .breakdown-item:nth-child(5) { animation-delay: 0.3s; }
+        .breakdown-item:nth-child(6) { animation-delay: 0.35s; }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-detail {
+            font-size: 0.85em;
+            color: #666;
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .total-hpp {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #7fa87c;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #4a6f4a;
+        }
+
+        .markup-section {
+            background: #e8f4e8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #a8c5a5;
+        }
+
+        .markup-section label {
+            color: #4a6f4a;
+            font-size: 1.1em;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .markup-section input {
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .final-cost {
+            background: linear-gradient(135deg, #4a6f4a 0%, #6b8e6b 100%);
+            padding: 25px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        .final-cost-label {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .final-cost-value {
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.85em;
+            border-top: 1px solid #ddd;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>HITUNG HARGA BUKU PoD</h1>
+            <h2>PAKTJIP DIGIPRINT</h2>
+            <p>Revisi Database: Juni 2023</p>
+        </div>
+
+        <div class="content">
+            <!-- Section 1: User Input -->
+            <div class="section-title">Data Pesanan Buku</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="pageCount">Jumlah Pemesanan</label>
+                    <input type="number" id="pageCount" value="50" min="1">
+                </div>
+
+                <div class="form-group">
+                    <label for="bookSize">Ukuran Buku</label>
+                    <select id="bookSize">
+                        <option value="A5">A5</option>
+                        <option value="A6">A6</option>
+                        <option value="A4">A4</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="paperType">Kertas Isi</label>
+                    <select id="paperType">
+                        <option value="HVS">HVS</option>
+                        <option value="Art Paper">Art Paper</option>
+                        <option value="Art Carton">Art Carton</option>
+                        <option value="BC">BC</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="copies">1 muka / 2 muka</label>
+                    <select id="copies">
+                        <option value="2 muka">2 muka</option>
+                        <option value="1 muka">1 muka</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="bwPages">Jumlah Halaman BW</label>
+                    <input type="number" id="bwPages" value="24" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="colorPages">Jumlah Halaman Color</label>
+                    <input type="number" id="colorPages" value="4" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="coverType">Kertas Cover</label>
+                    <select id="coverType">
+                        <option value="Art Carton">Art Carton</option>
+                        <option value="Art Carton + Laminasi">Art Carton + Laminasi</option>
+                        <option value="BC">BC</option>
+                        <option value="Hard Cover">Hard Cover</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="bindingType">Jilid</label>
+                    <select id="bindingType">
+                        <option value="Staples Tengah">Staples Tengah</option>
+                        <option value="Soft Cover">Soft Cover</option>
+                        <option value="Hard Cover">Hard Cover</option>
+                        <option value="Spiral Kawat">Spiral Kawat</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Section 2: Calculate Button -->
+            <button class="calculate-button" id="calculateButton">
+                <span>🧮</span>
+                <span>Hitung Harga</span>
+            </button>
+
+            <!-- Section 3: Results Container (Hidden by default) -->
+            <div class="results-container" id="resultsContainer">
+                <!-- Harga per Buku (Big Display) -->
+                <div class="price-display">
+                    <div class="price-label">Harga per Buku</div>
+                    <div class="price-value" id="pricePerBook">Rp0</div>
+                </div>
+
+                <!-- Copy Button -->
+                <button class="copy-button" id="copyButton">
+                    <span id="copyIcon">📋</span>
+                    <span id="copyText">Salin Spesifikasi & Harga</span>
+                </button>
+
+                <!-- Divider -->
+                <div class="divider"></div>
+
+                <!-- Rincian HPP -->
+                <div class="section-title">Rincian HPP</div>
+                <div class="hpp-section">
+                    <div class="breakdown-item">
+                        <span>Halaman BW</span>
+                        <span id="bwCost">Rp0</span>
+                    </div>
+                    <div class="breakdown-detail" id="bwDetail"></div>
+                    
+                    <div class="breakdown-item">
+                        <span>Halaman Color</span>
+                        <span id="colorCost">Rp0</span>
+                    </div>
+                    <div class="breakdown-detail" id="colorDetail"></div>
+                    
+                    <div class="breakdown-item">
+                        <span>Cover</span>
+                        <span id="coverCost">Rp0</span>
+                    </div>
+                    
+                    <div class="breakdown-item">
+                        <span>Jilid</span>
+                        <span id="bindingCost">Rp0</span>
+                    </div>
+                    
+                    <div class="breakdown-item total-hpp">
+                        <span>Total HPP</span>
+                        <span id="totalHPP">Rp0</span>
+                    </div>
+                </div>
+
+                <!-- Markup -->
+                <div class="section-title">Markup</div>
+                <div class="markup-section">
+                    <label for="markupPercent">Markup (%)</label>
+                    <input type="number" id="markupPercent" value="30" min="0" max="100" step="1">
+                </div>
+
+                <!-- Final Cost -->
+                <div class="section-title">Harga Final</div>
+                <div class="final-cost">
+                    <div class="final-cost-label">Harga per Buku (setelah markup)</div>
+                    <div class="final-cost-value" id="finalPrice">Rp0</div>
+                </div>
+
+                <!-- Reset Button -->
+                <button class="reset-button" id="resetButton">
+                    <span>🔄</span>
+                    <span>Reset Semua</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Copyright © 2026 PAKTJIP Digiprint. Hanya untuk digunakan untuk keperluan internal.</p>
+            <p>Developed by Lukas Ardianto using Claude AI.</p>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // PRICE DATA CONFIGURATION
+        // Edit these values to update pricing
+        // ============================================================
+
+        const PRICE_DATABASE = {
+            
+            // --------------------------------------------------------
+            // HARGA PER LEMBAR (per sheet) - BW
+            // Harga ini adalah harga per lembar kertas
+            // --------------------------------------------------------
+            BW_SHEET_COST: {
+                '1 muka': {
+                    'HVS':        300,
+                    'Art Paper':  3000,
+                    'Art Carton': 4000,
+                    'BC':         700
+                },
+                '2 muka': {
+                    'HVS':        400,
+                    'Art Paper':  4000,
+                    'Art Carton': 5000,
+                    'BC':         1000
+                }
+            },
+
+            // --------------------------------------------------------
+            // HARGA PER LEMBAR (per sheet) - COLOR
+            // Harga ini adalah harga per lembar kertas
+            // --------------------------------------------------------
+            COLOR_SHEET_COST: {
+                '1 muka': {
+                    'HVS':        600,
+                    'Art Paper':  4000,
+                    'Art Carton': 5000,
+                    'BC':         1000
+                },
+                '2 muka': {
+                    'HVS':        700,
+                    'Art Paper':  5500,
+                    'Art Carton': 6000,
+                    'BC':         1200
+                }
+            },
+
+            // --------------------------------------------------------
+            // KELIPATAN HALAMAN - 1 MUKA
+            // Berapa halaman yang bisa dicetak per lembar
+            // --------------------------------------------------------
+            COVERAGE_1_MUKA: {
+                'HVS':        { A6: 4, A5: 2, A4: 1 },
+                'Art Paper':  { A6: 8, A5: 4, A4: 2 },
+                'Art Carton': { A6: 8, A5: 4, A4: 2 },
+                'BC':         { A6: 4, A5: 2, A4: 1 }
+            },
+
+            // --------------------------------------------------------
+            // KELIPATAN HALAMAN - 2 MUKA
+            // Berapa halaman yang bisa dicetak per lembar
+            // --------------------------------------------------------
+            COVERAGE_2_MUKA: {
+                'HVS':        { A6: 8,  A5: 4, A4: 2 },
+                'Art Paper':  { A6: 16, A5: 8, A4: 4 },
+                'Art Carton': { A6: 16, A5: 8, A4: 4 },
+                'BC':         { A6: 8,  A5: 4, A4: 2 }
+            },
+
+            // --------------------------------------------------------
+            // HARGA COVER (per cover)
+            // Harga ini per lembar cover
+            // --------------------------------------------------------
+            COVER_COST: {
+                'Art Carton':             { A6: 1250,  A5: 2000,  A4: 4000  },
+                'Art Carton + Laminasi':  { A6: 1500,  A5: 2500,  A4: 5000  },
+                'BC':                     { A6: 500,   A5: 1000,  A4: 2000  },
+                'Hard Cover':             { A6: 10000, A5: 17500, A4: 30000 }
+            },
+
+            // --------------------------------------------------------
+            // KELIPATAN COVER
+            // Berapa cover yang dibutuhkan per buku
+            // --------------------------------------------------------
+            COVER_MULTIPLIER: {
+                'Art Carton':             { A6: 4, A5: 2, A4: 1   },
+                'Art Carton + Laminasi':  { A6: 4, A5: 2, A4: 1   },
+                'BC':                     { A6: 2, A5: 1, A4: 0.5 },
+                'Hard Cover':             { A6: 1, A5: 1, A4: 1   }
+            },
+
+            // --------------------------------------------------------
+            // HARGA JILID (per buku)
+            // --------------------------------------------------------
+            BINDING: {
+                'Staples Tengah': { A6: 300,  A5: 500,  A4: 500  },
+                'Soft Cover':     { A6: 1000, A5: 2000, A4: 4000 },
+                'Hard Cover':     { A6: 1000, A5: 2000, A4: 3000 },
+                'Spiral Kawat':   { A6: 1500, A5: 3000, A4: 5000 }
+            },
+
+            // --------------------------------------------------------
+            // MULTIPLIER SPIRAL KAWAT berdasarkan jumlah halaman dan jenis kertas
+            // Jika total halaman <= nilai, gunakan multiplier tersebut
+            // --------------------------------------------------------
+            SPIRAL_MULTIPLIER: {
+                'HVS': {
+                    10: 1.00,  20: 1.00,  30: 1.00,  40: 1.00,
+                    50: 1.25,  60: 1.25,  70: 1.25,  80: 1.25,
+                    90: 1.40, 100: 1.40, 110: 1.40, 120: 1.40,
+                   130: 1.50, 140: 1.50, 150: 1.60, 160: 1.60,
+                   170: 1.70, 180: 1.70, 190: 1.70, 200: 1.80
+                },
+                'Art Paper': {
+                    10: 1.00,  20: 1.00,  30: 1.25,  40: 1.40,
+                    50: 1.40,  60: 1.50,  70: 1.60,  80: 1.80,
+                    90: 1.80, 100: 1.80
+                },
+                'Art Carton': {
+                    10: 1.00,  20: 1.25,  30: 1.40,  40: 1.60,
+                    50: 1.70,  60: 1.80,  70: 1.90
+                },
+                'BC': {
+                    10: 1.00,  20: 1.00,  30: 1.25,  40: 1.40,
+                    50: 1.40,  60: 1.50,  70: 1.60,  80: 1.80,
+                    90: 1.80, 100: 1.80
+                }
+            }
+        };
+
+        // ============================================================
+        // CALCULATION FUNCTIONS
+        // ============================================================
+
+        function formatRupiah(amount) {
+            return 'Rp' + amount.toFixed(1).replace(/\d(?=(\d{3})+\.)/g, '$&,').replace('.0', '');
+        }
+
+        function ceilingMath(value, significance) {
+            // Excel's CEILING.MATH function: rounds up to nearest multiple
+            return Math.ceil(value / significance) * significance;
+        }
+
+        function getSpiralMultiplier(totalPages, paperType) {
+            // Get the multiplier table for the specific paper type
+            const multipliers = PRICE_DATABASE.SPIRAL_MULTIPLIER[paperType];
+            
+            if (!multipliers) {
+                return 1.00; // Default if paper type not found
+            }
+            
+            const thresholds = Object.keys(multipliers).map(Number).sort((a, b) => a - b);
+            
+            for (let threshold of thresholds) {
+                if (totalPages <= threshold) {
+                    return multipliers[threshold];
+                }
+            }
+            // If exceeds all thresholds, use the last one
+            return multipliers[thresholds[thresholds.length - 1]];
+        }
+
+        function calculate() {
+            // Get form values
+            const orderQty = parseInt(document.getElementById('pageCount').value) || 50;
+            const bookSize = document.getElementById('bookSize').value;
+            const paperType = document.getElementById('paperType').value;
+            const copies = document.getElementById('copies').value;
+            const bwPages = parseInt(document.getElementById('bwPages').value) || 0;
+            const colorPages = parseInt(document.getElementById('colorPages').value) || 0;
+            const coverType = document.getElementById('coverType').value;
+            const bindingType = document.getElementById('bindingType').value;
+            const markupPercent = parseFloat(document.getElementById('markupPercent').value);
+            const markupValue = isNaN(markupPercent) ? 30 : markupPercent;
+
+            // Get cost per sheet (harga per lembar)
+            const bwSheetCost = PRICE_DATABASE.BW_SHEET_COST[copies][paperType];
+            const colorSheetCost = PRICE_DATABASE.COLOR_SHEET_COST[copies][paperType];
+
+            // Get coverage table based on 1 muka / 2 muka
+            const coverageTable = (copies === "1 muka") ? 
+                PRICE_DATABASE.COVERAGE_1_MUKA : PRICE_DATABASE.COVERAGE_2_MUKA;
+
+            // Get coverage (how many pages per sheet for this paper type and size)
+            const coverage = coverageTable[paperType][bookSize];
+
+            // Calculate price per page = sheet cost / coverage
+            const bwPricePerPage = bwSheetCost / coverage;
+            const colorPricePerPage = colorSheetCost / coverage;
+
+            // Calculate number of sheets needed (using CEILING.MATH)
+            const bwSheets = ceilingMath(bwPages, coverage);
+            const colorSheets = ceilingMath(colorPages, coverage);
+
+            // Calculate costs (sheets * price per page)
+            const bwCost = bwSheets * bwPricePerPage;
+            const colorCost = colorSheets * colorPricePerPage;
+            
+            // Calculate cover cost using CEILING.MATH
+            const coverBaseCost = PRICE_DATABASE.COVER_COST[coverType][bookSize];
+            const coverMultiplier = PRICE_DATABASE.COVER_MULTIPLIER[coverType][bookSize];
+            const coversNeeded = ceilingMath(orderQty, coverMultiplier);
+            const coverCostPerBook = (coversNeeded * coverBaseCost) / orderQty;
+            
+            let bindingCost = PRICE_DATABASE.BINDING[bindingType][bookSize];
+
+            // Apply spiral multiplier if Spiral Kawat is selected
+            if (bindingType === 'Spiral Kawat') {
+                const totalPages = bwPages + colorPages;
+                const multiplier = getSpiralMultiplier(totalPages, paperType);
+                bindingCost *= multiplier;
+            }
+
+            // Calculate HPP (Harga Pokok Produksi / Cost Price)
+            const hpp = bwCost + colorCost + coverCostPerBook + bindingCost;
+
+            // Calculate selling price with markup
+            const markup = markupValue / 100;
+            const pricePerBook = Math.ceil((hpp * (1 + markup)) / 500) * 500; // Round up to nearest 500
+
+            // Update display
+            document.getElementById('bwCost').textContent = formatRupiah(bwCost);
+            document.getElementById('bwDetail').textContent = 
+                `${bwPages} halaman → ${bwSheets} lembar @ ${formatRupiah(bwPricePerPage)}/halaman (${formatRupiah(bwSheetCost)}/lembar ÷ ${coverage})`;
+            
+            document.getElementById('colorCost').textContent = formatRupiah(colorCost);
+            document.getElementById('colorDetail').textContent = 
+                `${colorPages} halaman → ${colorSheets} lembar @ ${formatRupiah(colorPricePerPage)}/halaman (${formatRupiah(colorSheetCost)}/lembar ÷ ${coverage})`;
+            
+            document.getElementById('coverCost').textContent = formatRupiah(coverCostPerBook);
+            document.getElementById('bindingCost').textContent = formatRupiah(bindingCost);
+            document.getElementById('totalHPP').textContent = formatRupiah(hpp);
+            document.getElementById('pricePerBook').textContent = formatRupiah(pricePerBook);
+            document.getElementById('finalPrice').textContent = formatRupiah(pricePerBook);
+        }
+
+        // ============================================================
+        // COPY FUNCTIONALITY
+        // ============================================================
+
+        function copySpecification() {
+            const orderQty = document.getElementById('pageCount').value;
+            const bookSize = document.getElementById('bookSize').value;
+            const paperType = document.getElementById('paperType').value;
+            const copies = document.getElementById('copies').value;
+            const bwPages = document.getElementById('bwPages').value;
+            const colorPages = document.getElementById('colorPages').value;
+            const coverType = document.getElementById('coverType').value;
+            const bindingType = document.getElementById('bindingType').value;
+            const pricePerBook = document.getElementById('pricePerBook').textContent;
+
+            // Get current date and time
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('id-ID', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            const timeStr = now.toLocaleTimeString('id-ID', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+
+            const specification = `SPESIFIKASI BUKU
+
+Jumlah Pemesanan: ${orderQty} buku
+Ukuran Buku: ${bookSize}
+Kertas Isi: ${paperType} (${copies})
+Jumlah Halaman BW: ${bwPages}
+Jumlah Halaman Color: ${colorPages}
+Kertas Cover: ${coverType}
+Jilid: ${bindingType}
+
+HARGA PER BUKU: ${pricePerBook}
+
+*PAKTJIP Digital Printing*
+Dihitung pada ${dateStr} ${timeStr}`;
+
+            navigator.clipboard.writeText(specification).then(() => {
+                const button = document.getElementById('copyButton');
+                const icon = document.getElementById('copyIcon');
+                const text = document.getElementById('copyText');
+                
+                button.classList.add('copied');
+                icon.textContent = '✓';
+                text.textContent = 'Tersalin!';
+                
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    icon.textContent = '📋';
+                    text.textContent = 'Salin Spesifikasi & Harga';
+                }, 2000);
+            });
+        }
+
+        // ============================================================
+        // RESET FUNCTIONALITY
+        // ============================================================
+
+        function resetForm() {
+            // Reset all form inputs to default values
+            document.getElementById('pageCount').value = '50';
+            document.getElementById('bookSize').value = 'A5';
+            document.getElementById('paperType').value = 'HVS';
+            document.getElementById('copies').value = '2 muka';
+            document.getElementById('bwPages').value = '24';
+            document.getElementById('colorPages').value = '4';
+            document.getElementById('coverType').value = 'Art Carton';
+            document.getElementById('bindingType').value = 'Staples Tengah';
+            document.getElementById('markupPercent').value = '30';
+            
+            // Hide results container
+            const resultsContainer = document.getElementById('resultsContainer');
+            resultsContainer.classList.remove('show');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ============================================================
+        // EVENT LISTENERS
+        // ============================================================
+
+        // Calculate button click handler
+        document.getElementById('calculateButton').addEventListener('click', () => {
+            calculate();
+            const resultsContainer = document.getElementById('resultsContainer');
+            resultsContainer.classList.remove('show');
+            // Small delay to trigger animation
+            setTimeout(() => {
+                resultsContainer.classList.add('show');
+            }, 10);
+        });
+
+        // Recalculate when markup changes
+        document.getElementById('markupPercent').addEventListener('change', calculate);
+        document.getElementById('markupPercent').addEventListener('input', calculate);
+
+        document.getElementById('copyButton').addEventListener('click', copySpecification);
+        
+        document.getElementById('resetButton').addEventListener('click', resetForm);
+    </script>
+</body>
+</html>

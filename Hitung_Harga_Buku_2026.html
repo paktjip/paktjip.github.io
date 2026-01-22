@@ -738,11 +738,11 @@
             // Update display
             document.getElementById('bwCost').textContent = formatRupiah(bwCost);
             document.getElementById('bwDetail').textContent = 
-                `${bwPages} halaman → ${bwSheets} lembar @ ${formatRupiah(bwPricePerPage)}/halaman (${formatRupiah(bwSheetCost)}/lembar ÷ ${coverage})`;
+                `${bwPages} halaman → ${bwSheets} lembar @ ${formatRupiah(bwPricePerPage)}/halaman `;
             
             document.getElementById('colorCost').textContent = formatRupiah(colorCost);
             document.getElementById('colorDetail').textContent = 
-                `${colorPages} halaman → ${colorSheets} lembar @ ${formatRupiah(colorPricePerPage)}/halaman (${formatRupiah(colorSheetCost)}/lembar ÷ ${coverage})`;
+                `${colorPages} halaman → ${colorSheets} lembar @ ${formatRupiah(colorPricePerPage)}/halaman `;
             
             document.getElementById('coverCost').textContent = formatRupiah(coverCostPerBook);
             document.getElementById('bindingCost').textContent = formatRupiah(bindingCost);

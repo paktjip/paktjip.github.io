@@ -1,226 +1,359 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkukator Harga Ganci Akrilik</title>
+    <title>Kalkulator Harga Gantungan Kunci Akrilik - PAKTJIP DIGIPRINT</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-        }
-
-        .container {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
             box-sizing: border-box;
         }
 
-        h1, h2 {
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a8c5a5 0%, #7fa87c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6b8e6b 0%, #4a6f4a 100%);
+            color: white;
+            padding: 30px;
             text-align: center;
-            color: #333333;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #d4e8d4;
+            font-size: 1em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #4a6f4a;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8f4e8;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
         }
 
         label {
-            display: block;
-            margin: 10px 0 5px;
-            color: #555555;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95em;
         }
 
         input, select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px; /* Mengurangi jarak antara input */
-            border: 1px solid #cccccc;
-            border-radius: 5px;
-            box-sizing: border-box; /* Menjaga agar padding tidak mempengaruhi ukuran lebar */
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
         }
 
-        .inline-input {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px; /* Mengurangi jarak antara input inline */
+        input:focus, select:focus {
+            outline: none;
+            border-color: #7fa87c;
         }
 
-        .inline-input input {
-            flex: 1 1 auto;
+        .inline-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #297373;
+        .calculate-button {
+            background: linear-gradient(135deg, #4a6f4a 0%, #6b8e6b 100%);
             color: white;
             border: none;
-            border-radius: 5px;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 8px;
             cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(74, 111, 74, 0.3);
+            margin-top: 10px;
         }
 
-        button:hover {
-            background-color: #ff8552;
+        .calculate-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 111, 74, 0.4);
         }
 
-        .harga-output {
+        .result-section {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #e8f4e8 0%, #d4e8d4 100%);
+            border-radius: 12px;
             text-align: center;
-            font-weight: bold;
-            color: red;
-            font-size: 24px;
         }
 
-        .reseller-output {
-            text-align: center;
-            color: grey;
-            font-size: 14px;
+        .result-section.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
         }
-		
-		.footer {
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #4a6f4a;
+            margin-bottom: 15px;
+        }
+
+        .price-main {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #4a6f4a;
+            margin-bottom: 15px;
+        }
+
+        .price-reseller {
+            font-size: 1.2em;
+            color: #666;
+            font-weight: 500;
+        }
+
+        footer {
             text-align: center;
-            color: grey;
-            font-size: 10px;
+            padding: 25px;
+            background: #f8f9f8;
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
+            border-top: 1px solid #e8f4e8;
+        }
+
+        footer strong {
+            color: #4a6f4a;
         }
 
         @media (max-width: 600px) {
-            .inline-input {
-                flex-direction: column;
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .inline-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .price-main {
+                font-size: 2em;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Kalkukator Harga Ganci Akrilik</h1>
-        <form id="ganciForm">
-            <label for="jumlah">Jumlah Pemesanan:</label>
-            <input type="number" id="jumlah" name="jumlah" required><br>
+        <div class="header">
+            <h1>🔑 Kalkulator Harga Gantungan Kunci Akrilik</h1>
+            <p>Perhitungan Harga Custom Ganci</p>
+        </div>
 
-            <label for="bentuk">Bentuk:</label>
-            <select id="bentuk" name="bentuk" required>
-                <option value="standar">Standar</option>
-                <option value="custom">Custom</option>
-            </select><br>
+        <div class="content">
+            <form id="ganciForm">
+                <div class="section-title">Detail Pesanan</div>
+                
+                <div class="form-group">
+                    <label for="jumlah">Jumlah Pemesanan</label>
+                    <input type="number" id="jumlah" name="jumlah" placeholder="Contoh: 50" min="1" required>
+                </div>
 
-            <div class="inline-input">
-                <label for="panjang">Panjang (cm):</label>
-                <input type="number" id="panjang" name="panjang">
+                <div class="form-group">
+                    <label for="bentuk">Bentuk Ganci</label>
+                    <select id="bentuk" name="bentuk" required>
+                        <option value="standar">Standar (Bulat/Kotak)</option>
+                        <option value="custom">Custom (Bentuk Khusus)</option>
+                    </select>
+                </div>
 
-                <label for="tinggi">Tinggi (cm):</label>
-                <input type="number" id="tinggi" name="tinggi">
-            </div><br>
+                <div class="section-title">Ukuran Ganci</div>
+                
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="panjang">Panjang (cm)</label>
+                        <input type="number" id="panjang" name="panjang" placeholder="Contoh: 5" step="0.1" required>
+                    </div>
 
-            <label for="cetak">Cetak:</label>
-            <select id="cetak" name="cetak" required>
-                <option value="1sisi">1 Sisi</option>
-                <option value="2sisi">2 Sisi</option>
-            </select><br>
+                    <div class="form-group">
+                        <label for="tinggi">Tinggi (cm)</label>
+                        <input type="number" id="tinggi" name="tinggi" placeholder="Contoh: 5" step="0.1" required>
+                    </div>
+                </div>
 
-            <button type="button" onclick="hitungHarga()">Hitung Harga</button>
-        </form>
+                <div class="form-group">
+                    <label for="cetak">Jenis Cetak</label>
+                    <select id="cetak" name="cetak" required>
+                        <option value="1sisi">1 Sisi</option>
+                        <option value="2sisi">2 Sisi</option>
+                    </select>
+                </div>
 
-        <h2>Harga:</h2>
-        <p class="harga-output" id="hargaOutput"></p>
-        <p class="reseller-output" id="resellerOutput"></p>
-		<p class="footer">Copyright © 2025 PAKTJIP Digital Printing<br>Developed by Lukas Ardianto</p>
+                <button type="button" class="calculate-button" onclick="hitungHarga()">
+                    🔢 Hitung Harga
+                </button>
+            </form>
+
+            <div class="result-section" id="resultSection">
+                <div class="result-title">💰 Harga Total</div>
+                <div class="price-main" id="hargaOutput">Rp 0</div>
+                <div class="price-reseller" id="resellerOutput">Harga Reseller: Rp 0</div>
+            </div>
+        </div>
+
+        <footer>
+            <strong>Copyright © 2025 PAKTJIP Digital Printing</strong><br>
+            Developed by Lukas Ardianto
+        </footer>
     </div>
 
     <script>
- function hitungHarga() {
-    const jumlah = document.getElementById("jumlah").value;
-    const bentuk = document.getElementById("bentuk").value;
-    const cetak = document.getElementById("cetak").value;
-    const panjang = document.getElementById("panjang").value;
-    const tinggi = document.getElementById("tinggi").value;
+        function hitungHarga() {
+            const jumlah = parseInt(document.getElementById("jumlah").value);
+            const bentuk = document.getElementById("bentuk").value;
+            const cetak = document.getElementById("cetak").value;
+            const panjang = parseFloat(document.getElementById("panjang").value);
+            const tinggi = parseFloat(document.getElementById("tinggi").value);
 
-    // Menghitung luas dalam cm2
-    const luas = panjang * tinggi;
+            if (!jumlah || !panjang || !tinggi || jumlah <= 0 || panjang <= 0 || tinggi <= 0) {
+                alert("Harap isi semua bidang dengan nilai yang valid!");
+                return;
+            }
 
-    // Inisialisasi harga per cm2
-    let hargaPerCm2Standar = 0;
-    let hargaPerCm2Reseller = 0;
-    let hargaTotalStandar = 0;
-    let hargaTotalReseller = 0;
+            // Menghitung luas dalam cm2
+            const luas = panjang * tinggi;
 
-    // Menentukan harga per cm2 berdasarkan bentuk dan sisi cetak
-    if (bentuk === "standar" && cetak === "1sisi") {
-        if (jumlah < 5) { hargaPerCm2Standar = 350; hargaPerCm2Reseller = 325; }
-        else if (jumlah <= 10) { hargaPerCm2Standar = 250; hargaPerCm2Reseller = 225; }
-        else if (jumlah <= 20) { hargaPerCm2Standar = 200; hargaPerCm2Reseller = 175; }
-        else if (jumlah <= 50) { hargaPerCm2Standar = 180; hargaPerCm2Reseller = 150; }
-        else { hargaPerCm2Standar = 150; hargaPerCm2Reseller = 125; }
-    } else if (bentuk === "standar" && cetak === "2sisi") {
-        if (jumlah < 5) { hargaPerCm2Standar = 500; hargaPerCm2Reseller = 450; }
-        else if (jumlah <= 10) { hargaPerCm2Standar = 400; hargaPerCm2Reseller = 350; }
-        else if (jumlah <= 20) { hargaPerCm2Standar = 300; hargaPerCm2Reseller = 275; }
-        else if (jumlah <= 50) { hargaPerCm2Standar = 275; hargaPerCm2Reseller = 250; }
-        else { hargaPerCm2Standar = 250; hargaPerCm2Reseller = 250; }
-    } else if (bentuk === "custom" && cetak === "1sisi") {
-        if (jumlah < 5) { hargaPerCm2Standar = 375; hargaPerCm2Reseller = 350; }
-        else if (jumlah <= 10) { hargaPerCm2Standar = 300; hargaPerCm2Reseller = 275; }
-        else if (jumlah <= 20) { hargaPerCm2Standar = 250; hargaPerCm2Reseller = 225; }
-        else if (jumlah <= 50) { hargaPerCm2Standar = 225; hargaPerCm2Reseller = 175; }
-        else { hargaPerCm2Standar = 200; hargaPerCm2Reseller = 150; }
-    } else if (bentuk === "custom" && cetak === "2sisi") {
-        if (jumlah < 5) { hargaPerCm2Standar = 550; hargaPerCm2Reseller = 475; }
-        else if (jumlah <= 10) { hargaPerCm2Standar = 425; hargaPerCm2Reseller = 375; }
-        else if (jumlah <= 20) { hargaPerCm2Standar = 350; hargaPerCm2Reseller = 300; }
-        else if (jumlah <= 50) { hargaPerCm2Standar = 300; hargaPerCm2Reseller = 275; }
-        else { hargaPerCm2Standar = 275; hargaPerCm2Reseller = 250; }
-    }
+            // Inisialisasi harga per cm2
+            let hargaPerCm2Standar = 0;
+            let hargaPerCm2Reseller = 0;
+            let hargaTotalStandar = 0;
+            let hargaTotalReseller = 0;
 
-    // Menghitung harga total
-    hargaTotalStandar = (luas * hargaPerCm2Standar) + 750;
-    hargaTotalReseller = (luas * hargaPerCm2Reseller) + 600;
+            // Menentukan harga per cm2 berdasarkan bentuk dan sisi cetak
+            if (bentuk === "standar" && cetak === "1sisi") {
+                if (jumlah < 5) { hargaPerCm2Standar = 350; hargaPerCm2Reseller = 325; }
+                else if (jumlah <= 10) { hargaPerCm2Standar = 250; hargaPerCm2Reseller = 225; }
+                else if (jumlah <= 20) { hargaPerCm2Standar = 200; hargaPerCm2Reseller = 175; }
+                else if (jumlah <= 50) { hargaPerCm2Standar = 180; hargaPerCm2Reseller = 150; }
+                else { hargaPerCm2Standar = 150; hargaPerCm2Reseller = 125; }
+            } else if (bentuk === "standar" && cetak === "2sisi") {
+                if (jumlah < 5) { hargaPerCm2Standar = 500; hargaPerCm2Reseller = 450; }
+                else if (jumlah <= 10) { hargaPerCm2Standar = 400; hargaPerCm2Reseller = 350; }
+                else if (jumlah <= 20) { hargaPerCm2Standar = 300; hargaPerCm2Reseller = 275; }
+                else if (jumlah <= 50) { hargaPerCm2Standar = 275; hargaPerCm2Reseller = 250; }
+                else { hargaPerCm2Standar = 250; hargaPerCm2Reseller = 250; }
+            } else if (bentuk === "custom" && cetak === "1sisi") {
+                if (jumlah < 5) { hargaPerCm2Standar = 375; hargaPerCm2Reseller = 350; }
+                else if (jumlah <= 10) { hargaPerCm2Standar = 300; hargaPerCm2Reseller = 275; }
+                else if (jumlah <= 20) { hargaPerCm2Standar = 250; hargaPerCm2Reseller = 225; }
+                else if (jumlah <= 50) { hargaPerCm2Standar = 225; hargaPerCm2Reseller = 175; }
+                else { hargaPerCm2Standar = 200; hargaPerCm2Reseller = 150; }
+            } else if (bentuk === "custom" && cetak === "2sisi") {
+                if (jumlah < 5) { hargaPerCm2Standar = 550; hargaPerCm2Reseller = 475; }
+                else if (jumlah <= 10) { hargaPerCm2Standar = 425; hargaPerCm2Reseller = 375; }
+                else if (jumlah <= 20) { hargaPerCm2Standar = 350; hargaPerCm2Reseller = 300; }
+                else if (jumlah <= 50) { hargaPerCm2Standar = 300; hargaPerCm2Reseller = 275; }
+                else { hargaPerCm2Standar = 275; hargaPerCm2Reseller = 250; }
+            }
 
-    // Menetapkan harga minimum berdasarkan jumlah dan sisi cetak
-    if (jumlah >= 1 && jumlah <= 3) {
-        if (cetak === "2sisi") {
-            hargaTotalStandar = Math.max(hargaTotalStandar, 11000);
-            hargaTotalReseller = Math.max(hargaTotalReseller, 8500);
-        } else {
-            hargaTotalStandar = Math.max(hargaTotalStandar, 10000);
-            hargaTotalReseller = Math.max(hargaTotalReseller, 8000);
+            // Menghitung harga total
+            hargaTotalStandar = (luas * hargaPerCm2Standar) + 750;
+            hargaTotalReseller = (luas * hargaPerCm2Reseller) + 600;
+
+            // Menetapkan harga minimum berdasarkan jumlah dan sisi cetak
+            if (jumlah >= 1 && jumlah <= 3) {
+                if (cetak === "2sisi") {
+                    hargaTotalStandar = Math.max(hargaTotalStandar, 11000);
+                    hargaTotalReseller = Math.max(hargaTotalReseller, 8500);
+                } else {
+                    hargaTotalStandar = Math.max(hargaTotalStandar, 10000);
+                    hargaTotalReseller = Math.max(hargaTotalReseller, 8000);
+                }
+            } else if (jumlah >= 4 && jumlah <= 8) {
+                if (cetak === "2sisi") {
+                    hargaTotalStandar = Math.max(hargaTotalStandar, 8000);
+                    hargaTotalReseller = Math.max(hargaTotalReseller, 7000);
+                } else {
+                    hargaTotalStandar = Math.max(hargaTotalStandar, 7000);
+                    hargaTotalReseller = Math.max(hargaTotalReseller, 6000);
+                }
+            }
+
+            // Menetapkan harga global minimum
+            hargaTotalStandar = Math.max(hargaTotalStandar, 4500);
+            hargaTotalReseller = Math.max(hargaTotalReseller, 4000);
+            
+            // Membulatkan harga ke kelipatan 500 terdekat
+            hargaTotalStandar = roundTo500(hargaTotalStandar);
+            hargaTotalReseller = roundTo500(hargaTotalReseller);
+
+            // Memformat harga dengan format Rupiah
+            const formattedHargaTotalStandar = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(hargaTotalStandar);
+            
+            const formattedHargaTotalReseller = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(hargaTotalReseller);
+
+            // Menampilkan harga
+            document.getElementById("hargaOutput").innerText = formattedHargaTotalStandar;
+            document.getElementById("resellerOutput").innerText = "Harga Reseller: " + formattedHargaTotalReseller;
+            
+            // Tampilkan hasil dengan animasi
+            const resultSection = document.getElementById("resultSection");
+            resultSection.classList.add("show");
         }
-    } else if (jumlah >= 4 && jumlah <= 8) {
-        if (cetak === "2sisi") {
-            hargaTotalStandar = Math.max(hargaTotalStandar, 8000);
-            hargaTotalReseller = Math.max(hargaTotalReseller, 7000);
-        } else {
-            hargaTotalStandar = Math.max(hargaTotalStandar, 7000);
-            hargaTotalReseller = Math.max(hargaTotalReseller, 6000);
+
+        // Fungsi untuk membulatkan angka ke kelipatan 500 terdekat
+        function roundTo500(num) {
+            return Math.round(num / 500) * 500;
         }
-    }
-
-    // Menetapkan harga global minimum
-    hargaTotalStandar = Math.max(hargaTotalStandar, 4500);
-    hargaTotalReseller = Math.max(hargaTotalReseller, 4000);
-    
-    // Membulatkan harga ke kelipatan 500 terdekat
-    hargaTotalStandar = roundTo500(hargaTotalStandar);
-    hargaTotalReseller = roundTo500(hargaTotalReseller);
-
-    // Memformat harga dengan tanda titik pemisah angka ribuan
-    const formattedHargaTotalStandar = new Intl.NumberFormat('id-ID').format(hargaTotalStandar);
-    const formattedHargaTotalReseller = new Intl.NumberFormat('id-ID').format(hargaTotalReseller);
-
-    // Menampilkan harga
-    document.getElementById("hargaOutput").innerText = "Rp " + formattedHargaTotalStandar;
-    document.getElementById("resellerOutput").innerText = "Harga reseller: Rp " + formattedHargaTotalReseller;
-}
-
-// Fungsi untuk membulatkan angka ke kelipatan 500 terdekat
-function roundTo500(num) {
-    return Math.round(num / 500) * 500;
-}
-
     </script>
 </body>
 </html>

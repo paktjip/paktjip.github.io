@@ -3,79 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Penghitung Potongan Kertas</title>
+    <title>Penghitung Potongan Kertas - PAKTJIP DIGIPRINT</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #121212;
-            color: #ffffff;
+        * {
             margin: 0;
-            position: relative;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .container {
-            background-color: #1e1e1e;
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a8c5a5 0%, #7fa87c 100%);
+            min-height: 100vh;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            max-height: 90vh;
-            overflow-y: auto;
-            width: 800px; /* Menetapkan lebar kontainer */
         }
-        .toggle-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
         }
-        .toggle-button:hover {
-            background-color: #0069d9;
+
+        .header {
+            background: linear-gradient(135deg, #6b8e6b 0%, #4a6f4a 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
         }
-        div {
+
+        .header h1 {
+            font-size: 2em;
             margin-bottom: 10px;
         }
+
+        .header p {
+            color: #d4e8d4;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #4a6f4a;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8f4e8;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
         label {
-            display: block;
-            margin-bottom: 5px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95em;
         }
+
         input {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-            background-color: #333;
-            color: #fff;
-            border: 1px solid #555;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
         }
+
+        input:focus {
+            outline: none;
+            border-color: #7fa87c;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
         button {
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
+            flex: 1;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 8px;
             cursor: pointer;
-            margin-top: 10px;
+            transition: all 0.3s;
+            border: none;
         }
-        button:hover {
-            background-color: #0069d9;
+
+        .calculate-button {
+            background: linear-gradient(135deg, #4a6f4a 0%, #6b8e6b 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(74, 111, 74, 0.3);
         }
+
+        .calculate-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 111, 74, 0.4);
+        }
+
+        .reset-button {
+            background: linear-gradient(135deg, #e8f4e8 0%, #d4e8d4 100%);
+            color: #4a6f4a;
+            border: 2px solid #4a6f4a;
+        }
+
+        .reset-button:hover {
+            background: linear-gradient(135deg, #d4e8d4 0%, #c0dcc0 100%);
+            transform: translateY(-2px);
+        }
+
         #hasil {
-            margin-top: 20px;
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #e8f4e8 0%, #d4e8d4 100%);
+            border-radius: 12px;
+            text-align: center;
             font-size: 1.2em;
-            font-weight: bold;
+            font-weight: 600;
+            color: #4a6f4a;
+            display: none;
         }
+
+        #hasil.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .visualization-container {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9f8;
+            border-radius: 12px;
+        }
+
+        .visualization-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #4a6f4a;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
         .parent-box {
             position: relative;
-            margin-top: 20px;
-            background-color: rgba(255, 0, 0, 0.2); /* Warna merah dengan transparansi */
+            margin: 0 auto;
+            background-color: rgba(127, 168, 124, 0.15);
+            border: 3px solid #7fa87c;
+            border-radius: 8px;
         }
+
         .child-table {
             position: absolute;
             top: 0;
@@ -83,65 +186,94 @@
             border-collapse: collapse;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 255, 0, 0.2); /* Warna hijau dengan transparansi */
         }
-        table, th, td {
-            border: 1px solid #555;
-        }
-        th, td {
-            padding: 0;
-            text-align: center;
-        }
+
         .cell {
-            background-color: rgba(0, 255, 0, 0.5); /* Warna hijau dengan transparansi */
-            border: 1px solid #555;
+            background-color: rgba(74, 111, 74, 0.3);
+            border: 2px solid #4a6f4a;
         }
-        .light-mode {
-            background-color: #ffffff;
-            color: #000000;
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #f8f9f8;
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
+            border-top: 1px solid #e8f4e8;
         }
-        .light-mode .container {
-            background-color: #f0f0f0;
-            color: #000000;
+
+        footer strong {
+            color: #4a6f4a;
         }
-        .light-mode input {
-            background-color: #ffffff;
-            color: #000000;
-            border: 1px solid #ccc;
-        }
-        .light-mode button {
-            background-color: #0069d9;
-        }
-        .light-mode button:hover {
-            background-color: #0056b3;
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <button class="toggle-button" onclick="toggleMode()">&#9788; Light Mode</button>
     <div class="container">
-        <h1>Penghitung Potongan Kertas</h1>
-        <div>
-            <label for="panjangKertas">Panjang Kertas (cm):</label>
-            <input type="text" id="panjangKertas" required>
+        <div class="header">
+            <h1>📐 Penghitung Potongan Kertas</h1>
+            <p>Optimasi Pemotongan Kertas</p>
         </div>
-        <div>
-            <label for="lebarKertas">Lebar Kertas (cm):</label>
-            <input type="text" id="lebarKertas" required>
+
+        <div class="content">
+            <div class="section-title">Data Kertas</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="panjangKertas">Panjang Kertas (cm)</label>
+                    <input type="number" id="panjangKertas" placeholder="Contoh: 100" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label for="lebarKertas">Lebar Kertas (cm)</label>
+                    <input type="number" id="lebarKertas" placeholder="Contoh: 70" step="0.1" required>
+                </div>
+            </div>
+
+            <div class="section-title">Ukuran Potongan</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="panjangPotongan">Panjang Potongan (cm)</label>
+                    <input type="number" id="panjangPotongan" placeholder="Contoh: 21" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label for="lebarPotongan">Lebar Potongan (cm)</label>
+                    <input type="number" id="lebarPotongan" placeholder="Contoh: 14.8" step="0.1" required>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="calculate-button" onclick="hitungPotongan()">
+                    🔢 Hitung Potongan
+                </button>
+                <button class="reset-button" onclick="resetForm()">
+                    🔄 Reset
+                </button>
+            </div>
+
+            <div id="hasil"></div>
+
+            <div id="tabelHasil"></div>
         </div>
-        <div>
-            <label for="panjangPotongan">Panjang Potongan (cm):</label>
-            <input type="text" id="panjangPotongan" required>
-        </div>
-        <div>
-            <label for="lebarPotongan">Lebar Potongan (cm):</label>
-            <input type="text" id="lebarPotongan" required>
-        </div>
-        <button onclick="hitungPotongan()">Hitung Potongan</button>
-        <div id="hasil"></div>
-        <div id="tabelHasil"></div>
-        <button onclick="resetForm()">Reset</button>
+
+        <footer>
+            <strong>Copyright © 2025 PAKTJIP Digital Printing</strong><br>
+            Developed by Lukas Ardianto
+        </footer>
     </div>
+
     <script>
         function hitungPotongan() {
             const panjangKertas = parseFloat(document.getElementById('panjangKertas').value);
@@ -149,40 +281,60 @@
             const panjangPotongan = parseFloat(document.getElementById('panjangPotongan').value);
             const lebarPotongan = parseFloat(document.getElementById('lebarPotongan').value);
 
-            if (panjangKertas && lebarKertas && panjangPotongan && lebarPotongan) {
-                const mode1 = hitungPotonganMode(panjangKertas, lebarKertas, panjangPotongan, lebarPotongan);
-                const mode2 = hitungPotonganMode(panjangKertas, lebarKertas, lebarPotongan, panjangPotongan);
-
-                const maxMode = mode1.total > mode2.total ? mode1 : mode2;
-
-                const areaDigunakanPanjang = maxMode.rows * (maxMode === mode1 ? panjangPotongan : lebarPotongan);
-                const areaDigunakanLebar = maxMode.columns * (maxMode === mode1 ? lebarPotongan : panjangPotongan);
-
-                document.getElementById('hasil').innerText = `Jumlah potongan maksimal: ${maxMode.total} (Menggunakan area ${areaDigunakanPanjang} cm x ${areaDigunakanLebar} cm)`;
-
-                let scaleFactor = 5; // Faktor skala untuk memperbesar ukuran tabel
-
-                // Membuat kotak parent dengan rasio ukuran kertas asli
-                let parentBox = `<div class="parent-box" style="width: ${lebarKertas * scaleFactor}px; height: ${panjangKertas * scaleFactor}px;">`;
-
-                // Membuat child table untuk potongan kertas
-                let childTable = '<table class="child-table">';
-                for (let i = 0; i < maxMode.rows; i++) {
-                    childTable += '<tr>';
-                    for (let j = 0; j < maxMode.columns; j++) {
-                        childTable += `<td class="cell" style="width: ${maxMode.cellWidth * scaleFactor}px; height: ${maxMode.cellHeight * scaleFactor}px;"></td>`;
-                    }
-                    childTable += '</tr>';
-                }
-                childTable += '</table>';
-                parentBox += childTable;
-                parentBox += '</div>';
-                
-                document.getElementById('tabelHasil').innerHTML = parentBox;
-            } else {
-                document.getElementById('hasil').innerText = 'Harap isi semua bidang input.';
-                document.getElementById('tabelHasil').innerHTML = '';
+            if (!panjangKertas || !lebarKertas || !panjangPotongan || !lebarPotongan) {
+                alert('Harap isi semua bidang input dengan nilai yang valid!');
+                return;
             }
+
+            if (panjangKertas <= 0 || lebarKertas <= 0 || panjangPotongan <= 0 || lebarPotongan <= 0) {
+                alert('Semua nilai harus lebih besar dari 0!');
+                return;
+            }
+
+            const mode1 = hitungPotonganMode(panjangKertas, lebarKertas, panjangPotongan, lebarPotongan);
+            const mode2 = hitungPotonganMode(panjangKertas, lebarKertas, lebarPotongan, panjangPotongan);
+
+            const maxMode = mode1.total > mode2.total ? mode1 : mode2;
+
+            const areaDigunakanPanjang = maxMode.rows * (maxMode === mode1 ? panjangPotongan : lebarPotongan);
+            const areaDigunakanLebar = maxMode.columns * (maxMode === mode1 ? lebarPotongan : panjangPotongan);
+
+            const hasilDiv = document.getElementById('hasil');
+            hasilDiv.innerHTML = `
+                <div style="font-size: 1.5em; margin-bottom: 10px;">
+                    ✅ ${maxMode.total} Potongan
+                </div>
+                <div style="font-size: 0.9em; color: #666;">
+                    Menggunakan area ${areaDigunakanPanjang.toFixed(1)} cm × ${areaDigunakanLebar.toFixed(1)} cm<br>
+                    Layout: ${maxMode.rows} baris × ${maxMode.columns} kolom
+                </div>
+            `;
+            hasilDiv.classList.add('show');
+
+            let scaleFactor = 5;
+
+            let visualizationHTML = `
+                <div class="visualization-container">
+                    <div class="visualization-title">Visualisasi Pemotongan</div>
+                    <div class="parent-box" style="width: ${lebarKertas * scaleFactor}px; height: ${panjangKertas * scaleFactor}px;">
+                        <table class="child-table">
+            `;
+
+            for (let i = 0; i < maxMode.rows; i++) {
+                visualizationHTML += '<tr>';
+                for (let j = 0; j < maxMode.columns; j++) {
+                    visualizationHTML += `<td class="cell" style="width: ${maxMode.cellWidth * scaleFactor}px; height: ${maxMode.cellHeight * scaleFactor}px;"></td>`;
+                }
+                visualizationHTML += '</tr>';
+            }
+
+            visualizationHTML += `
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('tabelHasil').innerHTML = visualizationHTML;
         }
 
         function hitungPotonganMode(panjangKertas, lebarKertas, panjangPotongan, lebarPotongan) {
@@ -199,22 +351,13 @@
             };
         }
 
-        function toggleMode() {
-            document.body.classList.toggle('light-mode');
-            const toggleButton = document.querySelector('.toggle-button');
-            if (document.body.classList.contains('light-mode')) {
-                toggleButton.innerHTML = '&#9790; Dark Mode'; // Ikon bulan untuk Dark Mode
-            } else {
-                toggleButton.innerHTML = '&#9788; Light Mode'; // Ikon matahari untuk Light Mode
-            }
-        }
-
         function resetForm() {
             document.getElementById('panjangKertas').value = '';
             document.getElementById('lebarKertas').value = '';
             document.getElementById('panjangPotongan').value = '';
             document.getElementById('lebarPotongan').value = '';
-            document.getElementById('hasil').innerText = '';
+            document.getElementById('hasil').innerHTML = '';
+            document.getElementById('hasil').classList.remove('show');
             document.getElementById('tabelHasil').innerHTML = '';
         }
     </script>

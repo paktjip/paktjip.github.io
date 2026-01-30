@@ -5,147 +5,350 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PAKTJIP Digital Printing</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #edebd9;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
-        .container {
-            max-width: 400px;
-            margin: 50px auto;
-            background: #fff;
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a8c5a5 0%, #7fa87c 100%);
+            min-height: 100vh;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .password-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .password-header {
+            background: linear-gradient(135deg, #6b8e6b 0%, #4a6f4a 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .password-header h2 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .password-content {
+            padding: 30px;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #7fa87c;
+        }
+
+        .password-button {
+            background: linear-gradient(135deg, #4a6f4a 0%, #6b8e6b 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(74, 111, 74, 0.3);
+        }
+
+        .password-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 111, 74, 0.4);
+        }
+
+        .password-button:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            color: #d32f2f;
+            font-size: 0.9em;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            display: none;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
             display: none;
         }
-        h1 {
-            font-size: 24px;
-            color: #1c1f4c;
+
+        .header {
+            background: linear-gradient(135deg, #6b8e6b 0%, #4a6f4a 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
         }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #d4e8d4;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
         .link {
+            background: linear-gradient(135deg, #4a6f4a 0%, #6b8e6b 100%);
+            color: white;
+            padding: 25px;
+            text-decoration: none;
+            border-radius: 12px;
             display: flex;
             align-items: center;
-            background: #00848c;
-            color: #fff;
-            padding: 15px;
-            margin: 10px 0;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
-            justify-content: flex-start;
-            cursor: pointer;
+            gap: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(74, 111, 74, 0.3);
         }
+
         .link:hover {
-            background: #037272;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(74, 111, 74, 0.4);
         }
+
+        .link:active {
+            transform: translateY(-2px);
+        }
+
         .link .emoji {
+            font-size: 2.5em;
             flex-shrink: 0;
-            margin-right: 10px;
-            font-size: 20px;
         }
+
         .link .text {
-            flex-grow: 1;
+            font-size: 1.1em;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .coming-soon {
             text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #f4f9f4 0%, #e8f4e8 100%);
+            border-radius: 12px;
+            margin-bottom: 30px;
         }
-        p {
-            color: #fec20f;
+
+        .coming-soon p {
+            color: #4a6f4a;
+            font-size: 1.2em;
+            font-weight: 600;
+            font-style: italic;
         }
+
         footer {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #777;
-        }
-        .password-container {
-            max-width: 300px;
-            margin: 100px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            padding: 25px;
+            background: #f8f9f8;
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
         }
-        input[type="password"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+
+        footer strong {
+            color: #4a6f4a;
         }
-        button {
-            background: #00848c;
-            color: #fff;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: block;
-            margin: 10px auto 0;
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        button:hover {
-            background: #037272;
+
+        .container.show {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .link {
+                padding: 20px;
+            }
+
+            .link .emoji {
+                font-size: 2em;
+            }
+
+            .link .text {
+                font-size: 1em;
+            }
         }
     </style>
     <script>
-        function encodePassword(password) {
-            return btoa(password);
+        const STORED_HASH = "39783f3fe190ffd874f8382bd2787fd1e8ea76ba1bba13de41584e6f7ef3aee3";
+
+        async function h(m) {
+            const b = new TextEncoder().encode(m);
+            const hb = await crypto.subtle.digest('SHA-256', b);
+            const ha = Array.from(new Uint8Array(hb));
+            return ha.map(x => x.toString(16).padStart(2, '0')).join('');
         }
 
-        function checkPassword() {
-            var password = document.getElementById("password").value;
-            var encodedInput = encodePassword(password);
-            const storedEncoded = "UEFLVEpJUDIwMjU="; 
-            
-            if (encodedInput === storedEncoded) {
+        async function checkPassword() {
+            const p = document.getElementById("password");
+            const e = document.getElementById("errorMessage");
+            const hashed = await h(p.value);
+
+            if (hashed === STORED_HASH) {
                 document.querySelector(".password-container").style.display = "none";
                 document.querySelector(".container").style.display = "block";
+                document.querySelector(".container").classList.add("show");
+                
+                const exp = Date.now() + (24 * 60 * 60 * 1000);
+                sessionStorage.setItem("auth", "true");
+                sessionStorage.setItem("exp", exp);
             } else {
-                alert("Password salah!");
+                e.textContent = "❌ Password salah! Silakan coba lagi.";
+                e.classList.add("show");
+                p.value = "";
+                p.focus();
+                
+                p.style.animation = "shake 0.5s";
+                setTimeout(() => p.style.animation = "", 500);
+                setTimeout(() => e.classList.remove("show"), 3000);
             }
         }
-        
+
+        function checkAuth() {
+            const auth = sessionStorage.getItem("auth");
+            const exp = sessionStorage.getItem("exp");
+
+            if (auth === "true" && exp && Date.now() < parseInt(exp)) {
+                document.querySelector(".password-container").style.display = "none";
+                document.querySelector(".container").style.display = "block";
+                document.querySelector(".container").classList.add("show");
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+
+            document.getElementById("password").addEventListener("keypress", function(e) {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    checkPassword();
+                }
+            });
+
+            if (document.querySelector(".password-container").style.display !== "none") {
+                document.getElementById("password").focus();
+            }
+        });
     </script>
 </head>
 <body>
     <div class="password-container">
-        <h2>Masukkan Password</h2>
-        <input type="password" id="password" placeholder="Masukkan password">
-        <button onclick="checkPassword()">Submit</button>
+        <div class="password-header">
+            <h2>🔒 Silakan Masukkan Password</h2>
+        </div>
+        <div class="password-content">
+            <input type="password" id="password" placeholder="Masukkan password" autofocus>
+            <div id="errorMessage" class="error-message"></div>
+            <button class="password-button" onclick="checkPassword()">Masuk</button>
+        </div>
     </div>
     
     <div class="container">
-        <h1>PAKTJIP Digital Printing</h1>
+        <div class="header">
+            <h1>🖨️ PAKTJIP Digital Printing</h1>
+        </div>
         
-        <a class="link" href="potongkertas.html">
-            <span class="emoji">📏</span>
-            <span class="text">Hitung Potongan Kertas</span>
-        </a>
-        
-        <a class="link" href="Hitung_Harga_Buku_2026.html">
-            <span class="emoji">📖</span>
-            <span class="text">Hitung Harga Buku</span>
-        </a>
-        
-		<a class="link" href="HargaSpanram.html">
-            <span class="emoji">🖼️</span>
-            <span class="text">Hitung Harga Spanram</span>
-        </a>
-        
-        <a class="link" href="Hitung_Ganci_Akrilik.html">
-            <span class="emoji">🔑</span>
-            <span class="text">Hitung Harga Gantungan Kunci Akrilik</span>
-        </a>
-        
-        <p>More to coming soon!</p>
+        <div class="content">
+            <div class="links-grid">
+                <a class="link" href="potongkertas.html">
+                    <span class="emoji">📐</span>
+                    <span class="text">Hitung Potongan Kertas</span>
+                </a>
+                
+                <a class="link" href="Hitung_Harga_Buku_2026.html">
+                    <span class="emoji">📖</span>
+                    <span class="text">Hitung Harga Buku</span>
+                </a>
+                
+                <a class="link" href="HargaSpanram.html">
+                    <span class="emoji">🖼️</span>
+                    <span class="text">Hitung Harga Spanram</span>
+                </a>
+                
+                <a class="link" href="Hitung_Ganci_Akrilik.html">
+                    <span class="emoji">🔑</span>
+                    <span class="text">Hitung Harga Gantungan Kunci Akrilik</span>
+                </a>
+            </div>
+            
+            <div class="coming-soon">
+                <p>✨ More to coming soon! ✨</p>
+            </div>
+        </div>
         
         <footer>
-            Copyright &copy; 2025 PAKTJIP Digital Printing<br>
-            Developed by Lukas Ardianto
+            <strong>Copyright © 2025 PAKTJIP Digital Printing</strong><br>
+            Developed by Lukas Ardianto using ChatGPT and Claude AI
         </footer>
     </div>
 </body>

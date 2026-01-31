@@ -16,15 +16,78 @@
             background: linear-gradient(135deg, #a8c5a5 0%, #7fa87c 100%);
             min-height: 100vh;
             padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            border-radius: 30px;
+            padding: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        body.dark-mode .dark-mode-toggle {
+            background: #2a2a3e;
+        }
+
+        .toggle-switch {
+            width: 50px;
+            height: 26px;
+            background: #ccc;
+            border-radius: 13px;
+            position: relative;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #4a6f4a;
+        }
+
+        .toggle-slider {
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(24px);
+        }
+
+        .toggle-icon {
+            font-size: 1.2em;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             background: white;
             border-radius: 15px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             overflow: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark-mode .container {
+            background: #2a2a3e;
+            color: #e0e0e0;
         }
 
         .header {
@@ -32,6 +95,10 @@
             color: white;
             padding: 30px;
             text-align: center;
+        }
+
+        body.dark-mode .header {
+            background: linear-gradient(135deg, #3a4a5a 0%, #2a3a4a 100%);
         }
 
         .header h1 {
@@ -48,6 +115,56 @@
             padding: 30px;
         }
 
+        .shape-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .shape-option {
+            flex: 1;
+            max-width: 200px;
+            padding: 20px;
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        body.dark-mode .shape-option {
+            background: #1a1a2e;
+            border-color: #444;
+            color: #e0e0e0;
+        }
+
+        .shape-option:hover {
+            border-color: #7fa87c;
+            transform: translateY(-2px);
+        }
+
+        .shape-option.active {
+            border-color: #4a6f4a;
+            background: linear-gradient(135deg, #e8f4e8 0%, #d4e8d4 100%);
+        }
+
+        body.dark-mode .shape-option.active {
+            background: linear-gradient(135deg, #3a4a5a 0%, #2a3a4a 100%);
+            border-color: #6a8a6a;
+        }
+
+        .shape-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .shape-name {
+            font-weight: 600;
+            color: #4a6f4a;
+        }
+
         .section-title {
             font-size: 1.1em;
             font-weight: 600;
@@ -55,6 +172,11 @@
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 2px solid #e8f4e8;
+        }
+
+        body.dark-mode .section-title {
+            color: #8fc98f;
+            border-bottom-color: #444;
         }
 
         .form-grid {
@@ -76,6 +198,10 @@
             font-size: 0.95em;
         }
 
+        body.dark-mode label {
+            color: #e0e0e0;
+        }
+
         input {
             padding: 12px;
             border: 2px solid #ddd;
@@ -84,9 +210,19 @@
             transition: border-color 0.3s;
         }
 
+        body.dark-mode input {
+            background: #1a1a2e;
+            border-color: #444;
+            color: #e0e0e0;
+        }
+
         input:focus {
             outline: none;
             border-color: #7fa87c;
+        }
+
+        body.dark-mode input:focus {
+            border-color: #6a8a6a;
         }
 
         .button-group {
@@ -133,16 +269,52 @@
             padding: 25px;
             background: linear-gradient(135deg, #e8f4e8 0%, #d4e8d4 100%);
             border-radius: 12px;
-            text-align: center;
-            font-size: 1.2em;
-            font-weight: 600;
-            color: #4a6f4a;
             display: none;
+        }
+
+        body.dark-mode #hasil {
+            background: linear-gradient(135deg, #2a3a4a 0%, #3a4a5a 100%);
         }
 
         #hasil.show {
             display: block;
             animation: fadeIn 0.5s ease-out;
+        }
+
+        .result-main {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #4a6f4a;
+            margin-bottom: 15px;
+        }
+
+        body.dark-mode .result-main {
+            color: #8fc98f;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        body.dark-mode .result-details {
+            color: #b0b0b0;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            background: white;
+            border-radius: 6px;
+        }
+
+        body.dark-mode .result-item {
+            background: #1a1a2e;
         }
 
         @keyframes fadeIn {
@@ -161,6 +333,15 @@
             padding: 25px;
             background: #f8f9f8;
             border-radius: 12px;
+            display: none;
+        }
+
+        body.dark-mode .visualization-container {
+            background: #1a1a2e;
+        }
+
+        .visualization-container.show {
+            display: block;
         }
 
         .visualization-title {
@@ -171,26 +352,27 @@
             text-align: center;
         }
 
-        .parent-box {
-            position: relative;
-            margin: 0 auto;
-            background-color: rgba(127, 168, 124, 0.15);
-            border: 3px solid #7fa87c;
+        body.dark-mode .visualization-title {
+            color: #8fc98f;
+        }
+
+        #canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+
+        #layoutCanvas {
+            border: 2px solid #7fa87c;
             border-radius: 8px;
+            background: white;
+            max-width: 100%;
+            height: auto;
         }
 
-        .child-table {
-            position: absolute;
-            top: 0;
-            left: 0;
-            border-collapse: collapse;
-            width: 100%;
-            height: 100%;
-        }
-
-        .cell {
-            background-color: rgba(74, 111, 74, 0.3);
-            border: 2px solid #4a6f4a;
+        body.dark-mode #layoutCanvas {
+            border-color: #6a8a6a;
         }
 
         footer {
@@ -203,8 +385,18 @@
             border-top: 1px solid #e8f4e8;
         }
 
+        body.dark-mode footer {
+            background: #1a1a2e;
+            color: #b0b0b0;
+            border-top-color: #444;
+        }
+
         footer strong {
             color: #4a6f4a;
+        }
+
+        body.dark-mode footer strong {
+            color: #8fc98f;
         }
 
         @media (max-width: 768px) {
@@ -219,38 +411,88 @@
             .button-group {
                 flex-direction: column;
             }
+
+            .shape-selector {
+                flex-direction: column;
+            }
+
+            .shape-option {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+        <span class="toggle-icon">☀️</span>
+        <div class="toggle-switch" id="darkModeSwitch">
+            <div class="toggle-slider"></div>
+        </div>
+        <span class="toggle-icon">🌙</span>
+    </div>
+
     <div class="container">
         <div class="header">
             <h1>📐 Penghitung Potongan Kertas</h1>
-            <p>Optimasi Pemotongan Kertas</p>
+            <p>Optimasi Pemotongan Kertas & Lingkaran/Oval</p>
         </div>
 
         <div class="content">
-            <div class="section-title">Data Kertas</div>
+            <div class="shape-selector">
+                <div class="shape-option active" data-shape="rectangle" onclick="selectShape('rectangle')">
+                    <div class="shape-icon">▭</div>
+                    <div class="shape-name">Persegi Panjang</div>
+                </div>
+                <div class="shape-option" data-shape="circle" onclick="selectShape('circle')">
+                    <div class="shape-icon">⬤</div>
+                    <div class="shape-name">Lingkaran / Oval</div>
+                </div>
+            </div>
+
+            <div class="section-title">Area Cetak</div>
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="panjangKertas">Panjang Kertas (cm)</label>
-                    <input type="number" id="panjangKertas" placeholder="Contoh: 100" step="0.1" required>
+                    <label for="panjangKertas">Panjang (cm)</label>
+                    <input type="number" id="panjangKertas" placeholder="Contoh: 31.5" step="0.1" value="31.5" required>
                 </div>
                 <div class="form-group">
-                    <label for="lebarKertas">Lebar Kertas (cm)</label>
-                    <input type="number" id="lebarKertas" placeholder="Contoh: 70" step="0.1" required>
+                    <label for="lebarKertas">Lebar (cm)</label>
+                    <input type="number" id="lebarKertas" placeholder="Contoh: 47.5" step="0.1" value="47.5" required>
                 </div>
             </div>
 
             <div class="section-title">Ukuran Potongan</div>
+            <div id="rectangleInputs">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="panjangPotongan">Panjang Potongan (cm)</label>
+                        <input type="number" id="panjangPotongan" placeholder="Contoh: 21" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lebarPotongan">Lebar Potongan (cm)</label>
+                        <input type="number" id="lebarPotongan" placeholder="Contoh: 14.8" step="0.1" required>
+                    </div>
+                </div>
+            </div>
+
+            <div id="circleInputs" style="display: none;">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="panjangOval">Panjang (cm)</label>
+                        <input type="number" id="panjangOval" placeholder="Contoh: 5" step="0.1" required oninput="syncOvalWidth()">
+                    </div>
+                    <div class="form-group">
+                        <label for="lebarOval">Lebar (cm)</label>
+                        <input type="number" id="lebarOval" placeholder="Sama dengan panjang" step="0.1" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">Spacing</div>
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="panjangPotongan">Panjang Potongan (cm)</label>
-                    <input type="number" id="panjangPotongan" placeholder="Contoh: 21" step="0.1" required>
-                </div>
-                <div class="form-group">
-                    <label for="lebarPotongan">Lebar Potongan (cm)</label>
-                    <input type="number" id="lebarPotongan" placeholder="Contoh: 14.8" step="0.1" required>
+                    <label for="spacing">Jarak Antar Potongan (mm)</label>
+                    <input type="number" id="spacing" placeholder="Contoh: 0" step="0.1" value="0" required>
                 </div>
             </div>
 
@@ -265,7 +507,12 @@
 
             <div id="hasil"></div>
 
-            <div id="tabelHasil"></div>
+            <div id="visualizationSection" class="visualization-container">
+                <div class="visualization-title">Preview Layout Pemotongan</div>
+                <div id="canvas-container">
+                    <canvas id="layoutCanvas"></canvas>
+                </div>
+            </div>
         </div>
 
         <footer>
@@ -275,90 +522,596 @@
     </div>
 
     <script>
-        function hitungPotongan() {
-            const panjangKertas = parseFloat(document.getElementById('panjangKertas').value);
-            const lebarKertas = parseFloat(document.getElementById('lebarKertas').value);
-            const panjangPotongan = parseFloat(document.getElementById('panjangPotongan').value);
-            const lebarPotongan = parseFloat(document.getElementById('lebarPotongan').value);
+        let currentShape = 'rectangle';
 
-            if (!panjangKertas || !lebarKertas || !panjangPotongan || !lebarPotongan) {
-                alert('Harap isi semua bidang input dengan nilai yang valid!');
-                return;
-            }
-
-            if (panjangKertas <= 0 || lebarKertas <= 0 || panjangPotongan <= 0 || lebarPotongan <= 0) {
-                alert('Semua nilai harus lebih besar dari 0!');
-                return;
-            }
-
-            const mode1 = hitungPotonganMode(panjangKertas, lebarKertas, panjangPotongan, lebarPotongan);
-            const mode2 = hitungPotonganMode(panjangKertas, lebarKertas, lebarPotongan, panjangPotongan);
-
-            const maxMode = mode1.total > mode2.total ? mode1 : mode2;
-
-            const areaDigunakanPanjang = maxMode.rows * (maxMode === mode1 ? panjangPotongan : lebarPotongan);
-            const areaDigunakanLebar = maxMode.columns * (maxMode === mode1 ? lebarPotongan : panjangPotongan);
-
-            const hasilDiv = document.getElementById('hasil');
-            hasilDiv.innerHTML = `
-                <div style="font-size: 1.5em; margin-bottom: 10px;">
-                    ✅ ${maxMode.total} Potongan
-                </div>
-                <div style="font-size: 0.9em; color: #666;">
-                    Menggunakan area ${areaDigunakanPanjang.toFixed(1)} cm × ${areaDigunakanLebar.toFixed(1)} cm<br>
-                    Layout: ${maxMode.rows} baris × ${maxMode.columns} kolom
-                </div>
-            `;
-            hasilDiv.classList.add('show');
-
-            let scaleFactor = 5;
-
-            let visualizationHTML = `
-                <div class="visualization-container">
-                    <div class="visualization-title">Visualisasi Pemotongan</div>
-                    <div class="parent-box" style="width: ${lebarKertas * scaleFactor}px; height: ${panjangKertas * scaleFactor}px;">
-                        <table class="child-table">
-            `;
-
-            for (let i = 0; i < maxMode.rows; i++) {
-                visualizationHTML += '<tr>';
-                for (let j = 0; j < maxMode.columns; j++) {
-                    visualizationHTML += `<td class="cell" style="width: ${maxMode.cellWidth * scaleFactor}px; height: ${maxMode.cellHeight * scaleFactor}px;"></td>`;
-                }
-                visualizationHTML += '</tr>';
-            }
-
-            visualizationHTML += `
-                        </table>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('tabelHasil').innerHTML = visualizationHTML;
+        // Dark mode functionality
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            document.getElementById('darkModeSwitch').classList.toggle('active');
+            
+            // Save preference
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
         }
 
-        function hitungPotonganMode(panjangKertas, lebarKertas, panjangPotongan, lebarPotongan) {
-            const jumlahPotonganPanjang = Math.floor(panjangKertas / panjangPotongan);
-            const jumlahPotonganLebar = Math.floor(lebarKertas / lebarPotongan);
-            const total = jumlahPotonganPanjang * jumlahPotonganLebar;
+        // Load dark mode preference
+        window.addEventListener('DOMContentLoaded', () => {
+            const isDark = localStorage.getItem('darkMode') === 'true';
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeSwitch').classList.add('active');
+            }
+        });
 
+        // Auto-sync oval width with length for circles
+        function syncOvalWidth() {
+            const panjang = document.getElementById('panjangOval').value;
+            const lebar = document.getElementById('lebarOval');
+            
+            // Only sync if lebar is empty or hasn't been manually edited
+            if (!lebar.dataset.manuallyEdited) {
+                lebar.value = panjang;
+            }
+        }
+
+        // Mark lebar as manually edited when user changes it
+        document.addEventListener('DOMContentLoaded', () => {
+            const lebarOval = document.getElementById('lebarOval');
+            lebarOval.addEventListener('input', () => {
+                lebarOval.dataset.manuallyEdited = 'true';
+            });
+        });
+
+        function selectShape(shape) {
+            currentShape = shape;
+            
+            // Update active state
+            document.querySelectorAll('.shape-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            document.querySelector(`[data-shape="${shape}"]`).classList.add('active');
+
+            // Show/hide appropriate inputs
+            document.getElementById('rectangleInputs').style.display = shape === 'rectangle' ? 'block' : 'none';
+            document.getElementById('circleInputs').style.display = shape === 'circle' ? 'block' : 'none';
+            
+            // Reset manual edit flag when switching shapes
+            if (shape === 'circle') {
+                document.getElementById('lebarOval').dataset.manuallyEdited = '';
+            }
+        }
+
+        function hitungPotongan() {
+            const inputPanjang = parseFloat(document.getElementById('panjangKertas').value);
+            const inputLebar = parseFloat(document.getElementById('lebarKertas').value);
+            const spacing = parseFloat(document.getElementById('spacing').value) / 10; // Convert mm to cm
+
+            if (!inputPanjang || !inputLebar || inputPanjang <= 0 || inputLebar <= 0) {
+                alert('Harap isi ukuran area cetak dengan nilai yang valid!');
+                return;
+            }
+
+            let result;
+
+            if (currentShape === 'rectangle') {
+                const inputCutPanjang = parseFloat(document.getElementById('panjangPotongan').value);
+                const inputCutLebar = parseFloat(document.getElementById('lebarPotongan').value);
+
+                if (!inputCutPanjang || !inputCutLebar || inputCutPanjang <= 0 || inputCutLebar <= 0) {
+                    alert('Harap isi ukuran potongan dengan nilai yang valid!');
+                    return;
+                }
+
+                // Try paper orientation 1: use as-is (width=inputPanjang, height=inputLebar)
+                const result1 = hitungRectangle(inputPanjang, inputLebar, inputCutPanjang, inputCutLebar, spacing);
+                result1.paperRotated = false;
+                
+                // Try paper orientation 2: rotate paper (width=inputLebar, height=inputPanjang)
+                const result2 = hitungRectangle(inputLebar, inputPanjang, inputCutPanjang, inputCutLebar, spacing);
+                result2.paperRotated = true;
+                
+                console.log('Result1 (no rotation):', result1);
+                console.log('Result2 (rotated):', result2);
+                
+                if (result2.total > result1.total) {
+                    result = result2;
+                } else if (result1.total > result2.total) {
+                    result = result1;
+                } else {
+                    // If equal, prefer non-rotated
+                    result = result1;
+                }
+                
+                // Set the actual paper dimensions used
+                result.usedPaperWidth = result.paperWidth;
+                result.usedPaperHeight = result.paperHeight;
+                
+                console.log('Selected result:', result);
+                
+                displayResult(result, 'rectangle');
+                drawRectangleLayout(result);
+            } else if (currentShape === 'circle') {
+                const panjangOval = parseFloat(document.getElementById('panjangOval').value);
+                const lebarOval = parseFloat(document.getElementById('lebarOval').value);
+
+                if (!panjangOval || !lebarOval || panjangOval <= 0 || lebarOval <= 0) {
+                    alert('Harap isi ukuran lingkaran/oval dengan nilai yang valid!');
+                    return;
+                }
+
+                // Try both paper orientations and pick the best
+                const result1 = hitungCircleOptimal(inputPanjang, inputLebar, panjangOval, lebarOval, spacing);
+                result1.usedPaperWidth = inputPanjang;
+                result1.usedPaperHeight = inputLebar;
+                result1.paperRotated = false;
+                
+                const result2 = hitungCircleOptimal(inputLebar, inputPanjang, panjangOval, lebarOval, spacing);
+                result2.usedPaperWidth = inputLebar;
+                result2.usedPaperHeight = inputPanjang;
+                result2.paperRotated = true;
+                
+                if (result2.total > result1.total) {
+                    result = result2;
+                } else {
+                    result = result1;
+                }
+                
+                displayResult(result, 'circle');
+                drawCircleLayout(result);
+            }
+        }
+
+        function hitungRectangle(paperWidth, paperHeight, cutWidth, cutHeight, spacing) {
+            // paperWidth = horizontal dimension (for columns)
+            // paperHeight = vertical dimension (for rows)
+            // cutWidth = width of each cut (horizontal)
+            // cutHeight = height of each cut (vertical)
+            
+            const cutWithSpacingW = cutWidth + spacing;
+            const cutWithSpacingH = cutHeight + spacing;
+            
+            // Mode 1: Use cuts in original orientation
+            const mode1 = {
+                columns: Math.floor(paperWidth / cutWithSpacingW),
+                rows: Math.floor(paperHeight / cutWithSpacingH),
+                orientation: 'normal',
+                usedCutWidth: cutWidth,
+                usedCutHeight: cutHeight
+            };
+            mode1.total = mode1.columns * mode1.rows;
+
+            // Mode 2: Rotate cuts 90 degrees
+            const mode2 = {
+                columns: Math.floor(paperWidth / cutWithSpacingH),
+                rows: Math.floor(paperHeight / cutWithSpacingW),
+                orientation: 'rotasi 90°',
+                usedCutWidth: cutHeight,
+                usedCutHeight: cutWidth
+            };
+            mode2.total = mode2.columns * mode2.rows;
+
+            const best = mode1.total >= mode2.total ? mode1 : mode2;
+            
             return {
-                total: total,
-                rows: jumlahPotonganPanjang,
-                columns: jumlahPotonganLebar,
-                cellWidth: lebarPotongan,
-                cellHeight: panjangPotongan
+                total: best.total,
+                rows: best.rows,
+                columns: best.columns,
+                orientation: best.orientation,
+                sisaPanjang: paperHeight - (best.rows * (best.usedCutHeight + spacing)),
+                sisaLebar: paperWidth - (best.columns * (best.usedCutWidth + spacing)),
+                cutWidth: best.usedCutWidth,
+                cutHeight: best.usedCutHeight,
+                spacing: spacing,
+                paperWidth: paperWidth,
+                paperHeight: paperHeight
             };
         }
 
+        function hitungCircleOptimal(paperWidth, paperHeight, ellipseWidth, ellipseHeight, spacing) {
+            let bestResult = null;
+            let maxCount = 0;
+
+            // Try multiple packing strategies with both orientations
+            const strategies = [
+                // Original orientation
+                { method: () => calculateGridPacking(paperWidth, paperHeight, ellipseWidth, ellipseHeight, spacing), name: 'Grid Standard' },
+                { method: () => calculateHexPackingV1(paperWidth, paperHeight, ellipseWidth, ellipseHeight, spacing), name: 'Hex V1' },
+                { method: () => calculateHexPackingV2(paperWidth, paperHeight, ellipseWidth, ellipseHeight, spacing), name: 'Hex V2' },
+                { method: () => calculateOptimalPacking(paperWidth, paperHeight, ellipseWidth, ellipseHeight, spacing), name: 'Optimal' },
+                
+                // Rotated 90 degrees
+                { method: () => calculateGridPacking(paperWidth, paperHeight, ellipseHeight, ellipseWidth, spacing), name: 'Grid Rotasi' },
+                { method: () => calculateHexPackingV1(paperWidth, paperHeight, ellipseHeight, ellipseWidth, spacing), name: 'Hex V1 Rotasi' },
+                { method: () => calculateHexPackingV2(paperWidth, paperHeight, ellipseHeight, ellipseWidth, spacing), name: 'Hex V2 Rotasi' },
+                { method: () => calculateOptimalPacking(paperWidth, paperHeight, ellipseHeight, ellipseWidth, spacing), name: 'Optimal Rotasi' }
+            ];
+
+            for (let strategy of strategies) {
+                const result = strategy.method();
+                if (result.total > maxCount) {
+                    maxCount = result.total;
+                    bestResult = result;
+                    bestResult.method = strategy.name;
+                }
+            }
+
+            return bestResult;
+        }
+
+        function calculateGridPacking(paperWidth, paperHeight, ellipseWidth, ellipseHeight, spacing) {
+            const widthWithSpacing = ellipseWidth + spacing;
+            const heightWithSpacing = ellipseHeight + spacing;
+            
+            const cols = Math.floor(paperWidth / widthWithSpacing);
+            const rows = Math.floor(paperHeight / heightWithSpacing);
+            const total = cols * rows;
+
+            const circles = [];
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    circles.push({
+                        x: col * widthWithSpacing + ellipseWidth / 2,
+                        y: row * heightWithSpacing + ellipseHeight / 2,
+                        rx: ellipseWidth / 2,
+                        ry: ellipseHeight / 2
+                    });
+                }
+            }
+
+            return {
+                total: total,
+                method: 'Grid Standard',
+                circles: circles,
+                ellipseWidth: ellipseWidth,
+                ellipseHeight: ellipseHeight,
+                cols: cols,
+                rows: rows
+            };
+        }
+
+        function calculateHexPackingV1(paperWidth, paperHeight, ellipseWidth, ellipseHeight, spacing) {
+            // Traditional hexagonal packing with offset rows
+            const circles = [];
+            const widthWithSpacing = ellipseWidth + spacing;
+            const heightWithSpacing = ellipseHeight + spacing;
+            const radius_x = ellipseWidth / 2;
+            const radius_y = ellipseHeight / 2;
+            
+            // Vertical spacing between row centers for hexagonal pattern
+            const verticalSpacing = heightWithSpacing * 0.866; // sqrt(3)/2
+            
+            let rowIndex = 0;
+            let y = radius_y;
+
+            while (y + radius_y <= paperHeight) {
+                const isEvenRow = rowIndex % 2 === 0;
+                
+                // Even rows: start from left edge
+                // Odd rows: offset by half width
+                const xStart = isEvenRow ? radius_x : radius_x + widthWithSpacing / 2;
+                let x = xStart;
+
+                while (x + radius_x <= paperWidth) {
+                    circles.push({
+                        x: x,
+                        y: y,
+                        rx: radius_x,
+                        ry: radius_y
+                    });
+                    x += widthWithSpacing;
+                }
+
+                y += verticalSpacing;
+                rowIndex++;
+            }
+
+            return {
+                total: circles.length,
+                method: 'Hexagonal Packing V1',
+                circles: circles,
+                ellipseWidth: ellipseWidth,
+                ellipseHeight: ellipseHeight
+            };
+        }
+
+        function calculateHexPackingV2(paperWidth, paperHeight, ellipseWidth, ellipseHeight, spacing) {
+            // Alternative hexagonal with different starting position
+            const circles = [];
+            const widthWithSpacing = ellipseWidth + spacing;
+            const heightWithSpacing = ellipseHeight + spacing;
+            const radius_x = ellipseWidth / 2;
+            const radius_y = ellipseHeight / 2;
+            
+            const verticalSpacing = heightWithSpacing * 0.866;
+            
+            let rowIndex = 0;
+            let y = radius_y;
+
+            while (y + radius_y <= paperHeight) {
+                const isOddRow = rowIndex % 2 === 1;
+                
+                // Odd rows get offset
+                const xStart = isOddRow ? radius_x + widthWithSpacing / 2 : radius_x;
+                let x = xStart;
+
+                while (x + radius_x <= paperWidth) {
+                    circles.push({
+                        x: x,
+                        y: y,
+                        rx: radius_x,
+                        ry: radius_y
+                    });
+                    x += widthWithSpacing;
+                }
+
+                y += verticalSpacing;
+                rowIndex++;
+            }
+
+            return {
+                total: circles.length,
+                method: 'Hexagonal Packing V2',
+                circles: circles,
+                ellipseWidth: ellipseWidth,
+                ellipseHeight: ellipseHeight
+            };
+        }
+
+        function calculateOptimalPacking(paperWidth, paperHeight, ellipseWidth, ellipseHeight, spacing) {
+            // Try to maximize by testing different vertical spacings
+            let bestCircles = [];
+            let maxCount = 0;
+            
+            const widthWithSpacing = ellipseWidth + spacing;
+            const heightWithSpacing = ellipseHeight + spacing;
+            
+            // Try different vertical spacing ratios
+            const spacingRatios = [1.0, 0.95, 0.9, 0.866, 0.85, 0.8];
+            
+            for (let ratio of spacingRatios) {
+                const circles = [];
+                const radius_x = ellipseWidth / 2;
+                const radius_y = ellipseHeight / 2;
+                const verticalSpacing = heightWithSpacing * ratio;
+                
+                let rowIndex = 0;
+                let y = radius_y;
+
+                while (y + radius_y <= paperHeight) {
+                    const isEvenRow = rowIndex % 2 === 0;
+                    const xStart = isEvenRow ? radius_x : radius_x + widthWithSpacing / 2;
+                    let x = xStart;
+
+                    while (x + radius_x <= paperWidth) {
+                        circles.push({
+                            x: x,
+                            y: y,
+                            rx: radius_x,
+                            ry: radius_y
+                        });
+                        x += widthWithSpacing;
+                    }
+
+                    y += verticalSpacing;
+                    rowIndex++;
+                }
+
+                if (circles.length > maxCount) {
+                    maxCount = circles.length;
+                    bestCircles = circles;
+                }
+            }
+
+            return {
+                total: bestCircles.length,
+                method: 'Optimal Packing',
+                circles: bestCircles,
+                ellipseWidth: ellipseWidth,
+                ellipseHeight: ellipseHeight
+            };
+        }
+
+        function displayResult(result, shapeType) {
+            const hasilDiv = document.getElementById('hasil');
+            
+            let detailsHTML = '';
+            
+            if (shapeType === 'rectangle') {
+                detailsHTML = `
+                    <div class="result-details">
+                        <div class="result-item">
+                            <span><strong>Layout:</strong></span>
+                            <span>${result.rows} baris × ${result.columns} kolom</span>
+                        </div>
+                        <div class="result-item">
+                            <span><strong>Sisa Panjang:</strong></span>
+                            <span>${result.sisaPanjang.toFixed(1)} cm</span>
+                        </div>
+                        <div class="result-item">
+                            <span><strong>Sisa Lebar:</strong></span>
+                            <span>${result.sisaLebar.toFixed(1)} cm</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                const panjangKertas = parseFloat(document.getElementById('panjangKertas').value);
+                const lebarKertas = parseFloat(document.getElementById('lebarKertas').value);
+                const actualWidth = result.paperRotated ? lebarKertas : panjangKertas;
+                const actualHeight = result.paperRotated ? panjangKertas : lebarKertas;
+                
+                const efficiency = ((result.total * Math.PI * (result.ellipseWidth/2) * (result.ellipseHeight/2)) / 
+                                   (actualWidth * actualHeight) * 100).toFixed(1);
+                
+                detailsHTML = `
+                    <div class="result-details">
+                        <div class="result-item">
+                            <span><strong>Efisiensi:</strong></span>
+                            <span>${efficiency}%</span>
+                        </div>
+                        <div class="result-item">
+                            <span><strong>Ukuran:</strong></span>
+                            <span>${result.ellipseWidth} × ${result.ellipseHeight} cm</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            hasilDiv.innerHTML = `
+                <div class="result-main">
+                    ✅ ${result.total} Potongan
+                </div>
+                ${detailsHTML}
+            `;
+            hasilDiv.classList.add('show');
+            document.getElementById('visualizationSection').classList.add('show');
+        }
+
+        function drawRectangleLayout(result) {
+            const canvas = document.getElementById('layoutCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Use the paper dimensions that were actually used in calculation
+            // paperWidth should be horizontal (columns direction)
+            // paperHeight should be vertical (rows direction)
+            const paperWidth = result.usedPaperWidth;
+            const paperHeight = result.usedPaperHeight;
+            const spacing = result.spacing;
+            
+            console.log('Drawing canvas:', {
+                paperWidth,
+                paperHeight,
+                rows: result.rows,
+                columns: result.columns,
+                cutWidth: result.cutWidth,
+                cutHeight: result.cutHeight
+            });
+            
+            // Calculate scale to fit canvas nicely (maintain aspect ratio)
+            const maxCanvasWidth = 800;
+            const maxCanvasHeight = 600;
+            const scale = Math.min(maxCanvasWidth / paperWidth, maxCanvasHeight / paperHeight, 8);
+            
+            canvas.width = paperWidth * scale;
+            canvas.height = paperHeight * scale;
+            
+            // Draw paper background
+            const isDark = document.body.classList.contains('dark-mode');
+            ctx.fillStyle = isDark ? '#2a2a3e' : '#f0f0f0';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw border
+            ctx.strokeStyle = isDark ? '#6a8a6a' : '#7fa87c';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(0, 0, canvas.width, canvas.height);
+            
+            // Get cut dimensions from result
+            const actualCutWidth = result.cutWidth;
+            const actualCutHeight = result.cutHeight;
+            
+            ctx.fillStyle = isDark ? 'rgba(106, 138, 106, 0.3)' : 'rgba(74, 111, 74, 0.3)';
+            ctx.strokeStyle = isDark ? '#6a8a6a' : '#4a6f4a';
+            ctx.lineWidth = 2;
+            
+            // Draw cuts: columns go horizontal, rows go vertical
+            for (let row = 0; row < result.rows; row++) {
+                for (let col = 0; col < result.columns; col++) {
+                    const x = col * (actualCutWidth + spacing) * scale;
+                    const y = row * (actualCutHeight + spacing) * scale;
+                    const w = actualCutWidth * scale;
+                    const h = actualCutHeight * scale;
+                    
+                    ctx.fillRect(x, y, w, h);
+                    ctx.strokeRect(x, y, w, h);
+                }
+            }
+            
+            // Draw waste area
+            if (result.sisaPanjang > 0 || result.sisaLebar > 0) {
+                ctx.fillStyle = isDark ? 'rgba(200, 100, 100, 0.15)' : 'rgba(200, 100, 100, 0.2)';
+                
+                // Calculate used dimensions
+                const usedWidth = result.columns * (actualCutWidth + spacing);
+                const usedHeight = result.rows * (actualCutHeight + spacing);
+                
+                if (paperWidth - usedWidth > 0) {
+                    ctx.fillRect(
+                        usedWidth * scale,
+                        0,
+                        (paperWidth - usedWidth) * scale,
+                        canvas.height
+                    );
+                }
+                
+                if (paperHeight - usedHeight > 0) {
+                    ctx.fillRect(
+                        0,
+                        usedHeight * scale,
+                        canvas.width,
+                        (paperHeight - usedHeight) * scale
+                    );
+                }
+            }
+        }
+
+        function drawCircleLayout(result) {
+            const canvas = document.getElementById('layoutCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Use the paper dimensions that were actually used in calculation
+            const paperWidth = result.usedPaperWidth;
+            const paperHeight = result.usedPaperHeight;
+            
+            // Calculate scale to maintain aspect ratio
+            const maxCanvasWidth = 800;
+            const maxCanvasHeight = 600;
+            const scale = Math.min(maxCanvasWidth / paperWidth, maxCanvasHeight / paperHeight, 8);
+            
+            canvas.width = paperWidth * scale;
+            canvas.height = paperHeight * scale;
+            
+            // Draw paper background
+            const isDark = document.body.classList.contains('dark-mode');
+            ctx.fillStyle = isDark ? '#2a2a3e' : '#f0f0f0';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw border
+            ctx.strokeStyle = isDark ? '#6a8a6a' : '#7fa87c';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw circles/ellipses
+            ctx.fillStyle = isDark ? 'rgba(106, 138, 106, 0.3)' : 'rgba(74, 111, 74, 0.3)';
+            ctx.strokeStyle = isDark ? '#6a8a6a' : '#4a6f4a';
+            ctx.lineWidth = 2;
+            
+            result.circles.forEach(circle => {
+                ctx.beginPath();
+                ctx.ellipse(
+                    circle.x * scale,
+                    circle.y * scale,
+                    circle.rx * scale,
+                    circle.ry * scale,
+                    0,
+                    0,
+                    2 * Math.PI
+                );
+                ctx.fill();
+                ctx.stroke();
+            });
+        }
+
         function resetForm() {
-            document.getElementById('panjangKertas').value = '';
-            document.getElementById('lebarKertas').value = '';
+            document.getElementById('panjangKertas').value = '31.5';
+            document.getElementById('lebarKertas').value = '47.5';
             document.getElementById('panjangPotongan').value = '';
             document.getElementById('lebarPotongan').value = '';
+            document.getElementById('panjangOval').value = '';
+            document.getElementById('lebarOval').value = '';
+            document.getElementById('lebarOval').dataset.manuallyEdited = '';
+            document.getElementById('spacing').value = '0';
             document.getElementById('hasil').innerHTML = '';
             document.getElementById('hasil').classList.remove('show');
-            document.getElementById('tabelHasil').innerHTML = '';
+            document.getElementById('visualizationSection').classList.remove('show');
         }
     </script>
 </body>

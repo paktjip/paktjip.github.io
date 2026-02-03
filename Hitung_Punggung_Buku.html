@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Ketebalan Punggung Buku - PAKTJIP DIGIPRINT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a8c5a5 0%, #7fa87c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6b8e6b 0%, #4a6f4a 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #d4e8d4;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #4a6f4a;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8f4e8;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        input, select {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #7fa87c;
+        }
+
+        .collapsible-section {
+            background: #f8f9f8;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            border: 2px solid #e8f4e8;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e8f4e8 0%, #d4e8d4 100%);
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #d4e8d4 0%, #c0dcc0 100%);
+        }
+
+        .collapsible-header h3 {
+            color: #4a6f4a;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .collapsible-icon {
+            font-size: 1.2em;
+            color: #4a6f4a;
+            transition: transform 0.3s;
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 20px;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+            padding: 20px;
+        }
+
+        .info-box {
+            background: #fff9e6;
+            border-left: 4px solid #ffa500;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .calculate-button {
+            background: linear-gradient(135deg, #4a6f4a 0%, #6b8e6b 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(74, 111, 74, 0.3);
+        }
+
+        .calculate-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 111, 74, 0.4);
+        }
+
+        #result {
+            display: none;
+            margin-top: 30px;
+        }
+
+        #result.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #e8f4e8 0%, #d4e8d4 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .result-card h3 {
+            color: #4a6f4a;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .result-card .thickness {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #4a6f4a;
+            margin-bottom: 8px;
+        }
+
+        .result-card .detail {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .result-card .formula {
+            font-size: 0.85em;
+            color: #888;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .paper-types-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+        .paper-types-table th,
+        .paper-types-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #e8f4e8;
+        }
+
+        .paper-types-table th {
+            background: #f0f7f0;
+            color: #4a6f4a;
+            font-weight: 600;
+        }
+
+        .paper-types-table tr:hover {
+            background: #f8fdf8;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #f8f9f8;
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
+            border-top: 1px solid #e8f4e8;
+        }
+
+        footer strong {
+            color: #4a6f4a;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .result-card .thickness {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Kalkulator Ketebalan Punggung Buku</h1>
+            <p>Perhitungan Akurat untuk Percetakan & Penerbitan</p>
+        </div>
+
+        <div class="content">
+            <!-- Data Buku -->
+            <div class="section-title">Data Buku</div>
+            <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                <div class="form-group">
+                    <label for="paperTypeIsi">Jenis Kertas Isi</label>
+                    <select id="paperTypeIsi" onchange="updateGramasiInput()">
+                        <option value="hvs-60">HVS 60 gsm</option>
+                        <option value="hvs-70" selected>HVS 70 gsm</option>
+                        <option value="hvs-75">HVS 75 gsm</option>
+                        <option value="hvs-80">HVS 80 gsm</option>
+                        <option value="hvs-100">HVS 100 gsm</option>
+                        <option value="art-120">Art Paper 120 gsm</option>
+                        <option value="art-150">Art Paper 150 gsm</option>
+                        <option value="bc-150">BC 150 gsm</option>
+                        <option value="custom">Atur Manual</option>
+                    </select>
+                </div>
+                <div class="form-group" id="customGramasiGroup" style="display: none;">
+                    <label for="customPaperType">Jenis Kertas Custom</label>
+                    <select id="customPaperType">
+                        <option value="0.0013">Uncoated</option>
+                        <option value="0.001">Coated</option>
+                    </select>
+                </div>
+                <div class="form-group" id="customGramasiInputGroup" style="display: none;">
+                    <label for="customGramasi">Gramasi (gsm)</label>
+                    <input type="number" id="customGramasi" placeholder="Contoh: 100" min="1">
+                </div>
+                <div class="form-group" id="numPagesGroup">
+                    <label for="numPages">Jumlah Lembar Kertas</label>
+                    <input type="number" id="numPages" placeholder="Contoh: 105" required>
+                    <small style="color: #888; margin-top: 5px;">Jumlah lembar kertas isi buku (tidak termasuk cover)</small>
+                </div>
+            </div>
+
+            <button class="calculate-button" onclick="calculateThickness()">
+                📏 Hitung Ketebalan Punggung
+            </button>
+
+            <!-- Hasil -->
+            <div id="result">
+                <div class="section-title">Hasil Perhitungan</div>
+                
+                <div class="result-card">
+                    <h3>📐 Ketebalan Punggung Buku</h3>
+                    <div class="thickness" id="totalThickness">0 mm</div>
+                    <div class="detail" id="thicknessDetail"></div>
+                    <div class="formula" id="thicknessFormula"></div>
+                </div>
+
+                <button class="calculate-button" style="background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%); box-shadow: 0 4px 15px rgba(192, 57, 43, 0.3);" onclick="resetForm()">
+                    🔄 Hitung Ulang
+                </button>
+            </div>
+        </div>
+
+        <footer>
+            <strong>Copyright © 2026 PAKTJIP Digital Printing</strong><br>
+            Vibe Coded by Lukas Ardianto using Claude AI
+        </footer>
+    </div>
+
+    <script>
+        function updateGramasiInput() {
+            const paperType = document.getElementById('paperTypeIsi').value;
+            const customGramasiGroup = document.getElementById('customGramasiGroup');
+            const customGramasiInputGroup = document.getElementById('customGramasiInputGroup');
+            const customGramasiInput = document.getElementById('customGramasi');
+            
+            if (paperType === 'custom') {
+                customGramasiGroup.style.display = 'flex';
+                customGramasiInputGroup.style.display = 'flex';
+                customGramasiInput.focus();
+            } else {
+                customGramasiGroup.style.display = 'none';
+                customGramasiInputGroup.style.display = 'none';
+                customGramasiInput.value = '';
+            }
+        }
+
+        function resetForm() {
+            // Reset semua input
+            document.getElementById('paperTypeIsi').value = 'hvs-70';
+            document.getElementById('customPaperType').value = '0.0013';
+            document.getElementById('customGramasi').value = '';
+            document.getElementById('numPages').value = '';
+            
+            // Sembunyikan field custom
+            document.getElementById('customGramasiGroup').style.display = 'none';
+            document.getElementById('customGramasiInputGroup').style.display = 'none';
+            
+            // Sembunyikan hasil
+            document.getElementById('result').classList.remove('show');
+            
+            // Focus ke field pertama
+            document.getElementById('numPages').focus();
+        }
+
+        function getPaperData(paperType) {
+            const paperDatabase = {
+                'hvs-60': { gramasi: 60, konstanta: 0.0013, nama: 'HVS 60 gsm' },
+                'hvs-70': { gramasi: 70, konstanta: 0.0013, nama: 'HVS 70 gsm' },
+                'hvs-75': { gramasi: 75, konstanta: 0.0013, nama: 'HVS 75 gsm' },
+                'hvs-80': { gramasi: 80, konstanta: 0.0013, nama: 'HVS 80 gsm' },
+                'hvs-100': { gramasi: 100, konstanta: 0.0013, nama: 'HVS 100 gsm' },
+                'art-120': { gramasi: 120, konstanta: 0.001, nama: 'Art Paper 120 gsm' },
+                'art-150': { gramasi: 150, konstanta: 0.001, nama: 'Art Paper 150 gsm' },
+                'bc-150': { gramasi: 150, konstanta: 0.001, nama: 'BC 150 gsm' }
+            };
+            return paperDatabase[paperType];
+        }
+
+        function calculateThickness() {
+            // Ambil nilai input
+            const numSheets = parseInt(document.getElementById('numPages').value);
+            
+            // Validasi input
+            if (isNaN(numSheets) || numSheets <= 0) {
+                alert('Masukkan jumlah lembar kertas yang valid!');
+                return;
+            }
+
+            let gramasi, konstanta, namaPaper;
+            const paperType = document.getElementById('paperTypeIsi').value;
+            
+            if (paperType === 'custom') {
+                // Custom paper
+                gramasi = parseFloat(document.getElementById('customGramasi').value);
+                konstanta = parseFloat(document.getElementById('customPaperType').value);
+                const paperTypeName = document.getElementById('customPaperType').selectedOptions[0].text;
+                
+                if (isNaN(gramasi) || gramasi <= 0) {
+                    alert('Masukkan gramasi kertas yang valid!');
+                    return;
+                }
+                
+                namaPaper = `${paperTypeName} ${gramasi} gsm (Custom)`;
+            } else {
+                // Predefined paper
+                const paperData = getPaperData(paperType);
+                gramasi = paperData.gramasi;
+                konstanta = paperData.konstanta;
+                namaPaper = paperData.nama;
+            }
+
+            // Hitung ketebalan menggunakan konstanta spesifik per jenis kertas
+            const thicknessPerSheet = konstanta * gramasi;
+            
+            // Total ketebalan
+            const totalThickness = numSheets * thicknessPerSheet;
+
+            // Tampilkan hasil
+            document.getElementById('totalThickness').textContent = totalThickness.toFixed(1) + ' mm';
+            
+            const detailText = `${numSheets} lembar × ${namaPaper}`;
+            document.getElementById('thicknessDetail').textContent = detailText;
+            
+            const formulaText = `Formula: ${numSheets} lembar × (${konstanta} × ${gramasi}) = ${numSheets} × ${thicknessPerSheet.toFixed(4)} mm`;
+            document.getElementById('thicknessFormula').textContent = formulaText;
+
+            // Tampilkan hasil
+            document.getElementById('result').classList.add('show');
+        }
+    </script>
+</body>
+</html>

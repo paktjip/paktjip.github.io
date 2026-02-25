@@ -460,7 +460,7 @@
             const unitHargaTxt = unitHargaSel.options[unitHargaSel.selectedIndex].text;
             const tgl = getDeadlineTanggal();
 
-            return `*Pesanan:* ${pesanan}\n*Jumlah:* ${jumlah} ${unitJml}\n*Harga:* Rp${harga} (${unitHargaTxt})\n*Estimasi deadline:* ${tgl}\n_*Balas pesan ini dengan "ACC" jika setuju pesanan diproses 🖨️ Terima kasih 😊*_`;
+            return `*Pesanan:* ${pesanan}\n*Jumlah:* ${jumlah} ${unitJml}\n*Harga:* Rp${harga} (${unitHargaTxt})\n*Estimasi deadline:* ${tgl}\n\n_*Balas pesan ini dengan "ACC" jika setuju pesanan diproses 🖨️ Terima kasih 😊*_`;
         }
 
         function showToast(msg, type) {

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Label Printer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .form {
+      margin-bottom: 20px;
+    }
+
+    .label {
+      width: 33mm;
+      height: 15mm;
+      border: 1px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      word-wrap: break-word;
+      text-align: center;
+    }
+
+    /* Print mode */
+    @page {
+      size: 33mm 15mm;
+      margin: 0;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .label {
+        visibility: visible;
+        position: absolute;
+        left: 0;
+        top: 0;
+        border: none; /* hilangkan border saat print */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="form">
+    <input type="text" id="inputText" placeholder="Isi teks label" />
+    <button onclick="printLabel()">Print</button>
+  </div>
+
+  <div class="label" id="labelPreview">Preview Label</div>
+
+  <script>
+    const input = document.getElementById('inputText');
+    const label = document.getElementById('labelPreview');
+
+    // Update preview setiap kali input berubah
+    input.addEventListener('input', () => {
+      label.textContent = input.value;
+      adjustFontSize();
+    });
+
+    function adjustFontSize() {
+      let size = 12; // ukuran awal
+      label.style.fontSize = size + 'pt';
+
+      // Turunkan font-size sampai muat
+      while ((label.scrollWidth > label.clientWidth || label.scrollHeight > label.clientHeight) && size > 4) {
+        size--;
+        label.style.fontSize = size + 'pt';
+      }
+    }
+
+    function printLabel() {
+      adjustFontSize();
+      window.print();
+    }
+  </script>
+</body>
+</html>

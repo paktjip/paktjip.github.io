@@ -49,8 +49,8 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
 
 .field { margin-bottom:16px; }
 .field label { display:block; font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink2); margin-bottom:6px; }
-.field input,.field select { width:100%; padding:10px 14px; border:1px solid var(--rule); background:var(--bg); font-family:'DM Sans',sans-serif; font-size:14px; color:var(--ink); outline:none; transition:border-color 0.2s; -webkit-appearance:none; border-radius:0; }
-.field input:focus,.field select:focus { border-color:var(--accent2); background:#fff; }
+.field input { width:100%; padding:10px 14px; border:1px solid var(--rule); background:var(--bg); font-family:'DM Sans',sans-serif; font-size:14px; color:var(--ink); outline:none; transition:border-color 0.2s; -webkit-appearance:none; border-radius:0; }
+.field input:focus { border-color:var(--accent2); background:#fff; }
 
 .warning-box { background: #fdf2f2; border-left: 4px solid var(--danger); padding: 14px 18px; margin: 24px 0 16px 0; font-size: 13px; line-height: 1.6; color: var(--ink); }
 .warning-box strong { color: var(--danger); font-weight: 600; display: block; margin-bottom: 4px; font-size: 14px;}
@@ -154,14 +154,13 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
 <div id="page-cover" class="active">
   <div class="cover-card">
     <div class="cover-banner">
-      <div class="cover-label">Formulir Seleksi Karyawan</div>
-      <h1>Tes Admin<br>&amp; Kasir Percetakan</h1>
-      <p>Isi data diri dengan lengkap dan benar sebelum memulai tes</p>
+      <div class="cover-label">Tes Seleksi Karyawan</div>
+      <h1>PAKTJIP Digital Printing</h1>
+      <p>Posisi: Admin - Kasir</p>
     </div>
     <div class="cover-meta">
       <div class="meta-chip"><span class="val">25</span><span class="lbl">Soal</span></div>
       <div class="meta-chip"><span class="val">15 mnt</span><span class="lbl">Waktu</span></div>
-      <div class="meta-chip"><span class="val">Tutup</span><span class="lbl">Sifat</span></div>
     </div>
     <div class="cover-form">
       <h2>Data Diri Peserta</h2>
@@ -170,14 +169,14 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
         <input type="text" id="f-nama" placeholder="Nama sesuai KTP">
       </div>
       <div class="field">
-        <label>Nomor HP / WhatsApp *</label>
+        <label>Nomor WhatsApp *</label>
         <input type="tel" id="f-hp" placeholder="08xx-xxxx-xxxx">
       </div>
 
       <div class="warning-box">
         <strong>PERHATIAN!</strong>
         Dilarang browsing internet, menggunakan AI, kalkulator handphone, atau meminta bantuan orang lain. Kerjakan sesuai kemampuan asli Anda.<br><br>
-        <i>*Untuk soal hitungan matematika, Anda diperbolehkan menggunakan coretan di kertas kosong yang telah disediakan panitia.</i>
+        <i>*Untuk soal hitungan, Anda diperbolehkan menggunakan coretan di kertas kosong yang telah disediakan.</i>
       </div>
 
       <button class="btn-start" onclick="startTest()">Mulai Tes →</button>
@@ -215,7 +214,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
       <div class="done-row"><span class="lbl">Durasi</span><span class="val" id="d-durasi">—</span></div>
       <div class="done-row"><span class="lbl">Soal Dijawab</span><span class="val" id="d-answered">— / 25</span></div>
     </div>
-    <button class="btn-download" onclick="downloadResult()">⬇ Unduh Hasil Tes (.txt)</button>
+    <button class="btn-download" onclick="downloadResult()">⬇ Unduh Hasil Tes (.html)</button>
   </div>
 </div>
 
@@ -238,8 +237,8 @@ const SECTIONS = [
     questions:[
       { id:1, type:'pilgan', text:'Pelanggan ingin mencetak brosur promosi agar tampak mengkilap dan profesional. Bahan yang paling tepat direkomendasikan adalah…', opts:['HVS 70gsm','Art Paper 150gsm','Kertas Koran','Kertas Buram'] },
       { id:2, type:'pilgan', text:'Ukuran kertas A6 adalah ... dari ukuran kertas A4.', opts:['2x lebih besar','4x lebih besar','2x lebih kecil','4x lebih kecil'] },
-      { id:3, type:'pilgan', text:'Format file yang paling aman dan disarankan untuk dikirim ke mesin cetak agar font atau susunan gambar tidak berubah/berantakan adalah…', opts:['Microsoft Word (.docx)','Adobe PDF (.pdf)','Microsoft Excel (.xlsx)','Notepad (.txt)'] },
-      { id:4, type:'pilgan', text:'Finishing yang melapisi permukaan cetak agar lebih tahan goresan dan tampak lebih mewah disebut…', opts:['Die Cut','Emboss','Laminasi','Perforasi'] },
+      { id:3, type:'pilgan', text:'Berikut file yang paling aman dan disarankan untuk dikirim ke percetakan untuk dicetak banner, <strong>kecuali</strong>…', opts:['PDF (.pdf)','TIFF (.tiff)','PowerPoint (.pptx)','File Asli (CorelDraw / AI)'] },
+      { id:4, type:'pilgan', text:'<strong>2,5 rim</strong> sama dengan berapa lembar kertas?', opts:['500 lembar','1.000 lembar','1.250 lembar','2.500 lembar'] },
       { id:5, type:'pilgan', text:'Pelanggan memesan banner outdoor berukuran besar untuk dipasang di luar ruangan. Bahan yang paling tepat adalah…', opts:['Kertas Poster','Flexi / MMT','Kertas Foto','Spanduk Kain'] },
     ]
   },
@@ -291,7 +290,7 @@ let waktuMulai = null;
 let waktuSelesai = null;
 let timerInterval = null;
 const DURATION_SEC = 15 * 60; // 15 menit
-let remaining = DURATION_SEC;
+let targetTime = null; // Agar akurat saat minimize
 let finished = false;
 
 const BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
@@ -320,6 +319,7 @@ function startTest() {
 
   peserta = { nama, hp };
   waktuMulai = new Date();
+  targetTime = waktuMulai.getTime() + (DURATION_SEC * 1000);
 
   buildQuestions();
 
@@ -388,14 +388,13 @@ function markDone(id) {
 }
 
 // ════════════════════════════════════════════
-// TIMER
+// TIMER (Tahan Minimize)
 // ════════════════════════════════════════════
 function startTimer() {
-  remaining = DURATION_SEC;
   renderTimer();
   timerInterval = setInterval(() => {
-    remaining--;
     renderTimer();
+    const remaining = Math.max(0, Math.floor((targetTime - Date.now()) / 1000));
     if (remaining <= 0) {
       clearInterval(timerInterval);
       document.getElementById('timeout-overlay').classList.add('show');
@@ -404,6 +403,7 @@ function startTimer() {
 }
 
 function renderTimer() {
+  const remaining = Math.max(0, Math.floor((targetTime - Date.now()) / 1000));
   const m = Math.floor(remaining/60), s = remaining%60;
   const disp = document.getElementById('timer-display');
   const dot  = document.getElementById('timer-dot');
@@ -463,70 +463,120 @@ function countAnswered() {
 }
 
 // ════════════════════════════════════════════
-// DOWNLOAD TXT
+// DOWNLOAD HTML (PRINT-FRIENDLY A4)
 // ════════════════════════════════════════════
 function downloadResult() {
   const elapsed = Math.floor((waktuSelesai - waktuMulai) / 1000);
-  const W = 62;
-  const line  = (c,n) => c.repeat(n);
-  const hr1   = line('═', W);
-  const hr2   = line('─', W);
-  const center = (s) => { const sp = Math.max(0, Math.floor((W - s.length) / 2)); return ' '.repeat(sp) + s; };
+  
+  let html = `<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Hasil Tes - ${peserta.nama}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+  body { font-family: 'DM Sans', Arial, sans-serif; color: #1c1c1c; background: #f0f0f0; margin: 0; padding: 20px; font-size: 13.5px; line-height: 1.6; }
+  .document { max-width: 210mm; background: #fff; margin: 0 auto; padding: 20mm; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+  .header { text-align: center; border-bottom: 2px solid #1a3a2a; padding-bottom: 15px; margin-bottom: 25px; }
+  .header h1 { margin: 0 0 5px 0; font-size: 20px; color: #1a3a2a; text-transform: uppercase; letter-spacing: 1px;}
+  .header p { margin: 0; font-size: 13px; color: #666; }
+  
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+  .info-box { border: 1px solid #ddd; padding: 15px; border-radius: 4px; }
+  .info-box h3 { margin: 0 0 12px 0; font-size: 12px; text-transform: uppercase; color: #1a3a2a; border-bottom: 1px solid #eee; padding-bottom: 6px; letter-spacing: 1px; }
+  .info-row { display: flex; margin-bottom: 6px; }
+  .info-row .lbl { width: 130px; font-weight: bold; color: #555; }
+  .info-row .val { flex: 1; font-family: monospace; font-size: 14px;}
+  
+  .section-title { font-size: 14px; font-weight: bold; color: #1a3a2a; background: #f9f9f9; padding: 8px 14px; border-left: 4px solid #1a3a2a; margin: 25px 0 15px 0; text-transform: uppercase; }
+  .q-item { margin-bottom: 16px; page-break-inside: avoid; }
+  .q-text { font-weight: 500; margin-bottom: 6px; }
+  .q-ans { padding-left: 20px; color: #2d6048; font-weight: bold; }
+  .q-ans.essay { font-weight: normal; color: #333; font-family: monospace; white-space: pre-wrap; background: #fafafa; padding: 10px 14px; border: 1px solid #eee; margin-top: 6px; border-radius: 4px; font-size: 13px;}
+  .q-unanswered { color: #c0392b; font-style: italic; }
+  
+  .footer { margin-top: 40px; text-align: center; font-size: 11px; color: #888; border-top: 1px solid #eee; padding-top: 10px;}
+  
+  .btn-print { display: block; width: 220px; margin: 0 auto 20px; padding: 12px; text-align: center; background: #1a3a2a; color: #fff; text-decoration: none; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; font-size: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;}
+  .btn-print:hover { background: #2d6048; }
 
-  let txt = '';
-  txt += hr1 + '\n';
-  txt += center('TES SELEKSI KARYAWAN') + '\n';
-  txt += center('ADMIN & KASIR PERCETAKAN') + '\n';
-  txt += hr1 + '\n\n';
-
-  txt += 'DATA PESERTA\n' + hr2 + '\n';
-  txt += `Nama Lengkap       : ${peserta.nama}\n`;
-  txt += `No. HP / WhatsApp  : ${peserta.hp}\n\n`;
-
-  txt += 'WAKTU TES\n' + hr2 + '\n';
-  txt += `Waktu Mulai        : ${formatDT(waktuMulai)}\n`;
-  txt += `Waktu Selesai      : ${formatDT(waktuSelesai)}\n`;
-  txt += `Durasi Pengerjaan  : ${formatDur(elapsed)}\n`;
-  txt += `Soal Dijawab       : ${countAnswered()} dari 25\n\n`;
-
-  txt += hr1 + '\n';
-  txt += center('JAWABAN PESERTA') + '\n';
-  txt += hr1 + '\n';
+  @media print {
+    body { background: none; padding: 0; }
+    .document { box-shadow: none; margin: 0; padding: 0; max-width: 100%; }
+    .btn-print { display: none; }
+  }
+</style>
+</head>
+<body>
+  <button class="btn-print" onclick="window.print()">🖨️ Cetak Hasil (A4)</button>
+  <div class="document">
+    <div class="header">
+      <h1>Hasil Tes Seleksi Karyawan</h1>
+      <p>Posisi: Admin & Kasir Percetakan</p>
+    </div>
+    
+    <div class="info-grid">
+      <div class="info-box">
+        <h3>Data Peserta</h3>
+        <div class="info-row"><div class="lbl">Nama Lengkap</div><div class="val">: ${peserta.nama}</div></div>
+        <div class="info-row"><div class="lbl">No. WhatsApp</div><div class="val">: ${peserta.hp}</div></div>
+      </div>
+      <div class="info-box">
+        <h3>Log Pengerjaan</h3>
+        <div class="info-row"><div class="lbl">Mulai</div><div class="val">: ${formatDT(waktuMulai)}</div></div>
+        <div class="info-row"><div class="lbl">Selesai</div><div class="val">: ${formatDT(waktuSelesai)}</div></div>
+        <div class="info-row"><div class="lbl">Durasi</div><div class="val">: ${formatDur(elapsed)}</div></div>
+        <div class="info-row"><div class="lbl">Terjawab</div><div class="val">: ${countAnswered()} / 25 Soal</div></div>
+      </div>
+    </div>
+    
+    <div class="answers">`;
 
   SECTIONS.forEach(sec => {
-    txt += `\nBAGIAN ${sec.id} — ${sec.title.toUpperCase()}\n${hr2}\n`;
+    html += `<div class="section-title">Bagian ${sec.id} — ${sec.title}</div>`;
 
     sec.questions.forEach(q => {
-      // strip html tags
+      // Hilangkan tag HTML dari pertanyaan jika ada
       const qText = q.text.replace(/<[^>]+>/g,'');
-      txt += `\n[Soal ${q.id}]\n${qText}\n`;
+      html += `<div class="q-item"><div class="q-text">${q.id}. ${qText}</div>`;
 
       if (q.type === 'pilgan') {
         const sel = document.querySelector(`input[name="q${q.id}"]:checked`);
         if (sel) {
-          const idx    = parseInt(sel.value);
+          const idx = parseInt(sel.value);
           const letter = String.fromCharCode(65+idx);
-          txt += `Jawaban : ${letter}. ${q.opts[idx]}\n`;
+          html += `<div class="q-ans">Jawaban: ${letter}. ${q.opts[idx]}</div>`;
         } else {
-          txt += `Jawaban : (tidak dijawab)\n`;
+          html += `<div class="q-ans q-unanswered">Jawaban: (Tidak dijawab)</div>`;
         }
       } else {
-        const ta  = document.querySelector(`#qcard-${q.id} textarea`);
-        const ans = ta && ta.value.trim() ? ta.value.trim() : '(tidak dijawab)';
-        txt += `Jawaban :\n${ans}\n`;
+        const ta = document.querySelector(`#qcard-${q.id} textarea`);
+        const ans = ta && ta.value.trim() ? ta.value.trim() : '';
+        if (ans) {
+          // Escape HTML pada jawaban esai peserta untuk keamanan format
+          const safeAns = ans.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          html += `<div class="q-ans essay">${safeAns}</div>`;
+        } else {
+          html += `<div class="q-ans q-unanswered">Jawaban: (Tidak dijawab)</div>`;
+        }
       }
+      html += `</div>`;
     });
   });
 
-  txt += '\n' + hr1 + '\n';
-  txt += `Dokumen dibuat otomatis pada: ${formatDT(new Date())}\n`;
-  txt += hr1 + '\n';
+  html += `
+    </div>
+    <div class="footer">Dokumen dihasilkan otomatis secara lokal pada: ${formatDT(new Date())}</div>
+  </div>
+</body>
+</html>`;
 
-  const blob = new Blob([txt], { type:'text/plain;charset=utf-8' });
+  // Unduh sebagai file HTML
+  const blob = new Blob([html], { type:'text/html;charset=utf-8' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
   a.href     = url;
-  a.download = `Hasil_Tes_${peserta.nama.replace(/\s+/g,'_')}.txt`;
+  a.download = `Hasil_Tes_${peserta.nama.replace(/\s+/g,'_')}.html`;
   a.click();
   URL.revokeObjectURL(url);
 }

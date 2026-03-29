@@ -180,7 +180,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
     </div>
     <div class="cover-meta">
       <div class="meta-chip"><span class="val">26</span><span class="lbl">Soal</span></div>
-      <div class="meta-chip"><span class="val">15 mnt</span><span class="lbl">Waktu</span></div>
+      <div class="meta-chip"><span class="val">35 mnt</span><span class="lbl">Waktu</span></div>
     </div>
     <div class="cover-form">
       <h2>Data Diri Peserta</h2>
@@ -209,7 +209,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
     <span class="test-header-name" id="hdr-name">—</span>
     <div class="timer-wrap">
       <div class="timer-dot" id="timer-dot"></div>
-      <div id="timer-display">15:00</div>
+      <div id="timer-display">35:00</div>
     </div>
     <button class="btn-finish-header" onclick="confirmFinish()">Selesai</button>
   </div>
@@ -241,7 +241,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
 <div id="timeout-overlay">
   <div class="timeout-box">
     <h3>Waktu Habis!</h3>
-    <p>Durasi 15 menit telah berakhir. Jawaban Anda telah direkam secara otomatis.</p>
+    <p>Durasi 35 menit telah berakhir. Jawaban Anda telah direkam secara otomatis.</p>
     <button onclick="finishTest(true)">Lihat Hasil &amp; Unduh</button>
   </div>
 </div>
@@ -310,7 +310,7 @@ let peserta = {};
 let waktuMulai = null;
 let waktuSelesai = null;
 let timerInterval = null;
-const DURATION_SEC = 15 * 60; // 15 menit
+const DURATION_SEC = 35 * 60; // 35 menit
 let targetTime = null; 
 let finished = false;
 

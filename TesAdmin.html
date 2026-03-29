@@ -77,7 +77,6 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
 .btn-finish-header { padding:7px 18px; background:transparent; border:1px solid rgba(255,255,255,0.4); color:#fff; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; cursor:pointer; transition:all 0.2s; }
 .btn-finish-header:hover { background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.7); }
 
-/* Progress row dibuat sticky di bawah header */
 .progress-row { display:flex; flex-wrap:wrap; gap:5px; padding:14px 28px; background:var(--bg); border-bottom:1px solid var(--rule); position:sticky; top:56px; z-index:99; }
 .prog-dot { width:9px; height:9px; border-radius:50%; background:var(--rule); transition:background 0.2s; cursor:default; }
 .prog-dot.done { background:var(--accent2); }
@@ -285,14 +284,14 @@ const SECTIONS = [
 ];
 
 // ════════════════════════════════════════════
-// STATE
+// STATE & CACHE MANAGER
 // ════════════════════════════════════════════
 let peserta = {};
 let waktuMulai = null;
 let waktuSelesai = null;
 let timerInterval = null;
 const DURATION_SEC = 15 * 60; // 15 menit
-let targetTime = null; // Agar akurat saat minimize
+let targetTime = null; 
 let finished = false;
 
 const BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
@@ -307,6 +306,69 @@ function formatDur(sec) {
   return `${m} menit ${s} detik`;
 }
 
+// SIMPAN KE LOCAL STORAGE
+function saveState() {
+  if (!peserta.nama) return;
+  const answers = {};
+  SECTIONS.forEach(sec => {
+    sec.questions.forEach(q => {
+      if (q.type === 'pilgan') {
+        const sel = document.querySelector(`input[name="q${q.id}"]:checked`);
+        if (sel) answers[q.id] = sel.value;
+      } else {
+        const ta = document.querySelector(`#qcard-${q.id} textarea`);
+        if (ta && ta.value.trim()) answers[q.id] = ta.value.trim();
+      }
+    });
+  });
+  const state = {
+    peserta,
+    waktuMulai: waktuMulai.getTime(),
+    targetTime,
+    answers
+  };
+  localStorage.setItem('paktjip_test_state', JSON.stringify(state));
+}
+
+// CEK CACHE SAAT HALAMAN DIMUAT (REFRESH)
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('paktjip_test_state');
+  if (saved) {
+    try {
+      const state = JSON.parse(saved);
+      peserta = state.peserta;
+      waktuMulai = new Date(state.waktuMulai);
+      targetTime = state.targetTime;
+      
+      buildQuestions();
+      
+      // Kembalikan Jawaban
+      for (const [id, val] of Object.entries(state.answers)) {
+        if (document.querySelector(`input[name="q${id}"]`)) {
+          const radio = document.querySelector(`input[name="q${id}"][value="${val}"]`);
+          if (radio) { radio.checked = true; markDone(id, true); }
+        } else {
+          const ta = document.querySelector(`#qcard-${id} textarea`);
+          if (ta) { ta.value = val; markDone(id, true); }
+        }
+      }
+
+      document.getElementById('page-cover').classList.remove('active');
+      document.getElementById('page-test').classList.add('active');
+      document.getElementById('hdr-name').textContent = peserta.nama;
+
+      if (Date.now() >= targetTime) {
+         document.getElementById('timeout-overlay').classList.add('show');
+      } else {
+         startTimer();
+      }
+    } catch(e) {
+      console.error('Error saat load cache', e);
+      localStorage.removeItem('paktjip_test_state');
+    }
+  }
+});
+
 // ════════════════════════════════════════════
 // START
 // ════════════════════════════════════════════
@@ -319,7 +381,7 @@ function startTest() {
     return;
   }
 
-  // Request Fullscreen on Start
+  // Masuk Fullscreen
   const docElm = document.documentElement;
   if (docElm.requestFullscreen) {
     docElm.requestFullscreen().catch(err => console.log(err));
@@ -334,6 +396,7 @@ function startTest() {
   targetTime = waktuMulai.getTime() + (DURATION_SEC * 1000);
 
   buildQuestions();
+  saveState(); // Inisialisasi Save Data Pertama
 
   document.getElementById('page-cover').classList.remove('active');
   document.getElementById('page-test').classList.add('active');
@@ -394,13 +457,14 @@ function buildQuestions() {
   progRow.innerHTML = dots;
 }
 
-function markDone(id) {
+function markDone(id, skipSave = false) {
   document.getElementById('qcard-'+id).classList.add('answered');
   document.getElementById('dot-'+id).classList.add('done');
+  if (!skipSave) saveState();
 }
 
 // ════════════════════════════════════════════
-// TIMER (Tahan Minimize)
+// TIMER (Tahan Minimize & Refresh)
 // ════════════════════════════════════════════
 function startTimer() {
   renderTimer();
@@ -445,10 +509,17 @@ function finishTest(timeout) {
 
   document.getElementById('timeout-overlay').classList.remove('show');
 
-  // Keluar dari fullscreen jika selesai
+  // Keluar dari fullscreen jika tes selesai
   if (document.exitFullscreen) {
     document.exitFullscreen().catch(err => console.log(err));
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
   }
+
+  // Bersihkan cache storage untuk peserta selanjutnya
+  localStorage.removeItem('paktjip_test_state');
 
   const elapsed  = Math.floor((waktuSelesai - waktuMulai) / 1000);
   const answered = countAnswered();
@@ -556,7 +627,6 @@ function downloadResult() {
     html += `<div class="section-title">Bagian ${sec.id} — ${sec.title}</div>`;
 
     sec.questions.forEach(q => {
-      // Hilangkan tag HTML dari pertanyaan jika ada
       const qText = q.text.replace(/<[^>]+>/g,'');
       html += `<div class="q-item"><div class="q-text">${q.id}. ${qText}</div>`;
 
@@ -573,7 +643,6 @@ function downloadResult() {
         const ta = document.querySelector(`#qcard-${q.id} textarea`);
         const ans = ta && ta.value.trim() ? ta.value.trim() : '';
         if (ans) {
-          // Escape HTML pada jawaban esai peserta untuk keamanan format
           const safeAns = ans.replace(/</g, '&lt;').replace(/>/g, '&gt;');
           html += `<div class="q-ans essay">${safeAns}</div>`;
         } else {
@@ -591,7 +660,6 @@ function downloadResult() {
 </body>
 </html>`;
 
-  // Unduh sebagai file HTML
   const blob = new Blob([html], { type:'text/html;charset=utf-8' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');

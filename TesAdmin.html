@@ -570,8 +570,8 @@ function countAnswered() {
   return c;
 }
 
-// ════════════════════════════════════════════
-// DOWNLOAD HTML (PRINT-FRIENDLY)
+// ════════════════════════════════════════════// ════════════════════════════════════════════
+// DOWNLOAD HTML (PRINT-FRIENDLY) - TANPA PASSWORD
 // ════════════════════════════════════════════
 function downloadResult() {
   const elapsed = Math.floor((waktuSelesai - waktuMulai) / 1000);
@@ -584,19 +584,6 @@ function downloadResult() {
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
   body { font-family: 'DM Sans', Arial, sans-serif; color: #1c1c1c; background: #f0f0f0; margin: 0; padding: 20px; font-size: 13px; line-height: 1.5; }
-  
-  /* AUTH SCREEN CSS */
-  #auth-overlay { position:fixed; inset:0; background:#f0f0f0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; }
-  .auth-box { background:#fff; padding:40px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:center; max-width:350px; width:100%; }
-  .auth-box h2 { margin:0 0 10px 0; color:#1a3a2a; }
-  .auth-box input { width:100%; padding:12px; margin:20px 0 15px 0; border:1px solid #ddd; text-align:center; font-family:monospace; font-size:16px; box-sizing:border-box; outline:none; }
-  .auth-box input:focus { border-color:#2d6048; }
-  .auth-box button { width:100%; padding:14px; background:#1a3a2a; color:#fff; border:none; border-radius:4px; cursor:pointer; font-weight:bold; font-size:15px; }
-  
-  /* MAIN CONTENT CSS */
-  #main-content { display:none; }
-  body.unlocked #auth-overlay { display:none; }
-  body.unlocked #main-content { display:block; }
   
   .document { max-width: 210mm; background: #fff; margin: 0 auto; padding: 15mm 20mm; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
   .header { text-align: center; border-bottom: 2px solid #1a3a2a; padding-bottom: 15px; margin-bottom: 25px; }
@@ -692,15 +679,6 @@ function downloadResult() {
     </div>
   </div>
 
-  <script>
-    function unlockRes() {
-      if(document.getElementById('res-pass').value === '196b!') {
-        document.body.classList.add('unlocked');
-      } else {
-        document.getElementById('res-err').style.display = 'block';
-      }
-    }
-  </scr` + `ipt>
 </body>
 </html>`;
 

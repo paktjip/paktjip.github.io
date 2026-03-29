@@ -25,12 +25,22 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
 .page { display:none; }
 .page.active { display:block; }
 
-/* ── COVER ── */
-#page-cover { min-height:100vh; display:none; flex-direction:column; align-items:center; justify-content:center; padding:40px 20px; }
-#page-cover.active { display:flex; }
-
+/* ── LAYOUT UTAMA ── */
+.full-center { min-height:100vh; display:none; flex-direction:column; align-items:center; justify-content:center; padding:40px 20px; }
+.full-center.active { display:flex; }
 .cover-card { background:var(--surface); border:1px solid var(--rule); max-width:520px; width:100%; overflow:hidden; box-shadow:0 8px 40px rgba(0,0,0,0.08); }
 
+/* ── LOGIN PAGE ── */
+.login-box { padding: 40px; text-align: center; }
+.login-box h2 { font-family:'DM Serif Display',serif; font-size:24px; color:var(--accent); margin-bottom:10px; }
+.login-box p { font-size:13px; color:var(--ink2); margin-bottom:24px; }
+.login-box input { width:100%; padding:14px; border:1px solid var(--rule); background:var(--bg); text-align:center; font-family:'DM Mono',monospace; font-size:16px; margin-bottom:16px; outline:none; transition:0.2s; }
+.login-box input:focus { border-color:var(--accent2); background:#fff; }
+.login-btn { width:100%; padding:14px; background:var(--accent); color:#fff; border:none; font-family:'DM Serif Display',serif; font-size:16px; cursor:pointer; transition:0.2s; }
+.login-btn:hover { background:var(--accent2); }
+#login-err { color:var(--danger); font-size:12px; margin-top:12px; display:none; }
+
+/* ── COVER PAGE ── */
 .cover-banner { background:var(--accent); padding:36px 40px 28px; position:relative; overflow:hidden; }
 .cover-banner::before { content:''; position:absolute; right:-30px; top:-30px; width:140px; height:140px; border-radius:50%; border:40px solid rgba(255,255,255,0.05); }
 .cover-banner::after { content:''; position:absolute; right:40px; bottom:-40px; width:80px; height:80px; border-radius:50%; border:20px solid rgba(255,255,255,0.05); }
@@ -113,11 +123,9 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
 .btn-submit-big:hover { background:var(--accent2); }
 
 /* ── DONE PAGE ── */
-#page-done { min-height:100vh; display:none; flex-direction:column; align-items:center; justify-content:center; padding:40px 20px; }
-#page-done.active { display:flex; }
-.done-card { background:var(--surface); border:1px solid var(--rule); max-width:480px; width:100%; overflow:hidden; box-shadow:0 8px 40px rgba(0,0,0,0.08); }
+#page-done { display:none; flex-direction:column; align-items:center; justify-content:center; padding:40px 20px; }
 .done-banner { background:var(--accent); padding:36px 40px; text-align:center; }
-.done-icon { width:54px; height:54px; border-radius:50%; border:2px solid rgba(255,255,255,0.35); display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:22px; }
+.done-icon { width:54px; height:54px; border-radius:50%; border:2px solid rgba(255,255,255,0.35); display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:22px; color:#fff; }
 .done-banner h2 { font-family:'DM Serif Display',serif; font-size:24px; color:#fff; margin-bottom:6px; }
 .done-banner p { font-size:13px; color:rgba(255,255,255,0.6); }
 .done-body { padding:24px 40px 28px; }
@@ -151,7 +159,19 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
 </head>
 <body>
 
-<div id="page-cover" class="active">
+<div id="page-login" class="full-center active">
+  <div class="cover-card">
+    <div class="login-box">
+      <h2>Akses Terkunci</h2>
+      <p>Silakan masukkan kata sandi HRD untuk mengakses halaman sistem seleksi karyawan.</p>
+      <input type="password" id="sys-pass" placeholder="Kata Sandi" onkeypress="if(event.key==='Enter') verifyLogin()">
+      <button class="login-btn" onclick="verifyLogin()">Buka Akses</button>
+      <div id="login-err">Kata sandi tidak valid.</div>
+    </div>
+  </div>
+</div>
+
+<div id="page-cover" class="full-center">
   <div class="cover-card">
     <div class="cover-banner">
       <div class="cover-label">Tes Seleksi Karyawan</div>
@@ -200,7 +220,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
   </div>
 </div>
 
-<div id="page-done">
+<div id="page-done" class="full-center">
   <div class="done-card">
     <div class="done-banner">
       <div class="done-icon">✓</div>
@@ -306,6 +326,30 @@ function formatDur(sec) {
   return `${m} menit ${s} detik`;
 }
 
+// Cek adanya cache saat halaman dimuat
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('paktjip_test_state');
+  if (saved) {
+    // Jika ada cache (tes sedang berjalan), skip halaman login & cover
+    document.getElementById('page-login').classList.remove('active');
+    restoreState();
+  } else {
+    // Jika tidak ada cache, tampilkan halaman login untuk HRD
+    document.getElementById('page-login').classList.add('active');
+  }
+});
+
+// Sistem Login App (Hanya dipanggil jika TIDAK ADA cache)
+function verifyLogin() {
+  const pass = document.getElementById('sys-pass').value;
+  if(pass === '196b!') {
+    document.getElementById('page-login').classList.remove('active');
+    document.getElementById('page-cover').classList.add('active');
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+  }
+}
+
 // SIMPAN KE LOCAL STORAGE
 function saveState() {
   if (!peserta.nama) return;
@@ -330,8 +374,8 @@ function saveState() {
   localStorage.setItem('paktjip_test_state', JSON.stringify(state));
 }
 
-// CEK CACHE SAAT HALAMAN DIMUAT (REFRESH)
-window.addEventListener('DOMContentLoaded', () => {
+// KEMBALIKAN DATA DARI LOCAL STORAGE (Bypass Password)
+function restoreState() {
   const saved = localStorage.getItem('paktjip_test_state');
   if (saved) {
     try {
@@ -342,7 +386,6 @@ window.addEventListener('DOMContentLoaded', () => {
       
       buildQuestions();
       
-      // Kembalikan Jawaban
       for (const [id, val] of Object.entries(state.answers)) {
         if (document.querySelector(`input[name="q${id}"]`)) {
           const radio = document.querySelector(`input[name="q${id}"][value="${val}"]`);
@@ -353,7 +396,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      document.getElementById('page-cover').classList.remove('active');
       document.getElementById('page-test').classList.add('active');
       document.getElementById('hdr-name').textContent = peserta.nama;
 
@@ -365,9 +407,10 @@ window.addEventListener('DOMContentLoaded', () => {
     } catch(e) {
       console.error('Error saat load cache', e);
       localStorage.removeItem('paktjip_test_state');
+      document.getElementById('page-login').classList.add('active'); // kembali ke awal jika error
     }
   }
-});
+}
 
 // ════════════════════════════════════════════
 // START
@@ -381,22 +424,12 @@ function startTest() {
     return;
   }
 
-  // Masuk Fullscreen
-  const docElm = document.documentElement;
-  if (docElm.requestFullscreen) {
-    docElm.requestFullscreen().catch(err => console.log(err));
-  } else if (docElm.webkitRequestFullScreen) {
-    docElm.webkitRequestFullScreen();
-  } else if (docElm.msRequestFullscreen) {
-    docElm.msRequestFullscreen();
-  }
-
   peserta = { nama, hp };
   waktuMulai = new Date();
   targetTime = waktuMulai.getTime() + (DURATION_SEC * 1000);
 
   buildQuestions();
-  saveState(); // Inisialisasi Save Data Pertama
+  saveState(); 
 
   document.getElementById('page-cover').classList.remove('active');
   document.getElementById('page-test').classList.add('active');
@@ -464,7 +497,7 @@ function markDone(id, skipSave = false) {
 }
 
 // ════════════════════════════════════════════
-// TIMER (Tahan Minimize & Refresh)
+// TIMER 
 // ════════════════════════════════════════════
 function startTimer() {
   renderTimer();
@@ -509,15 +542,6 @@ function finishTest(timeout) {
 
   document.getElementById('timeout-overlay').classList.remove('show');
 
-  // Keluar dari fullscreen jika tes selesai
-  if (document.exitFullscreen) {
-    document.exitFullscreen().catch(err => console.log(err));
-  } else if (document.webkitExitFullscreen) {
-    document.webkitExitFullscreen();
-  } else if (document.msExitFullscreen) {
-    document.msExitFullscreen();
-  }
-
   // Bersihkan cache storage untuk peserta selanjutnya
   localStorage.removeItem('paktjip_test_state');
 
@@ -551,7 +575,7 @@ function countAnswered() {
 }
 
 // ════════════════════════════════════════════
-// DOWNLOAD HTML (PRINT-FRIENDLY A4 - 2 COLUMNS)
+// DOWNLOAD HTML (PRINT-FRIENDLY & PASSWORD PROTECTED)
 // ════════════════════════════════════════════
 function downloadResult() {
   const elapsed = Math.floor((waktuSelesai - waktuMulai) / 1000);
@@ -564,6 +588,20 @@ function downloadResult() {
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
   body { font-family: 'DM Sans', Arial, sans-serif; color: #1c1c1c; background: #f0f0f0; margin: 0; padding: 20px; font-size: 13px; line-height: 1.5; }
+  
+  /* AUTH SCREEN CSS */
+  #auth-overlay { position:fixed; inset:0; background:#f0f0f0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; }
+  .auth-box { background:#fff; padding:40px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.1); text-align:center; max-width:350px; width:100%; }
+  .auth-box h2 { margin:0 0 10px 0; color:#1a3a2a; }
+  .auth-box input { width:100%; padding:12px; margin:20px 0 15px 0; border:1px solid #ddd; text-align:center; font-family:monospace; font-size:16px; box-sizing:border-box; outline:none; }
+  .auth-box input:focus { border-color:#2d6048; }
+  .auth-box button { width:100%; padding:14px; background:#1a3a2a; color:#fff; border:none; border-radius:4px; cursor:pointer; font-weight:bold; font-size:15px; }
+  
+  /* MAIN CONTENT CSS */
+  #main-content { display:none; }
+  body.unlocked #auth-overlay { display:none; }
+  body.unlocked #main-content { display:block; }
+  
   .document { max-width: 210mm; background: #fff; margin: 0 auto; padding: 15mm 20mm; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
   .header { text-align: center; border-bottom: 2px solid #1a3a2a; padding-bottom: 15px; margin-bottom: 25px; }
   .header h1 { margin: 0 0 5px 0; font-size: 20px; color: #1a3a2a; text-transform: uppercase; letter-spacing: 1px;}
@@ -576,9 +614,7 @@ function downloadResult() {
   .info-row .lbl { width: 110px; font-weight: bold; color: #555; }
   .info-row .val { flex: 1; font-family: monospace; font-size: 13px;}
   
-  /* CSS untuk 2 Kolom */
   .answers { column-count: 2; column-gap: 30px; }
-  
   .section-title { font-size: 13px; font-weight: bold; color: #1a3a2a; background: #f9f9f9; padding: 6px 12px; border-left: 4px solid #1a3a2a; margin: 15px 0 12px 0; text-transform: uppercase; break-after: avoid; }
   .q-item { margin-bottom: 14px; break-inside: avoid; page-break-inside: avoid; }
   .q-text { font-weight: 500; margin-bottom: 4px; font-size: 12.5px; }
@@ -587,7 +623,6 @@ function downloadResult() {
   .q-unanswered { color: #c0392b; font-style: italic; }
   
   .footer { margin-top: 30px; text-align: center; font-size: 10px; color: #888; border-top: 1px solid #eee; padding-top: 10px; clear: both;}
-  
   .btn-print { display: block; width: 220px; margin: 0 auto 20px; padding: 12px; text-align: center; background: #1a3a2a; color: #fff; text-decoration: none; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; font-size: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;}
   .btn-print:hover { background: #2d6048; }
 
@@ -599,29 +634,41 @@ function downloadResult() {
 </style>
 </head>
 <body>
-  <button class="btn-print" onclick="window.print()">🖨️ Cetak Hasil (A4)</button>
-  <div class="document">
-    <div class="header">
-      <h1>Hasil Tes Seleksi Karyawan</h1>
-      <p>Posisi: Admin & Kasir Paktjip Digital Printing</p>
+
+  <div id="auth-overlay">
+    <div class="auth-box">
+      <h2>Dokumen Terkunci</h2>
+      <p style="font-size:13px; color:#666; margin:0;">Silakan masukkan kata sandi HRD untuk melihat hasil tes ini.</p>
+      <input type="password" id="res-pass" placeholder="••••••" onkeypress="if(event.key==='Enter') unlockRes()">
+      <button onclick="unlockRes()">Buka Hasil</button>
+      <p id="res-err" style="color:#c0392b; font-size:12px; margin-top:12px; display:none;">Kata sandi tidak valid!</p>
     </div>
-    
-    <div class="info-grid">
-      <div class="info-box">
-        <h3>Data Peserta</h3>
-        <div class="info-row"><div class="lbl">Nama Lengkap</div><div class="val">: ${peserta.nama}</div></div>
-        <div class="info-row"><div class="lbl">No. WhatsApp</div><div class="val">: ${peserta.hp}</div></div>
+  </div>
+
+  <div id="main-content">
+    <button class="btn-print" onclick="window.print()">🖨️ Cetak Hasil (A4)</button>
+    <div class="document">
+      <div class="header">
+        <h1>Hasil Tes Seleksi Karyawan</h1>
+        <p>Posisi: Admin & Kasir Paktjip Digital Printing</p>
       </div>
-      <div class="info-box">
-        <h3>Log Pengerjaan</h3>
-        <div class="info-row"><div class="lbl">Mulai</div><div class="val">: ${formatDT(waktuMulai)}</div></div>
-        <div class="info-row"><div class="lbl">Selesai</div><div class="val">: ${formatDT(waktuSelesai)}</div></div>
-        <div class="info-row"><div class="lbl">Durasi</div><div class="val">: ${formatDur(elapsed)}</div></div>
-        <div class="info-row"><div class="lbl">Terjawab</div><div class="val">: ${countAnswered()} / 26 Soal</div></div>
+      
+      <div class="info-grid">
+        <div class="info-box">
+          <h3>Data Peserta</h3>
+          <div class="info-row"><div class="lbl">Nama Lengkap</div><div class="val">: ${peserta.nama}</div></div>
+          <div class="info-row"><div class="lbl">No. WhatsApp</div><div class="val">: ${peserta.hp}</div></div>
+        </div>
+        <div class="info-box">
+          <h3>Log Pengerjaan</h3>
+          <div class="info-row"><div class="lbl">Mulai</div><div class="val">: ${formatDT(waktuMulai)}</div></div>
+          <div class="info-row"><div class="lbl">Selesai</div><div class="val">: ${formatDT(waktuSelesai)}</div></div>
+          <div class="info-row"><div class="lbl">Durasi</div><div class="val">: ${formatDur(elapsed)}</div></div>
+          <div class="info-row"><div class="lbl">Terjawab</div><div class="val">: ${countAnswered()} / 26 Soal</div></div>
+        </div>
       </div>
-    </div>
-    
-    <div class="answers">`;
+      
+      <div class="answers">`;
 
   SECTIONS.forEach(sec => {
     html += `<div class="section-title">Bagian ${sec.id} — ${sec.title}</div>`;
@@ -654,9 +701,20 @@ function downloadResult() {
   });
 
   html += `
+      </div>
+      <div class="footer">Dokumen dihasilkan otomatis secara lokal pada: ${formatDT(new Date())}</div>
     </div>
-    <div class="footer">Dokumen dihasilkan otomatis secara lokal pada: ${formatDT(new Date())}</div>
   </div>
+
+  <script>
+    function unlockRes() {
+      if(document.getElementById('res-pass').value === '196b!') {
+        document.body.classList.add('unlocked');
+      } else {
+        document.getElementById('res-err').style.display = 'block';
+      }
+    }
+  </script>
 </body>
 </html>`;
 

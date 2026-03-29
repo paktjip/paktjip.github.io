@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tes Seleksi Admin / Kasir Percetakan</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f4ee;
+  --surface: #ffffff;
+  --ink: #1c1c1c;
+  --ink2: #666;
+  --rule: #ddd8cc;
+  --accent: #1a3a2a;
+  --accent2: #2d6048;
+  --gold: #c49a28;
+  --danger: #c0392b;
+  --warn-bg: #fffbf0;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; }
+
+/* ── PAGE SYSTEM ── */
+.page { display:none; }
+.page.active { display:block; }
+
+/* ── COVER ── */
+#page-cover { min-height:100vh; display:none; flex-direction:column; align-items:center; justify-content:center; padding:40px 20px; }
+#page-cover.active { display:flex; }
+
+.cover-card { background:var(--surface); border:1px solid var(--rule); max-width:520px; width:100%; overflow:hidden; box-shadow:0 8px 40px rgba(0,0,0,0.08); }
+
+.cover-banner { background:var(--accent); padding:36px 40px 28px; position:relative; overflow:hidden; }
+.cover-banner::before { content:''; position:absolute; right:-30px; top:-30px; width:140px; height:140px; border-radius:50%; border:40px solid rgba(255,255,255,0.05); }
+.cover-banner::after { content:''; position:absolute; right:40px; bottom:-40px; width:80px; height:80px; border-radius:50%; border:20px solid rgba(255,255,255,0.05); }
+.cover-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.5); margin-bottom:10px; }
+.cover-banner h1 { font-family:'DM Serif Display',serif; font-size:28px; color:#fff; line-height:1.25; margin-bottom:6px; }
+.cover-banner p { font-size:12.5px; color:rgba(255,255,255,0.6); font-weight:300; }
+
+.cover-meta { display:flex; border-bottom:1px solid var(--rule); }
+.meta-chip { flex:1; padding:12px 16px; border-right:1px solid var(--rule); font-family:'DM Mono',monospace; }
+.meta-chip:last-child { border-right:none; }
+.meta-chip .val { font-size:16px; font-weight:500; color:var(--accent); display:block; margin-bottom:2px; }
+.meta-chip .lbl { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink2); }
+
+.cover-form { padding:28px 40px 36px; }
+.cover-form h2 { font-family:'DM Serif Display',serif; font-size:15px; color:var(--accent); margin-bottom:20px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+
+.field { margin-bottom:16px; }
+.field label { display:block; font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink2); margin-bottom:6px; }
+.field input,.field select { width:100%; padding:10px 14px; border:1px solid var(--rule); background:var(--bg); font-family:'DM Sans',sans-serif; font-size:14px; color:var(--ink); outline:none; transition:border-color 0.2s; -webkit-appearance:none; border-radius:0; }
+.field input:focus,.field select:focus { border-color:var(--accent2); background:#fff; }
+
+.warning-box { background: #fdf2f2; border-left: 4px solid var(--danger); padding: 14px 18px; margin: 24px 0 16px 0; font-size: 13px; line-height: 1.6; color: var(--ink); }
+.warning-box strong { color: var(--danger); font-weight: 600; display: block; margin-bottom: 4px; font-size: 14px;}
+
+.btn-start { width:100%; margin-top:8px; padding:14px; background:var(--accent); color:#fff; border:none; font-family:'DM Serif Display',serif; font-size:17px; letter-spacing:0.5px; cursor:pointer; transition:background 0.2s; }
+.btn-start:hover { background:var(--accent2); }
+
+/* ── TEST PAGE ── */
+#page-test { max-width:760px; margin:0 auto; padding:0 20px 80px; }
+
+.test-header { position:sticky; top:0; z-index:100; background:var(--accent); color:#fff; padding:0 28px; display:flex; align-items:center; justify-content:space-between; height:56px; box-shadow:0 2px 16px rgba(0,0,0,0.2); }
+.test-header-name { font-size:13px; font-weight:500; opacity:0.8; max-width:160px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+.timer-wrap { display:flex; align-items:center; gap:10px; }
+.timer-dot { width:8px; height:8px; border-radius:50%; background:#6fcf97; animation:blink 1.2s infinite; }
+@keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.75)} }
+.timer-dot.warn { background:var(--gold); }
+.timer-dot.crit { background:#ff6b6b; animation:blink 0.4s infinite; }
+
+#timer-display { font-family:'DM Mono',monospace; font-size:20px; font-weight:500; letter-spacing:3px; color:#fff; }
+#timer-display.warn { color:#f6c90e; }
+#timer-display.crit { color:#ff6b6b; }
+
+.btn-finish-header { padding:7px 18px; background:transparent; border:1px solid rgba(255,255,255,0.4); color:#fff; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; cursor:pointer; transition:all 0.2s; }
+.btn-finish-header:hover { background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.7); }
+
+.progress-row { display:flex; flex-wrap:wrap; gap:5px; padding:14px 28px; background:rgba(26,58,42,0.05); border-bottom:1px solid var(--rule); }
+.prog-dot { width:9px; height:9px; border-radius:50%; background:var(--rule); transition:background 0.2s; cursor:default; }
+.prog-dot.done { background:var(--accent2); }
+
+.section-label { margin-top:28px; margin-bottom:4px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.sec-tag { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2.5px; text-transform:uppercase; background:var(--accent); color:#fff; padding:4px 10px; }
+.sec-title { font-family:'DM Serif Display',serif; font-size:17px; color:var(--accent); }
+.sec-count { margin-left:auto; font-size:11px; color:var(--ink2); font-family:'DM Mono',monospace; }
+
+.section-note { font-size:12px; color:#666; font-style:italic; padding:8px 14px; border-left:3px solid var(--gold); background:var(--warn-bg); margin-bottom:10px; }
+
+.qcard { background:var(--surface); border:1px solid var(--rule); border-left:3px solid transparent; padding:20px 24px; margin-bottom:2px; transition:border-left-color 0.2s; }
+.qcard.answered { border-left-color:var(--accent2); }
+
+.q-row { display:flex; gap:14px; align-items:flex-start; margin-bottom:14px; }
+.q-n { font-family:'DM Mono',monospace; font-size:11px; font-weight:500; color:var(--accent); min-width:26px; padding-top:2px; }
+.q-t { font-size:14px; line-height:1.75; flex:1; }
+.q-t strong { font-weight:600; }
+
+.options { padding-left:40px; display:flex; flex-direction:column; gap:5px; }
+.opt { display:flex; align-items:flex-start; gap:10px; padding:8px 12px; border:1px solid transparent; cursor:pointer; transition:all 0.14s; border-radius:2px; user-select:none; }
+.opt:hover { background:rgba(26,58,42,0.04); border-color:rgba(26,58,42,0.15); }
+.opt input[type=radio] { appearance:none; -webkit-appearance:none; width:16px; height:16px; border:1.5px solid #bbb; border-radius:50%; flex-shrink:0; margin-top:2px; cursor:pointer; transition:all 0.15s; }
+.opt input[type=radio]:checked { border-color:var(--accent2); background:var(--accent2); box-shadow:inset 0 0 0 3px #fff; }
+.opt-key { font-family:'DM Mono',monospace; font-size:12px; color:var(--accent); font-weight:500; min-width:18px; }
+.opt-lbl { font-size:13.5px; line-height:1.55; color:#333; }
+
+.essay-wrap { padding-left:40px; margin-top:4px; }
+.essay-wrap textarea { width:100%; border:1px solid var(--rule); background:var(--bg); padding:10px 12px; font-family:'DM Mono',monospace; font-size:13px; line-height:1.7; color:var(--ink); resize:vertical; min-height:88px; outline:none; transition:border-color 0.2s; border-radius:0; }
+.essay-wrap textarea:focus { border-color:var(--accent2); background:#fff; }
+
+.test-footer { display:flex; justify-content:center; padding:40px 0 20px; }
+.btn-submit-big { padding:15px 52px; background:var(--accent); color:#fff; border:none; font-family:'DM Serif Display',serif; font-size:18px; cursor:pointer; transition:background 0.2s; }
+.btn-submit-big:hover { background:var(--accent2); }
+
+/* ── DONE PAGE ── */
+#page-done { min-height:100vh; display:none; flex-direction:column; align-items:center; justify-content:center; padding:40px 20px; }
+#page-done.active { display:flex; }
+.done-card { background:var(--surface); border:1px solid var(--rule); max-width:480px; width:100%; overflow:hidden; box-shadow:0 8px 40px rgba(0,0,0,0.08); }
+.done-banner { background:var(--accent); padding:36px 40px; text-align:center; }
+.done-icon { width:54px; height:54px; border-radius:50%; border:2px solid rgba(255,255,255,0.35); display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:22px; }
+.done-banner h2 { font-family:'DM Serif Display',serif; font-size:24px; color:#fff; margin-bottom:6px; }
+.done-banner p { font-size:13px; color:rgba(255,255,255,0.6); }
+.done-body { padding:24px 40px 28px; }
+.done-row { display:flex; justify-content:space-between; align-items:center; padding:11px 0; border-bottom:1px solid var(--rule); }
+.done-row:last-child { border-bottom:none; }
+.done-row .lbl { color:var(--ink2); font-size:11px; letter-spacing:1px; text-transform:uppercase; font-weight:600; }
+.done-row .val { font-family:'DM Mono',monospace; font-size:13px; text-align:right; max-width:260px; }
+.btn-download { display:block; width:100%; padding:15px; background:var(--accent); color:#fff; border:none; font-family:'DM Serif Display',serif; font-size:18px; cursor:pointer; transition:background 0.2s; text-align:center; }
+.btn-download:hover { background:var(--accent2); }
+
+/* ── TIMEOUT OVERLAY ── */
+#timeout-overlay { display:none; position:fixed; inset:0; background:rgba(5,15,10,0.88); z-index:999; align-items:center; justify-content:center; padding:20px; }
+#timeout-overlay.show { display:flex; }
+.timeout-box { background:var(--surface); max-width:360px; width:100%; padding:40px; text-align:center; }
+.timeout-box h3 { font-family:'DM Serif Display',serif; font-size:22px; color:var(--danger); margin-bottom:10px; }
+.timeout-box p { font-size:13.5px; color:var(--ink2); margin-bottom:24px; line-height:1.65; }
+.timeout-box button { padding:12px 36px; background:var(--accent); color:#fff; border:none; font-family:'DM Serif Display',serif; font-size:16px; cursor:pointer; }
+
+@media(max-width:540px){
+.cover-form,.cover-banner { padding-left:24px; padding-right:24px; }
+.test-header { padding:0 16px; }
+.test-header-name { max-width:100px; }
+.qcard { padding:16px 16px; }
+.options { padding-left:28px; }
+.essay-wrap { padding-left:28px; }
+.done-body { padding:20px 24px 24px; }
+.done-banner { padding:28px 24px; }
+.progress-row { padding:12px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div id="page-cover" class="active">
+  <div class="cover-card">
+    <div class="cover-banner">
+      <div class="cover-label">Formulir Seleksi Karyawan</div>
+      <h1>Tes Admin<br>&amp; Kasir Percetakan</h1>
+      <p>Isi data diri dengan lengkap dan benar sebelum memulai tes</p>
+    </div>
+    <div class="cover-meta">
+      <div class="meta-chip"><span class="val">25</span><span class="lbl">Soal</span></div>
+      <div class="meta-chip"><span class="val">15 mnt</span><span class="lbl">Waktu</span></div>
+      <div class="meta-chip"><span class="val">Tutup</span><span class="lbl">Sifat</span></div>
+    </div>
+    <div class="cover-form">
+      <h2>Data Diri Peserta</h2>
+      <div class="field">
+        <label>Nama Lengkap *</label>
+        <input type="text" id="f-nama" placeholder="Nama sesuai KTP">
+      </div>
+      <div class="field">
+        <label>Nomor HP / WhatsApp *</label>
+        <input type="tel" id="f-hp" placeholder="08xx-xxxx-xxxx">
+      </div>
+
+      <div class="warning-box">
+        <strong>PERHATIAN!</strong>
+        Dilarang browsing internet, menggunakan AI, kalkulator handphone, atau meminta bantuan orang lain. Kerjakan sesuai kemampuan asli Anda.<br><br>
+        <i>*Untuk soal hitungan matematika, Anda diperbolehkan menggunakan coretan di kertas kosong yang telah disediakan panitia.</i>
+      </div>
+
+      <button class="btn-start" onclick="startTest()">Mulai Tes →</button>
+    </div>
+  </div>
+</div>
+
+<div id="page-test" class="page">
+  <div class="test-header">
+    <span class="test-header-name" id="hdr-name">—</span>
+    <div class="timer-wrap">
+      <div class="timer-dot" id="timer-dot"></div>
+      <div id="timer-display">15:00</div>
+    </div>
+    <button class="btn-finish-header" onclick="confirmFinish()">Selesai</button>
+  </div>
+  <div class="progress-row" id="progress-row"></div>
+  <div id="questions-container"></div>
+  <div class="test-footer">
+    <button class="btn-submit-big" onclick="confirmFinish()">Selesaikan Tes</button>
+  </div>
+</div>
+
+<div id="page-done">
+  <div class="done-card">
+    <div class="done-banner">
+      <div class="done-icon">✓</div>
+      <h2>Tes Selesai</h2>
+      <p>Terima kasih telah mengikuti tes seleksi</p>
+    </div>
+    <div class="done-body">
+      <div class="done-row"><span class="lbl">Peserta</span><span class="val" id="d-nama">—</span></div>
+      <div class="done-row"><span class="lbl">Waktu Mulai</span><span class="val" id="d-mulai">—</span></div>
+      <div class="done-row"><span class="lbl">Waktu Selesai</span><span class="val" id="d-selesai">—</span></div>
+      <div class="done-row"><span class="lbl">Durasi</span><span class="val" id="d-durasi">—</span></div>
+      <div class="done-row"><span class="lbl">Soal Dijawab</span><span class="val" id="d-answered">— / 25</span></div>
+    </div>
+    <button class="btn-download" onclick="downloadResult()">⬇ Unduh Hasil Tes (.txt)</button>
+  </div>
+</div>
+
+<div id="timeout-overlay">
+  <div class="timeout-box">
+    <h3>Waktu Habis!</h3>
+    <p>Durasi 15 menit telah berakhir. Jawaban Anda telah direkam secara otomatis.</p>
+    <button onclick="finishTest(true)">Lihat Hasil &amp; Unduh</button>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+// DATA SOAL
+// ════════════════════════════════════════════
+const SECTIONS = [
+  {
+    id:'A', title:'Pengetahuan Produk & Layanan Percetakan',
+    note:'Pilih satu jawaban yang paling tepat.',
+    questions:[
+      { id:1, type:'pilgan', text:'Pelanggan ingin mencetak brosur promosi agar tampak mengkilap dan profesional. Bahan yang paling tepat direkomendasikan adalah…', opts:['HVS 70gsm','Art Paper 150gsm','Kertas Koran','Kertas Buram'] },
+      { id:2, type:'pilgan', text:'Ukuran kertas A6 adalah ... dari ukuran kertas A4.', opts:['2x lebih besar','4x lebih besar','2x lebih kecil','4x lebih kecil'] },
+      { id:3, type:'pilgan', text:'Format file yang paling aman dan disarankan untuk dikirim ke mesin cetak agar font atau susunan gambar tidak berubah/berantakan adalah…', opts:['Microsoft Word (.docx)','Adobe PDF (.pdf)','Microsoft Excel (.xlsx)','Notepad (.txt)'] },
+      { id:4, type:'pilgan', text:'Finishing yang melapisi permukaan cetak agar lebih tahan goresan dan tampak lebih mewah disebut…', opts:['Die Cut','Emboss','Laminasi','Perforasi'] },
+      { id:5, type:'pilgan', text:'Pelanggan memesan banner outdoor berukuran besar untuk dipasang di luar ruangan. Bahan yang paling tepat adalah…', opts:['Kertas Poster','Flexi / MMT','Kertas Foto','Spanduk Kain'] },
+    ]
+  },
+  {
+    id:'B', title:'Matematika Kasir & Transaksi',
+    note:'Hitung dengan cermat. Boleh menggunakan coretan di kertas.',
+    questions:[
+      { id:6,  type:'pilgan', text:'Pelanggan membeli jasa cetak senilai <strong>Rp 87.500</strong> dan membayar dengan uang <strong>Rp 100.000</strong>. Kembalian yang benar adalah…', opts:['Rp 10.000','Rp 12.500','Rp 13.500','Rp 15.000'] },
+      { id:7,  type:'pilgan', text:'Harga cetak kartu nama adalah <strong>Rp 45.000 per box</strong> (1 box isi 100 lembar). Pemesanan harus dalam kelipatan 1 box. Jika pelanggan membutuhkan <strong>350 lembar</strong> kartu nama, berapakah total yang harus dibayar?', opts:['Rp 135.000','Rp 157.500','Rp 180.000','Rp 225.000'] },
+      { id:8,  type:'pilgan', text:'Pelanggan mendapatkan diskon <strong>15%</strong>. Total belanja sebelum diskon <strong>Rp 240.000</strong>. Jumlah yang harus dibayar adalah…', opts:['Rp 200.000','Rp 204.000','Rp 210.000','Rp 216.000'] },
+      { id:9,  type:'pilgan', text:'Pelanggan membeli 3 item: cetak foto <strong>Rp 35.000</strong>, laminating <strong>Rp 15.000</strong>, jilid spiral <strong>Rp 25.000</strong>. Ia membayar <strong>Rp 100.000</strong>. Kembaliannya adalah…', opts:['Rp 20.000','Rp 25.000','Rp 30.000','Rp 35.000'] },
+      { id:10, type:'pilgan', text:'Harga cetak buku tahunan <strong>Rp 180.000 per eksemplar</strong>. Sekolah memesan <strong>120 eksemplar</strong> dan mendapat diskon <strong>10%</strong>. Total tagihan adalah…', opts:['Rp 19.440.000','Rp 19.000.000','Rp 21.600.000','Rp 18.000.000'] },
+      { id:11, type:'pilgan', text:'Kasir menerima uang tunai <strong>Rp 500.000</strong> untuk tagihan <strong>Rp 362.500</strong>. Kembalian yang benar adalah…', opts:['Rp 127.500','Rp 137.500','Rp 147.500','Rp 157.500'] },
+      { id:12, type:'pilgan', text:'Pelanggan membayar dengan empat lembar <strong>Rp 100.000</strong> dan satu lembar <strong>Rp 50.000</strong>. Total tagihannya adalah <strong>Rp 415.000</strong>. Apakah uang pelanggan cukup dan berapa kembaliannya?', opts:['Cukup, kembalian Rp 25.000','Cukup, kembalian Rp 35.000','Cukup, kembalian Rp 45.000','Kurang Rp 15.000'] },
+      { id:13, type:'pilgan', text:'Kas awal pagi <strong>Rp 500.000</strong>. Pemasukan hari ini <strong>Rp 3.250.000</strong>. Pengeluaran untuk beli bahan <strong>Rp 850.000</strong>. Saldo kas akhir hari adalah…', opts:['Rp 2.900.000','Rp 2.750.000','Rp 3.150.000','Rp 2.400.000'] },
+      { id:14, type:'pilgan', text:'Harga cetak per lembar A4: hitam putih <strong>Rp 500</strong>, berwarna <strong>Rp 1.500</strong>. Pelanggan mencetak <strong>80 lembar HVS</strong> dan <strong>30 lembar berwarna</strong>. Total biaya adalah…', opts:['Rp 75.000','Rp 80.000','Rp 85.000','Rp 90.000'] },
+      { id:15, type:'pilgan', text:'Total pesanan spanduk adalah <strong>Rp 1.250.000</strong>. Pelanggan wajib membayar DP (uang muka) sebesar 50% di awal. Saat pengambilan barang, pelanggan menyerahkan uang tunai sebesar <strong>Rp 700.000</strong> untuk pelunasan. Berapa kembalian yang harus Anda berikan?', opts:['Rp 25.000','Rp 50.000','Rp 75.000','Rp 100.000'] },
+    ]
+  },
+  {
+    id:'C', title:'Pelayanan Pelanggan & Administrasi',
+    note:'Pilih sikap atau tindakan yang paling tepat dan profesional.',
+    questions:[
+      { id:16, type:'pilgan', text:'Pelanggan marah karena hasil cetakan warnanya berbeda dari desain. Setelah dicek, penyebabnya adalah file yang dikirim pelanggan berkualitas rendah (resolusi kecil). Tindakan paling tepat adalah…', opts:['Langsung menyalahkan file pelanggan di depan umum','Menjelaskan penyebab masalah dengan sopan, menunjukkan perbandingan, dan menawarkan solusi','Menolak komplain pelanggan karena toko takut rugi','Memberikan pengembalian uang penuh tanpa diskusi'] },
+      { id:17, type:'pilgan', text:'Saat melayani pelanggan di meja, telepon toko berdering. Tindakan yang paling profesional adalah…', opts:['Mengangkat telepon dan membiarkan pelanggan di depan menunggu tanpa penjelasan','Membiarkan telepon berdering sampai selesai melayani','Meminta izin kepada pelanggan di depan, angkat telepon singkat, minta penelepon tunggu atau tinggalkan pesan','Mematikan nada dering telepon'] },
+      { id:18, type:'pilgan', text:'Pesanan pelanggan terlambat diproduksi. Tindakan admin yang paling tepat adalah…', opts:['Menunggu pesanan jadi dulu, baru memberitahu pelanggan','Proaktif menghubungi pelanggan lebih awal, minta maaf, dan berikan estimasi waktu baru','Menyuruh pelanggan bersabar tanpa penjelasan','Menyalahkan bagian produksi kepada pelanggan'] },
+      { id:19, type:'pilgan', text:'Saat menutup kasir, uang fisik kurang <strong>Rp 75.000</strong> dari catatan. Tindakan yang benar adalah…', opts:['Menutup laporan dengan angka fisik saja tanpa mencatat selisih','Menutupi kekurangan dari uang pribadi tanpa laporan','Mencatat selisih secara jujur, melapor ke atasan, dan telusuri kemungkinan kesalahan transaksi','Meminjam dari kas hari berikutnya tanpa laporan'] },
+      { id:20, type:'pilgan', text:'Dokumen yang mencatat rincian pesanan pelanggan (produk, jumlah, spesifikasi, harga, dan deadline) disebut…', opts:['Faktur','Surat Order','Invoice','Surat Jalan'] },
+    ]
+  },
+  {
+    id:'D', title:'Esai Singkat',
+    note:'Jawab dengan singkat dan jelas. Dinilai oleh penguji — tidak ada benar/salah mutlak.',
+    questions:[
+      { id:21, type:'esai', text:'Anda menemukan bahwa hasil cetakan berbeda dari yang dijanjikan ke pelanggan (terlalu gelap). Pelanggan sudah tiba untuk mengambil. Apa yang Anda lakukan?' },
+      { id:22, type:'esai', text:'Sebutkan <strong>3 hal penting</strong> yang wajib dicatat saat menerima pesanan baru dari pelanggan, dan jelaskan mengapa masing-masing penting!' },
+      { id:23, type:'esai', text:'Ada pelanggan tetap yang meminta harga khusus di luar daftar harga resmi karena memesan dalam jumlah besar. Bagaimana Anda menyikapinya?' },
+      { id:24, type:'esai', text:'Mengapa kejujuran dalam mencatat setiap transaksi kasir sangat penting bagi keberlangsungan usaha percetakan?' },
+      { id:25, type:'esai', text:'Anda baru 2 minggu bekerja dan seorang pelanggan menanyakan detail teknis yang belum Anda kuasai. Apa yang Anda lakukan?' },
+    ]
+  }
+];
+
+// ════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════
+let peserta = {};
+let waktuMulai = null;
+let waktuSelesai = null;
+let timerInterval = null;
+const DURATION_SEC = 15 * 60; // 15 menit
+let remaining = DURATION_SEC;
+let finished = false;
+
+const BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const pad = n => String(n).padStart(2,'0');
+
+function formatDT(d) {
+  return `${d.getDate()} ${BULAN[d.getMonth()]} ${d.getFullYear()}, ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
+function formatDur(sec) {
+  const m = Math.floor(sec/60), s = sec%60;
+  return `${m} menit ${s} detik`;
+}
+
+// ════════════════════════════════════════════
+// START
+// ════════════════════════════════════════════
+function startTest() {
+  const nama = document.getElementById('f-nama').value.trim();
+  const hp   = document.getElementById('f-hp').value.trim();
+
+  if (!nama || !hp) {
+    alert('Mohon lengkapi Nama Lengkap dan Nomor WhatsApp sebelum memulai tes.');
+    return;
+  }
+
+  peserta = { nama, hp };
+  waktuMulai = new Date();
+
+  buildQuestions();
+
+  document.getElementById('page-cover').classList.remove('active');
+  document.getElementById('page-test').classList.add('active');
+  document.getElementById('hdr-name').textContent = nama;
+
+  startTimer();
+  window.scrollTo(0,0);
+}
+
+// ════════════════════════════════════════════
+// BUILD
+// ════════════════════════════════════════════
+function buildQuestions() {
+  const container = document.getElementById('questions-container');
+  const progRow   = document.getElementById('progress-row');
+  let html = '';
+  let total = 0;
+
+  SECTIONS.forEach(sec => {
+    html += `
+      <div class="section-label">
+        <span class="sec-tag">Bagian ${sec.id}</span>
+        <span class="sec-title">${sec.title}</span>
+        <span class="sec-count">${sec.questions.length} soal</span>
+      </div>
+      <div class="section-note">${sec.note}</div>`;
+
+    sec.questions.forEach(q => {
+      total++;
+      if (q.type === 'pilgan') {
+        const optsHtml = q.opts.map((o,i) => `
+          <label class="opt" onclick="markDone(${q.id})">
+            <input type="radio" name="q${q.id}" value="${i}">
+            <span class="opt-key">${String.fromCharCode(65+i)}.</span>
+            <span class="opt-lbl">${o}</span>
+          </label>`).join('');
+        html += `
+          <div class="qcard" id="qcard-${q.id}">
+            <div class="q-row"><span class="q-n">${q.id}.</span><span class="q-t">${q.text}</span></div>
+            <div class="options">${optsHtml}</div>
+          </div>`;
+      } else {
+        html += `
+          <div class="qcard" id="qcard-${q.id}">
+            <div class="q-row"><span class="q-n">${q.id}.</span><span class="q-t">${q.text}</span></div>
+            <div class="essay-wrap"><textarea placeholder="Tulis jawaban Anda di sini…" oninput="markDone(${q.id})"></textarea></div>
+          </div>`;
+      }
+    });
+  });
+
+  container.innerHTML = html;
+
+  let dots = '';
+  for (let i = 1; i <= total; i++) {
+    dots += `<div class="prog-dot" id="dot-${i}" title="Soal ${i}"></div>`;
+  }
+  progRow.innerHTML = dots;
+}
+
+function markDone(id) {
+  document.getElementById('qcard-'+id).classList.add('answered');
+  document.getElementById('dot-'+id).classList.add('done');
+}
+
+// ════════════════════════════════════════════
+// TIMER
+// ════════════════════════════════════════════
+function startTimer() {
+  remaining = DURATION_SEC;
+  renderTimer();
+  timerInterval = setInterval(() => {
+    remaining--;
+    renderTimer();
+    if (remaining <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById('timeout-overlay').classList.add('show');
+    }
+  }, 1000);
+}
+
+function renderTimer() {
+  const m = Math.floor(remaining/60), s = remaining%60;
+  const disp = document.getElementById('timer-display');
+  const dot  = document.getElementById('timer-dot');
+  disp.textContent = `${pad(m)}:${pad(s)}`;
+  
+  if (remaining <= 120) {
+    disp.className = 'crit'; dot.className = 'timer-dot crit';
+  } else if (remaining <= 300) {
+    disp.className = 'warn'; dot.className = 'timer-dot warn';
+  } else {
+    disp.className = ''; dot.className = 'timer-dot';
+  }
+}
+
+// ════════════════════════════════════════════
+// FINISH
+// ════════════════════════════════════════════
+function confirmFinish() {
+  if (confirm('Apakah Anda yakin ingin mengakhiri tes sekarang? Pastikan semua soal telah terjawab.')) finishTest(false);
+}
+
+function finishTest(timeout) {
+  if (finished) return;
+  finished = true;
+  clearInterval(timerInterval);
+  waktuSelesai = new Date();
+
+  document.getElementById('timeout-overlay').classList.remove('show');
+
+  const elapsed  = Math.floor((waktuSelesai - waktuMulai) / 1000);
+  const answered = countAnswered();
+
+  document.getElementById('d-nama').textContent     = peserta.nama;
+  document.getElementById('d-mulai').textContent    = formatDT(waktuMulai);
+  document.getElementById('d-selesai').textContent  = formatDT(waktuSelesai);
+  document.getElementById('d-durasi').textContent   = formatDur(elapsed);
+  document.getElementById('d-answered').textContent = `${answered} / 25`;
+
+  document.getElementById('page-test').classList.remove('active');
+  document.getElementById('page-done').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function countAnswered() {
+  let c = 0;
+  SECTIONS.forEach(sec => {
+    sec.questions.forEach(q => {
+      if (q.type === 'pilgan') {
+        if (document.querySelector(`input[name="q${q.id}"]:checked`)) c++;
+      } else {
+        const ta = document.querySelector(`#qcard-${q.id} textarea`);
+        if (ta && ta.value.trim()) c++;
+      }
+    });
+  });
+  return c;
+}
+
+// ════════════════════════════════════════════
+// DOWNLOAD TXT
+// ════════════════════════════════════════════
+function downloadResult() {
+  const elapsed = Math.floor((waktuSelesai - waktuMulai) / 1000);
+  const W = 62;
+  const line  = (c,n) => c.repeat(n);
+  const hr1   = line('═', W);
+  const hr2   = line('─', W);
+  const center = (s) => { const sp = Math.max(0, Math.floor((W - s.length) / 2)); return ' '.repeat(sp) + s; };
+
+  let txt = '';
+  txt += hr1 + '\n';
+  txt += center('TES SELEKSI KARYAWAN') + '\n';
+  txt += center('ADMIN & KASIR PERCETAKAN') + '\n';
+  txt += hr1 + '\n\n';
+
+  txt += 'DATA PESERTA\n' + hr2 + '\n';
+  txt += `Nama Lengkap       : ${peserta.nama}\n`;
+  txt += `No. HP / WhatsApp  : ${peserta.hp}\n\n`;
+
+  txt += 'WAKTU TES\n' + hr2 + '\n';
+  txt += `Waktu Mulai        : ${formatDT(waktuMulai)}\n`;
+  txt += `Waktu Selesai      : ${formatDT(waktuSelesai)}\n`;
+  txt += `Durasi Pengerjaan  : ${formatDur(elapsed)}\n`;
+  txt += `Soal Dijawab       : ${countAnswered()} dari 25\n\n`;
+
+  txt += hr1 + '\n';
+  txt += center('JAWABAN PESERTA') + '\n';
+  txt += hr1 + '\n';
+
+  SECTIONS.forEach(sec => {
+    txt += `\nBAGIAN ${sec.id} — ${sec.title.toUpperCase()}\n${hr2}\n`;
+
+    sec.questions.forEach(q => {
+      // strip html tags
+      const qText = q.text.replace(/<[^>]+>/g,'');
+      txt += `\n[Soal ${q.id}]\n${qText}\n`;
+
+      if (q.type === 'pilgan') {
+        const sel = document.querySelector(`input[name="q${q.id}"]:checked`);
+        if (sel) {
+          const idx    = parseInt(sel.value);
+          const letter = String.fromCharCode(65+idx);
+          txt += `Jawaban : ${letter}. ${q.opts[idx]}\n`;
+        } else {
+          txt += `Jawaban : (tidak dijawab)\n`;
+        }
+      } else {
+        const ta  = document.querySelector(`#qcard-${q.id} textarea`);
+        const ans = ta && ta.value.trim() ? ta.value.trim() : '(tidak dijawab)';
+        txt += `Jawaban :\n${ans}\n`;
+      }
+    });
+  });
+
+  txt += '\n' + hr1 + '\n';
+  txt += `Dokumen dibuat otomatis pada: ${formatDT(new Date())}\n`;
+  txt += hr1 + '\n';
+
+  const blob = new Blob([txt], { type:'text/plain;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `Hasil_Tes_${peserta.nama.replace(/\s+/g,'_')}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>

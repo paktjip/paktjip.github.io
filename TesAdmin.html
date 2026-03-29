@@ -123,6 +123,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
 .btn-submit-big:hover { background:var(--accent2); }
 
 /* ── DONE PAGE ── */
+#page-done { display:none; flex-direction:column; align-items:center; justify-content:center; padding:40px 20px; }
 .done-banner { background:var(--accent); padding:36px 40px; text-align:center; }
 .done-icon { width:54px; height:54px; border-radius:50%; border:2px solid rgba(255,255,255,0.35); display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:22px; color:#fff; }
 .done-banner h2 { font-family:'DM Serif Display',serif; font-size:24px; color:#fff; margin-bottom:6px; }
@@ -329,16 +330,13 @@ function formatDur(sec) {
 window.addEventListener('DOMContentLoaded', () => {
   const saved = localStorage.getItem('paktjip_test_state');
   if (saved) {
-    // Jika ada cache (tes sedang berjalan), skip halaman login & cover
     document.getElementById('page-login').classList.remove('active');
     restoreState();
   } else {
-    // Jika tidak ada cache, tampilkan halaman login untuk HRD
     document.getElementById('page-login').classList.add('active');
   }
 });
 
-// Sistem Login App (Hanya dipanggil jika TIDAK ADA cache)
 function verifyLogin() {
   const pass = document.getElementById('sys-pass').value;
   if(pass === '196b!') {
@@ -373,7 +371,7 @@ function saveState() {
   localStorage.setItem('paktjip_test_state', JSON.stringify(state));
 }
 
-// KEMBALIKAN DATA DARI LOCAL STORAGE (Bypass Password)
+// KEMBALIKAN DATA DARI LOCAL STORAGE
 function restoreState() {
   const saved = localStorage.getItem('paktjip_test_state');
   if (saved) {
@@ -406,7 +404,7 @@ function restoreState() {
     } catch(e) {
       console.error('Error saat load cache', e);
       localStorage.removeItem('paktjip_test_state');
-      document.getElementById('page-login').classList.add('active'); // kembali ke awal jika error
+      document.getElementById('page-login').classList.add('active'); 
     }
   }
 }
@@ -713,7 +711,7 @@ function downloadResult() {
         document.getElementById('res-err').style.display = 'block';
       }
     }
-  <\\/script>
+  </scr` + `ipt>
 </body>
 </html>`;
 

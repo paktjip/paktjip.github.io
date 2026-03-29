@@ -162,7 +162,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
   <div class="cover-card">
     <div class="login-box">
       <h2>Akses Terkunci</h2>
-      <p>Silakan masukkan kata sandi HRD untuk mengakses halaman sistem seleksi karyawan.</p>
+      <p>Silakan masukkan kata sandi untuk mengakses halaman sistem seleksi karyawan.</p>
       <input type="password" id="sys-pass" placeholder="Kata Sandi" onkeypress="if(event.key==='Enter') verifyLogin()">
       <button class="login-btn" onclick="verifyLogin()">Buka Akses</button>
       <div id="login-err">Kata sandi tidak valid.</div>
@@ -571,7 +571,7 @@ function countAnswered() {
 }
 
 // ════════════════════════════════════════════
-// DOWNLOAD HTML (PRINT-FRIENDLY & PASSWORD PROTECTED)
+// DOWNLOAD HTML (PRINT-FRIENDLY)
 // ════════════════════════════════════════════
 function downloadResult() {
   const elapsed = Math.floor((waktuSelesai - waktuMulai) / 1000);
@@ -630,16 +630,6 @@ function downloadResult() {
 </style>
 </head>
 <body>
-
-  <div id="auth-overlay">
-    <div class="auth-box">
-      <h2>Dokumen Terkunci</h2>
-      <p style="font-size:13px; color:#666; margin:0;">Silakan masukkan kata sandi HRD untuk melihat hasil tes ini.</p>
-      <input type="password" id="res-pass" placeholder="••••••" onkeypress="if(event.key==='Enter') unlockRes()">
-      <button onclick="unlockRes()">Buka Hasil</button>
-      <p id="res-err" style="color:#c0392b; font-size:12px; margin-top:12px; display:none;">Kata sandi tidak valid!</p>
-    </div>
-  </div>
 
   <div id="main-content">
     <button class="btn-print" onclick="window.print()">🖨️ Cetak Hasil (A4)</button>

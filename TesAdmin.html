@@ -708,7 +708,7 @@ function downloadResult() {
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
   a.href     = url;
-  a.download = `Hasil_Tes_Koreksi_${peserta.nama.replace(/\s+/g,'_')}.html`;
+  a.download = `Hasil_Tes_${peserta.nama.replace(/\s+/g,'_')}.html`;
   a.click();
   URL.revokeObjectURL(url);
 }

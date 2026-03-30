@@ -178,7 +178,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
       <p>Posisi: Admin - Kasir</p>
     </div>
     <div class="cover-meta">
-      <div class="meta-chip"><span class="val">31</span><span class="lbl">Soal</span></div>
+      <div class="meta-chip"><span class="val">26</span><span class="lbl">Soal</span></div>
       <div class="meta-chip"><span class="val">35 mnt</span><span class="lbl">Waktu</span></div>
     </div>
     <div class="cover-form">
@@ -231,9 +231,9 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
       <div class="done-row"><span class="lbl">Waktu Mulai</span><span class="val" id="d-mulai">—</span></div>
       <div class="done-row"><span class="lbl">Waktu Selesai</span><span class="val" id="d-selesai">—</span></div>
       <div class="done-row"><span class="lbl">Durasi</span><span class="val" id="d-durasi">—</span></div>
-      <div class="done-row"><span class="lbl">Soal Dijawab</span><span class="val" id="d-answered">— / 31</span></div>
+      <div class="done-row"><span class="lbl">Soal Dijawab</span><span class="val" id="d-answered">— / 26</span></div>
     </div>
-    <button class="btn-download" onclick="downloadResult()">⬇ Unduh & Koreksi Hasil (.html)</button>
+    <button class="btn-download" onclick="downloadResult()">⬇ Unduh Hasil Tes (.html)</button>
   </div>
 </div>
 
@@ -247,68 +247,57 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
 
 <script>
 // ════════════════════════════════════════════
-// DATA SOAL (DENGAN KUNCI JAWABAN)
+// DATA SOAL
 // ════════════════════════════════════════════
 const SECTIONS = [
   {
     id:'A', title:'Pengetahuan Produk & Layanan Percetakan',
     note:'Pilih satu jawaban yang paling tepat.',
     questions:[
-      { id:1, ans:1, type:'pilgan', text:'Pelanggan ingin mencetak brosur promosi agar tampak mengkilap dan profesional. Bahan yang paling tepat direkomendasikan adalah…', opts:['HVS 70gsm','Art Paper 150gsm','Kertas Koran','Kertas Foto'] },
-      { id:2, ans:3, type:'pilgan', text:'Ukuran kertas A6 adalah ... dari ukuran kertas A4.', opts:['2x lebih besar','4x lebih besar','2x lebih kecil','4x lebih kecil'] },
-      { id:3, ans:2, type:'pilgan', text:'Berikut file yang paling aman dan disarankan untuk dikirim ke percetakan untuk dicetak banner, <strong>kecuali</strong>…', opts:['PDF (.pdf)','TIFF (.tiff)','PowerPoint (.pptx)','File Asli (CorelDraw / AI)'] },
-      { id:4, ans:2, type:'pilgan', text:'<strong>2,5 rim</strong> sama dengan berapa lembar kertas?', opts:['250 lembar','500 lembar','1.250 lembar','2.500 lembar'] },
-      { id:5, ans:1, type:'pilgan', text:'Pelanggan memesan banner outdoor berukuran besar untuk dipasang di luar ruangan. Bahan yang paling tepat adalah…', opts:['Kertas Poster','Flexi / MMT','Plastik','Spanduk Kain'] },
+      { id:1, type:'pilgan', text:'Pelanggan ingin mencetak brosur promosi agar tampak mengkilap dan profesional. Bahan yang paling tepat direkomendasikan adalah…', opts:['HVS 70gsm','Art Paper 150gsm','Kertas Koran','Kertas Buram'] },
+      { id:2, type:'pilgan', text:'Ukuran kertas A6 adalah ... dari ukuran kertas A4.', opts:['2x lebih besar','4x lebih besar','2x lebih kecil','4x lebih kecil'] },
+      { id:3, type:'pilgan', text:'Berikut file yang paling aman dan disarankan untuk dikirim ke percetakan untuk dicetak banner, <strong>kecuali</strong>…', opts:['PDF (.pdf)','TIFF (.tiff)','PowerPoint (.pptx)','File Asli (CorelDraw / AI)'] },
+      { id:4, type:'pilgan', text:'<strong>2,5 rim</strong> sama dengan berapa lembar kertas?', opts:['500 lembar','1.000 lembar','1.250 lembar','2.500 lembar'] },
+      { id:5, type:'pilgan', text:'Pelanggan memesan banner outdoor berukuran besar untuk dipasang di luar ruangan. Bahan yang paling tepat adalah…', opts:['Kertas Poster','Flexi / MMT','Kertas Foto','Spanduk Kain'] },
     ]
   },
   {
     id:'B', title:'Matematika Kasir & Transaksi',
     note:'Hitung dengan cermat. Boleh menggunakan coretan di kertas.',
     questions:[
-      { id:6,  ans:1, type:'pilgan', text:'Pelanggan membeli jasa cetak senilai <strong>Rp 87.500</strong> dan membayar dengan uang <strong>Rp 100.000</strong>. Kembalian yang benar adalah…', opts:['Rp 10.000','Rp 12.500','Rp 13.500','Rp 15.000'] },
-      { id:7,  ans:2, type:'pilgan', text:'Harga cetak kartu nama adalah <strong>Rp 45.000 per box</strong> (1 box isi 100 lembar). Pemesanan harus dalam kelipatan 1 box. Jika pelanggan membutuhkan <strong>350 lembar</strong> kartu nama, berapakah total yang harus dibayar?', opts:['Rp 135.000','Rp 157.500','Rp 180.000','Rp 225.000'] },
-      { id:8,  ans:1, type:'pilgan', text:'Pelanggan mendapatkan diskon <strong>15%</strong>. Total belanja sebelum diskon <strong>Rp 240.000</strong>. Jumlah yang harus dibayar adalah…', opts:['Rp 200.000','Rp 204.000','Rp 210.000','Rp 216.000'] },
-      { id:9,  ans:1, type:'pilgan', text:'Pelanggan membeli 3 item: cetak foto <strong>Rp 35.000</strong>, laminating <strong>Rp 15.000</strong>, jilid spiral <strong>Rp 25.000</strong>. Ia membayar <strong>Rp 100.000</strong>. Kembaliannya adalah…', opts:['Rp 20.000','Rp 25.000','Rp 30.000','Rp 35.000'] },
-      { id:10, ans:0, type:'pilgan', text:'Harga cetak buku tahunan <strong>Rp 180.000 per eksemplar</strong>. Sekolah memesan <strong>120 eksemplar</strong> dan mendapat diskon <strong>10%</strong>. Total tagihan adalah…', opts:['Rp 19.440.000','Rp 19.000.000','Rp 21.600.000','Rp 18.000.000'] },
-      { id:11, ans:1, type:'pilgan', text:'Kasir menerima uang tunai <strong>Rp 500.000</strong> untuk tagihan <strong>Rp 362.500</strong>. Kembalian yang benar adalah…', opts:['Rp 127.500','Rp 137.500','Rp 147.500','Rp 157.500'] },
-      { id:12, ans:1, type:'pilgan', text:'Pelanggan membayar dengan empat lembar <strong>Rp 100.000</strong> dan satu lembar <strong>Rp 50.000</strong>. Total tagihannya adalah <strong>Rp 415.000</strong>. Apakah uang pelanggan cukup dan berapa kembaliannya?', opts:['Cukup, kembalian Rp 25.000','Cukup, kembalian Rp 35.000','Cukup, kembalian Rp 45.000','Kurang Rp 15.000'] },
-      { id:13, ans:0, type:'pilgan', text:'Kas awal pagi <strong>Rp 500.000</strong>. Pemasukan hari ini <strong>Rp 3.250.000</strong>. Pengeluaran untuk beli bahan <strong>Rp 850.000</strong>. Saldo kas akhir hari adalah…', opts:['Rp 2.900.000','Rp 2.750.000','Rp 3.150.000','Rp 2.400.000'] },
-      { id:14, ans:2, type:'pilgan', text:'Harga cetak per lembar A4: hitam putih <strong>Rp 500</strong>, berwarna <strong>Rp 1.500</strong>. Pelanggan mencetak <strong>80 lembar HVS</strong> dan <strong>30 lembar berwarna</strong>. Total biaya adalah…', opts:['Rp 75.000','Rp 80.000','Rp 85.000','Rp 90.000'] },
-      { id:15, ans:2, type:'pilgan', text:'Total pesanan spanduk adalah <strong>Rp 1.250.000</strong>. Pelanggan wajib membayar DP (uang muka) sebesar 50% di awal. Saat pengambilan barang, pelanggan menyerahkan uang tunai sebesar <strong>Rp 700.000</strong> untuk pelunasan. Berapa kembalian yang harus Anda berikan?', opts:['Rp 25.000','Rp 50.000','Rp 75.000','Rp 100.000'] },
+      { id:6,  type:'pilgan', text:'Pelanggan membeli jasa cetak senilai <strong>Rp 87.500</strong> dan membayar dengan uang <strong>Rp 100.000</strong>. Kembalian yang benar adalah…', opts:['Rp 10.000','Rp 12.500','Rp 13.500','Rp 15.000'] },
+      { id:7,  type:'pilgan', text:'Harga cetak kartu nama adalah <strong>Rp 45.000 per box</strong> (1 box isi 100 lembar). Pemesanan harus dalam kelipatan 1 box. Jika pelanggan membutuhkan <strong>350 lembar</strong> kartu nama, berapakah total yang harus dibayar?', opts:['Rp 135.000','Rp 157.500','Rp 180.000','Rp 225.000'] },
+      { id:8,  type:'pilgan', text:'Pelanggan mendapatkan diskon <strong>15%</strong>. Total belanja sebelum diskon <strong>Rp 240.000</strong>. Jumlah yang harus dibayar adalah…', opts:['Rp 200.000','Rp 204.000','Rp 210.000','Rp 216.000'] },
+      { id:9,  type:'pilgan', text:'Pelanggan membeli 3 item: cetak foto <strong>Rp 35.000</strong>, laminating <strong>Rp 15.000</strong>, jilid spiral <strong>Rp 25.000</strong>. Ia membayar <strong>Rp 100.000</strong>. Kembaliannya adalah…', opts:['Rp 20.000','Rp 25.000','Rp 30.000','Rp 35.000'] },
+      { id:10, type:'pilgan', text:'Harga cetak buku tahunan <strong>Rp 180.000 per eksemplar</strong>. Sekolah memesan <strong>120 eksemplar</strong> dan mendapat diskon <strong>10%</strong>. Total tagihan adalah…', opts:['Rp 19.440.000','Rp 19.000.000','Rp 21.600.000','Rp 18.000.000'] },
+      { id:11, type:'pilgan', text:'Kasir menerima uang tunai <strong>Rp 500.000</strong> untuk tagihan <strong>Rp 362.500</strong>. Kembalian yang benar adalah…', opts:['Rp 127.500','Rp 137.500','Rp 147.500','Rp 157.500'] },
+      { id:12, type:'pilgan', text:'Pelanggan membayar dengan empat lembar <strong>Rp 100.000</strong> dan satu lembar <strong>Rp 50.000</strong>. Total tagihannya adalah <strong>Rp 415.000</strong>. Apakah uang pelanggan cukup dan berapa kembaliannya?', opts:['Cukup, kembalian Rp 25.000','Cukup, kembalian Rp 35.000','Cukup, kembalian Rp 45.000','Kurang Rp 15.000'] },
+      { id:13, type:'pilgan', text:'Kas awal pagi <strong>Rp 500.000</strong>. Pemasukan hari ini <strong>Rp 3.250.000</strong>. Pengeluaran untuk beli bahan <strong>Rp 850.000</strong>. Saldo kas akhir hari adalah…', opts:['Rp 2.900.000','Rp 2.750.000','Rp 3.150.000','Rp 2.400.000'] },
+      { id:14, type:'pilgan', text:'Harga cetak per lembar A4: hitam putih <strong>Rp 500</strong>, berwarna <strong>Rp 1.500</strong>. Pelanggan mencetak <strong>80 lembar HVS</strong> dan <strong>30 lembar berwarna</strong>. Total biaya adalah…', opts:['Rp 75.000','Rp 80.000','Rp 85.000','Rp 90.000'] },
+      { id:15, type:'pilgan', text:'Total pesanan spanduk adalah <strong>Rp 1.250.000</strong>. Pelanggan wajib membayar DP (uang muka) sebesar 50% di awal. Saat pengambilan barang, pelanggan menyerahkan uang tunai sebesar <strong>Rp 700.000</strong> untuk pelunasan. Berapa kembalian yang harus Anda berikan?', opts:['Rp 25.000','Rp 50.000','Rp 75.000','Rp 100.000'] },
     ]
   },
   {
     id:'C', title:'Pelayanan Pelanggan & Administrasi',
     note:'Pilih sikap atau tindakan yang paling tepat dan profesional.',
     questions:[
-      { id:16, ans:1, type:'pilgan', text:'Pelanggan marah karena hasil cetakan buram. Setelah dicek, penyebabnya adalah file yang dikirim pelanggan berkualitas rendah (resolusi kecil). Tindakan paling tepat adalah…', opts:['Menyalahkan file pelanggan','Menjelaskan penyebab masalah','Menolak komplain pelanggan agar tidak rugi','Memberikan pengembalian uang penuh'] },
-      { id:17, ans:2, type:'pilgan', text:'Saat melayani pelanggan di meja, telepon toko berdering. Tindakan yang paling profesional adalah…', opts:['Langsung mengangkat telepon','Membiarkan telepon berdering sampai selesai melayani','Meminta izin untuk angkat telepon','Mematikan nada dering telepon'] },
-      { id:18, ans:1, type:'pilgan', text:'Pesanan pelanggan terlambat diproduksi. Tindakan admin yang paling tepat adalah…', opts:['Menunggu pesanan jadi dulu, baru memberitahu pelanggan','Menghubungi pelanggan lebih awal untuk beri estimasi waktu baru','Meminta pelanggan bersabar','Menyalahkan bagian produksi'] },
-      { id:19, ans:2, type:'pilgan', text:'Saat menutup kasir, uang fisik kurang <strong>Rp 75.000</strong> dari catatan. Tindakan yang benar adalah…', opts:['Menutup laporan tanpa mencatat selisih','Menutupi kekurangan dari uang pribadi','Mencatat selisih dan telusuri kemungkinan kesalahan transaksi','Mengganti selisih dari kas lain'] },
-      { id:20, ans:1, type:'pilgan', text:'Dokumen yang mencatat rincian pesanan pelanggan (produk, jumlah, spesifikasi, harga, dan deadline) disebut…', opts:['Faktur','Nota Pesanan','Invoice','Surat Jalan'] },
+      { id:16, type:'pilgan', text:'Pelanggan marah karena hasil cetakan warnanya berbeda dari desain. Setelah dicek, penyebabnya adalah file yang dikirim pelanggan berkualitas rendah (resolusi kecil). Tindakan paling tepat adalah…', opts:['Langsung menyalahkan file pelanggan di depan umum','Menjelaskan penyebab masalah dengan sopan, menunjukkan perbandingan, dan menawarkan solusi','Menolak komplain pelanggan karena toko takut rugi','Memberikan pengembalian uang penuh tanpa diskusi'] },
+      { id:17, type:'pilgan', text:'Saat melayani pelanggan di meja, telepon toko berdering. Tindakan yang paling profesional adalah…', opts:['Mengangkat telepon dan membiarkan pelanggan di depan menunggu tanpa penjelasan','Membiarkan telepon berdering sampai selesai melayani','Meminta izin kepada pelanggan di depan, angkat telepon singkat, minta penelepon tunggu atau tinggalkan pesan','Mematikan nada dering telepon'] },
+      { id:18, type:'pilgan', text:'Pesanan pelanggan terlambat diproduksi. Tindakan admin yang paling tepat adalah…', opts:['Menunggu pesanan jadi dulu, baru memberitahu pelanggan','Proaktif menghubungi pelanggan lebih awal, minta maaf, dan berikan estimasi waktu baru','Menyuruh pelanggan bersabar tanpa penjelasan','Menyalahkan bagian produksi kepada pelanggan'] },
+      { id:19, type:'pilgan', text:'Saat menutup kasir, uang fisik kurang <strong>Rp 75.000</strong> dari catatan. Tindakan yang benar adalah…', opts:['Menutup laporan dengan angka fisik saja tanpa mencatat selisih','Menutupi kekurangan dari uang pribadi tanpa laporan','Mencatat selisih secara jujur, melapor ke atasan, dan telusuri kemungkinan kesalahan transaksi','Meminjam dari kas hari berikutnya tanpa laporan'] },
+      { id:20, type:'pilgan', text:'Dokumen yang mencatat rincian pesanan pelanggan (produk, jumlah, spesifikasi, harga, dan deadline) disebut…', opts:['Faktur','Surat Order','Invoice','Surat Jalan'] },
     ]
   },
   {
-    id:'D', title:'Penggunaan Microsoft Excel Dasar',
-    note:'Pilih satu jawaban yang paling tepat terkait penggunaan spreadsheet / aplikasi kasir.',
-    questions:[
-      { id:21, ans:0, type:'pilgan', text:'Fungsi di Excel yang digunakan untuk menjumlahkan total pendapatan harian secara otomatis dari atas ke bawah adalah...', opts:['SUM','AVERAGE','COUNT','VLOOKUP'] },
-      { id:22, ans:3, type:'pilgan', text:'Jika atasan meminta Anda mencari rata-rata nilai pengeluaran toko bulan ini, rumus yang tepat digunakan adalah...', opts:['MAX','MIN','SUM','AVERAGE'] },
-      { id:23, ans:1, type:'pilgan', text:'Penulisan rumus (formula) yang benar untuk mengalikan sel A1 (Harga) dengan sel B1 (Jumlah) adalah...', opts:['=A1xB1','=A1*B1','=MULT(A1,B1)','A1*B1'] },
-      { id:24, ans:1, type:'pilgan', text:'Jika ingin menghitung banyaknya transaksi (jumlah baris data) pelanggan yang masuk pada hari itu, Anda dapat menggunakan fungsi...', opts:['SUM','COUNT','IF','AVERAGE'] },
-      { id:25, ans:2, type:'pilgan', text:'Tanda baca yang selalu digunakan untuk mengawali setiap penulisan rumus (formula) di Microsoft Excel adalah...', opts:['# (Pagar)','@ (At)','= (Sama Dengan)','+ (Plus)'] },
-    ]
-  },
-  {
-    id:'E', title:'Esai Singkat',
+    id:'D', title:'Esai Singkat',
     note:'Jawab dengan singkat dan jelas. Dinilai oleh penguji — tidak ada benar/salah mutlak.',
     questions:[
-      { id:26, type:'esai', text:'Anda menemukan bahwa hasil cetakan berbeda dari yang dijanjikan ke pelanggan (foto menjadi terlalu gelap). Pelanggan sudah tiba untuk mengambil. Apa yang Anda lakukan?' },
-      { id:27, type:'esai', text:'Sebutkan <strong>3 hal penting</strong> yang wajib dicatat saat menerima pesanan baru dari pelanggan, dan jelaskan mengapa masing-masing penting!' },
-      { id:28, type:'esai', text:'Ada pelanggan tetap yang meminta harga khusus di luar daftar harga resmi karena memesan dalam jumlah besar. Bagaimana Anda menyikapinya?' },
-      { id:29, type:'esai', text:'Mengapa kejujuran dalam mencatat setiap transaksi kasir sangat penting bagi keberlangsungan usaha sebuah perusahaan?' },
-      { id:30, type:'esai', text:'Anda baru 2 minggu bekerja dan seorang pelanggan menanyakan detail teknis yang belum Anda kuasai. Apa yang Anda lakukan?' },
-      { id:31, type:'esai', text:'Konten adalah video produk nomor rumah berbahan akrilik. Buat caption singkat untuk promosi di status WhatsApp, yang berpotensi menarik pelanggan.' },
+      { id:21, type:'esai', text:'Anda menemukan bahwa hasil cetakan berbeda dari yang dijanjikan ke pelanggan (terlalu gelap). Pelanggan sudah tiba untuk mengambil. Apa yang Anda lakukan?' },
+      { id:22, type:'esai', text:'Sebutkan <strong>3 hal penting</strong> yang wajib dicatat saat menerima pesanan baru dari pelanggan, dan jelaskan mengapa masing-masing penting!' },
+      { id:23, type:'esai', text:'Ada pelanggan tetap yang meminta harga khusus di luar daftar harga resmi karena memesan dalam jumlah besar. Bagaimana Anda menyikapinya?' },
+      { id:24, type:'esai', text:'Mengapa kejujuran dalam mencatat setiap transaksi kasir sangat penting bagi keberlangsungan usaha percetakan?' },
+      { id:25, type:'esai', text:'Anda baru 2 minggu bekerja dan seorang pelanggan menanyakan detail teknis yang belum Anda kuasai. Apa yang Anda lakukan?' },
+      { id:26, type:'esai', text:'Konten adalah video produk nomor rumah berbahan akrilik. Buat caption singkat untuk status whatsapp.' },
     ]
   }
 ];
@@ -336,6 +325,7 @@ function formatDur(sec) {
   return `${m} menit ${s} detik`;
 }
 
+// Cek adanya cache saat halaman dimuat
 window.addEventListener('DOMContentLoaded', () => {
   const saved = localStorage.getItem('paktjip_test_state');
   if (saved) {
@@ -356,6 +346,7 @@ function verifyLogin() {
   }
 }
 
+// SIMPAN KE LOCAL STORAGE
 function saveState() {
   if (!peserta.nama) return;
   const answers = {};
@@ -379,6 +370,7 @@ function saveState() {
   localStorage.setItem('paktjip_test_state', JSON.stringify(state));
 }
 
+// KEMBALIKAN DATA DARI LOCAL STORAGE
 function restoreState() {
   const saved = localStorage.getItem('paktjip_test_state');
   if (saved) {
@@ -416,6 +408,9 @@ function restoreState() {
   }
 }
 
+// ════════════════════════════════════════════
+// START
+// ════════════════════════════════════════════
 function startTest() {
   const nama = document.getElementById('f-nama').value.trim();
   const hp   = document.getElementById('f-hp').value.trim();
@@ -440,6 +435,9 @@ function startTest() {
   window.scrollTo(0,0);
 }
 
+// ════════════════════════════════════════════
+// BUILD
+// ════════════════════════════════════════════
 function buildQuestions() {
   const container = document.getElementById('questions-container');
   const progRow   = document.getElementById('progress-row');
@@ -494,6 +492,9 @@ function markDone(id, skipSave = false) {
   if (!skipSave) saveState();
 }
 
+// ════════════════════════════════════════════
+// TIMER 
+// ════════════════════════════════════════════
 function startTimer() {
   renderTimer();
   timerInterval = setInterval(() => {
@@ -522,6 +523,9 @@ function renderTimer() {
   }
 }
 
+// ════════════════════════════════════════════
+// FINISH
+// ════════════════════════════════════════════
 function confirmFinish() {
   if (confirm('Apakah Anda yakin ingin mengakhiri tes sekarang? Pastikan semua soal telah terjawab.')) finishTest(false);
 }
@@ -534,6 +538,7 @@ function finishTest(timeout) {
 
   document.getElementById('timeout-overlay').classList.remove('show');
 
+  // Bersihkan cache storage untuk peserta selanjutnya
   localStorage.removeItem('paktjip_test_state');
 
   const elapsed  = Math.floor((waktuSelesai - waktuMulai) / 1000);
@@ -543,7 +548,7 @@ function finishTest(timeout) {
   document.getElementById('d-mulai').textContent    = formatDT(waktuMulai);
   document.getElementById('d-selesai').textContent  = formatDT(waktuSelesai);
   document.getElementById('d-durasi').textContent   = formatDur(elapsed);
-  document.getElementById('d-answered').textContent = `${answered} / 31`;
+  document.getElementById('d-answered').textContent = `${answered} / 26`;
 
   document.getElementById('page-test').classList.remove('active');
   document.getElementById('page-done').classList.add('active');
@@ -565,59 +570,12 @@ function countAnswered() {
   return c;
 }
 
-// ════════════════════════════════════════════
-// DOWNLOAD HTML & GRADING ENGINE
+// ════════════════════════════════════════════// ════════════════════════════════════════════
+// DOWNLOAD HTML (PRINT-FRIENDLY) - TANPA PASSWORD
 // ════════════════════════════════════════════
 function downloadResult() {
   const elapsed = Math.floor((waktuSelesai - waktuMulai) / 1000);
   
-  // Grading Engine
-  let skorPilgan = 0;
-  let totalPilgan = 0;
-
-  let contentHtml = '';
-  SECTIONS.forEach(sec => {
-    contentHtml += `<div class="section-title">Bagian ${sec.id} — ${sec.title}</div>`;
-
-    sec.questions.forEach(q => {
-      const qText = q.text.replace(/<[^>]+>/g,'');
-      contentHtml += `<div class="q-item"><div class="q-text">${q.id}. ${qText}</div>`;
-
-      if (q.type === 'pilgan') {
-        totalPilgan++;
-        const sel = document.querySelector(`input[name="q${q.id}"]:checked`);
-        if (sel) {
-          const idx = parseInt(sel.value);
-          const letter = String.fromCharCode(65+idx);
-          if (idx === q.ans) {
-            skorPilgan++;
-            contentHtml += `<div class="q-ans correct">✓ Jawaban: ${letter}. ${q.opts[idx]}</div>`;
-          } else {
-            const trueLetter = String.fromCharCode(65+q.ans);
-            contentHtml += `<div class="q-ans wrong">✗ Jawaban: ${letter}. ${q.opts[idx]}</div>`;
-            contentHtml += `<div class="q-correct-key">Kunci yang benar: ${trueLetter}. ${q.opts[q.ans]}</div>`;
-          }
-        } else {
-          const trueLetter = String.fromCharCode(65+q.ans);
-          contentHtml += `<div class="q-ans q-unanswered">Jawaban: (Tidak dijawab)</div>`;
-          contentHtml += `<div class="q-correct-key">Kunci yang benar: ${trueLetter}. ${q.opts[q.ans]}</div>`;
-        }
-      } else {
-        const ta = document.querySelector(`#qcard-${q.id} textarea`);
-        const ans = ta && ta.value.trim() ? ta.value.trim() : '';
-        if (ans) {
-          const safeAns = ans.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-          contentHtml += `<div class="q-ans essay">${safeAns}</div>`;
-        } else {
-          contentHtml += `<div class="q-ans q-unanswered">Jawaban: (Tidak dijawab)</div>`;
-        }
-      }
-      contentHtml += `</div>`;
-    });
-  });
-
-  const finalScore = Math.round((skorPilgan / totalPilgan) * 100);
-
   let html = `<!DOCTYPE html>
 <html lang="id">
 <head>
@@ -632,36 +590,29 @@ function downloadResult() {
   .header h1 { margin: 0 0 5px 0; font-size: 20px; color: #1a3a2a; text-transform: uppercase; letter-spacing: 1px;}
   .header p { margin: 0; font-size: 13px; color: #666; }
   
-  .info-grid { display: grid; grid-template-columns: 1fr 1fr 180px; gap: 20px; margin-bottom: 25px; }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
   .info-box { border: 1px solid #ddd; padding: 12px 15px; border-radius: 4px; }
-  .info-box h3 { margin: 0 0 12px 0; font-size: 11px; text-transform: uppercase; color: #1a3a2a; border-bottom: 1px solid #eee; padding-bottom: 6px; letter-spacing: 1px; }
-  
-  /* PERUBAHAN CSS UNTUK LAYOUT MENURUN */
-  .info-row { margin-bottom: 12px; }
-  .info-row:last-child { margin-bottom: 0; }
-  .info-row .lbl { display: block; font-size: 10px; font-weight: bold; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
-  .info-row .val { display: block; font-family: monospace; font-size: 13.5px; color: #111; word-wrap: break-word; line-height: 1.4; }
-
-  .score-box { background: #1a3a2a; color: white; text-align: center; padding: 15px; border-radius: 4px; font-size: 24px; font-weight: bold; display: flex; flex-direction: column; justify-content: center;}
-  .score-box span { display: block; font-size: 10px; font-weight: bold; color: #a9dfbf; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;}
-  .score-box small { font-size: 12px; font-weight: normal; margin-top: 4px;}
+  .info-box h3 { margin: 0 0 10px 0; font-size: 11px; text-transform: uppercase; color: #1a3a2a; border-bottom: 1px solid #eee; padding-bottom: 6px; letter-spacing: 1px; }
+  .info-row { display: flex; margin-bottom: 4px; }
+  .info-row .lbl { width: 110px; font-weight: bold; color: #555; }
+  .info-row .val { flex: 1; font-family: monospace; font-size: 13px;}
   
   .answers { column-count: 2; column-gap: 30px; }
   .section-title { font-size: 13px; font-weight: bold; color: #1a3a2a; background: #f9f9f9; padding: 6px 12px; border-left: 4px solid #1a3a2a; margin: 15px 0 12px 0; text-transform: uppercase; break-after: avoid; }
-  .q-item { margin-bottom: 16px; break-inside: avoid; page-break-inside: avoid; }
+  .q-item { margin-bottom: 14px; break-inside: avoid; page-break-inside: avoid; }
   .q-text { font-weight: 500; margin-bottom: 4px; font-size: 12.5px; }
-  .q-ans { padding-left: 15px; font-weight: bold; font-size: 12.5px; }
-  .q-ans.correct { color: #1a3a2a }
-  .q-ans.wrong { color: #c0392b; }
-  .q-correct-key { font-size: 11.5px; color: #2d6048; margin-top: 4px; font-weight: bold; background: #e8f5e9; padding: 4px 10px; border-radius: 3px; display: inline-block; margin-left: 15px;}
-  .q-ans.essay { font-weight: normal; color: #333; font-family: monospace; white-space: pre-wrap; background: #fafafa; padding: 8px 12px; border: 1px solid #eee; margin-top: 4px; border-radius: 4px; font-size: 12px; margin-left: 0;}
-  .q-unanswered { color: #888; font-style: italic; }
+  .q-ans { padding-left: 15px; color: #2d6048; font-weight: bold; font-size: 12.5px; }
+  .q-ans.essay { font-weight: normal; color: #333; font-family: monospace; white-space: pre-wrap; background: #fafafa; padding: 8px 12px; border: 1px solid #eee; margin-top: 4px; border-radius: 4px; font-size: 12px;}
+  .q-unanswered { color: #c0392b; font-style: italic; }
   
   .footer { margin-top: 30px; text-align: center; font-size: 10px; color: #888; border-top: 1px solid #eee; padding-top: 10px; clear: both;}
+  .btn-print { display: block; width: 220px; margin: 0 auto 20px; padding: 12px; text-align: center; background: #1a3a2a; color: #fff; text-decoration: none; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; font-size: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;}
+  .btn-print:hover { background: #2d6048; }
 
   @media print {
     body { background: none; padding: 0; }
     .document { box-shadow: none; margin: 0; padding: 0; max-width: 100%; }
+    .btn-print { display: none; }
   }
 </style>
 </head>
@@ -670,34 +621,60 @@ function downloadResult() {
   <div id="main-content">
     <div class="document">
       <div class="header">
-        <h1>Hasil Tes Seleksi Karyawan & Koreksi</h1>
+        <h1>Hasil Tes Seleksi Karyawan</h1>
         <p>Posisi: Admin & Kasir Paktjip Digital Printing</p>
       </div>
       
       <div class="info-grid">
         <div class="info-box">
           <h3>Data Peserta</h3>
-          <div class="info-row"><div class="lbl">Nama Lengkap</div><div class="val">${peserta.nama}</div></div>
-          <div class="info-row"><div class="lbl">No. WhatsApp</div><div class="val">${peserta.hp}</div></div>
-          <div class="info-row"><div class="lbl">Durasi Pengerjaan</div><div class="val">${formatDur(elapsed)}</div></div>
+          <div class="info-row"><div class="lbl">Nama Lengkap</div><div class="val">: ${peserta.nama}</div></div>
+          <div class="info-row"><div class="lbl">No. WhatsApp</div><div class="val">: ${peserta.hp}</div></div>
         </div>
         <div class="info-box">
           <h3>Log Pengerjaan</h3>
-          <div class="info-row"><div class="lbl">Waktu Mulai</div><div class="val">${formatDT(waktuMulai)}</div></div>
-          <div class="info-row"><div class="lbl">Waktu Selesai</div><div class="val">${formatDT(waktuSelesai)}</div></div>
-          <div class="info-row"><div class="lbl">Soal Terjawab</div><div class="val">${countAnswered()} / 31 Soal</div></div>
-        </div>
-        <div class="score-box">
-          <span>Nilai Pilihan Ganda</span>
-          ${finalScore}
-          <small>(${skorPilgan} dari ${totalPilgan} Benar)</small>
+          <div class="info-row"><div class="lbl">Mulai</div><div class="val">: ${formatDT(waktuMulai)}</div></div>
+          <div class="info-row"><div class="lbl">Selesai</div><div class="val">: ${formatDT(waktuSelesai)}</div></div>
+          <div class="info-row"><div class="lbl">Durasi</div><div class="val">: ${formatDur(elapsed)}</div></div>
+          <div class="info-row"><div class="lbl">Terjawab</div><div class="val">: ${countAnswered()} / 26 Soal</div></div>
         </div>
       </div>
       
-      <div class="answers">
-        ${contentHtml}
+      <div class="answers">`;
+
+  SECTIONS.forEach(sec => {
+    html += `<div class="section-title">Bagian ${sec.id} — ${sec.title}</div>`;
+
+    sec.questions.forEach(q => {
+      const qText = q.text.replace(/<[^>]+>/g,'');
+      html += `<div class="q-item"><div class="q-text">${q.id}. ${qText}</div>`;
+
+      if (q.type === 'pilgan') {
+        const sel = document.querySelector(`input[name="q${q.id}"]:checked`);
+        if (sel) {
+          const idx = parseInt(sel.value);
+          const letter = String.fromCharCode(65+idx);
+          html += `<div class="q-ans">Jawaban: ${letter}. ${q.opts[idx]}</div>`;
+        } else {
+          html += `<div class="q-ans q-unanswered">Jawaban: (Tidak dijawab)</div>`;
+        }
+      } else {
+        const ta = document.querySelector(`#qcard-${q.id} textarea`);
+        const ans = ta && ta.value.trim() ? ta.value.trim() : '';
+        if (ans) {
+          const safeAns = ans.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          html += `<div class="q-ans essay">${safeAns}</div>`;
+        } else {
+          html += `<div class="q-ans q-unanswered">Jawaban: (Tidak dijawab)</div>`;
+        }
+      }
+      html += `</div>`;
+    });
+  });
+
+  html += `
       </div>
-      <div class="footer">Dokumen beserta koreksi PG dihasilkan otomatis secara lokal pada: ${formatDT(new Date())}</div>
+      <div class="footer">Dokumen dihasilkan otomatis secara lokal pada: ${formatDT(new Date())}</div>
     </div>
   </div>
 
@@ -708,7 +685,7 @@ function downloadResult() {
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
   a.href     = url;
-  a.download = `Hasil_Tes_Koreksi_${peserta.nama.replace(/\s+/g,'_')}.html`;
+  a.download = `Hasil_Tes_${peserta.nama.replace(/\s+/g,'_')}.html`;
   a.click();
   URL.revokeObjectURL(url);
 }

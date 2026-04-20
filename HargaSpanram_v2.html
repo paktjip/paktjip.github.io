@@ -682,9 +682,9 @@
             let spanramHppBaseWithKayu = (perimeter * 50) + (jumlahKayu > 0 ? kayuPenyangga * 50 : 0);
             let spanramHppDisplay = spanramHppBaseWithKayu * (slide2muka ? 2 : 1);
             
-            let hppSpanramDetail = `<b>Spanram</b> ${formatRupiah(perimeter * 50)} (${perimeter}cm @ Rp 50/cm)${slide2muka ? ' ×2' : ''}`;
+            let hppSpanramDetail = `<b>Spanram</b> ${formatRupiah(perimeter * 50)} (${perimeter}cm @ Rp 50/cm)${(slide2muka && withKaki) ? ' ×2' : ''}`;
             if (jumlahKayu > 0) {
-                hppSpanramDetail += ` + <b>Kayu Penyangga</b> ${formatRupiah(kayuPenyangga * 50)} (${jumlahKayu}x${minSide}cm)${slide2muka ? ' ×2' : ''}`;
+                hppSpanramDetail += ` + <b>Kayu Penyangga</b> ${formatRupiah(kayuPenyangga * 50)} (${jumlahKayu}x${minSide}cm)${(slide2muka && withKaki) ? ' ×2' : ''}`;
             }
             if (spanramPenyanggaHpp > 0) {
                 hppSpanramDetail += ` + <b>Penyangga Kaki</b> ${formatRupiah(spanramPenyanggaHpp)}`;
@@ -700,9 +700,9 @@
             let spanramHppBannerDisplay = spanramHppBaseWithKayu * (slide2muka ? 2 : 1);
             let bannerHppDisplay = originalBannerHpp * (slide2muka ? 2 : 1);
             
-            let hppBannerDetail = `<b>Spanram</b> ${formatRupiah(perimeter * 50)} (${perimeter}cm @ Rp 50/cm)${slide2muka ? ' ×2' : ''}`;
+            let hppBannerDetail = `<b>Spanram</b> ${formatRupiah(perimeter * 50)} (${perimeter}cm @ Rp 50/cm)${(slide2muka && withKaki) ? ' ×2' : ''}`;
             if (jumlahKayu > 0) {
-                hppBannerDetail += ` + <b>Kayu Penyangga</b> ${formatRupiah(kayuPenyangga * 50)} (${jumlahKayu}x${minSide}cm)${slide2muka ? ' ×2' : ''}`;
+                hppBannerDetail += ` + <b>Kayu Penyangga</b> ${formatRupiah(kayuPenyangga * 50)} (${jumlahKayu}x${minSide}cm)${(slide2muka && withKaki) ? ' ×2' : ''}`;
             }
             if (penyanggaHpp > 0) {
                 hppBannerDetail += ` + <b>Penyangga Kaki</b> ${formatRupiah(penyanggaHpp)}`;

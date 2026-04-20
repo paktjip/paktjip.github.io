@@ -3,20 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lukas Ardianto — Visual Designer</title>
-
-  <!-- Fonts loaded async — zero render-blocking -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cormorant+SC:wght@300;400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap"
-    onload="this.onload=null;this.rel='stylesheet'" />
-  <noscript>
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cormorant+SC:wght@300;400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" />
-  </noscript>
+  <title>Lukas Ardianto — Graphic Designer</title>
 
   <style>
+    @font-face {
+      font-family: "San Francisco";
+      font-weight: 400;
+      src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
+    }
+
     :root {
       --bg: #f5f5f7;
       --surface: #ffffff;
@@ -24,12 +19,12 @@
       --text: #0f172a;
       --muted: #667085;
       --border: rgba(15,23,42,.10);
-      --border-strong: rgba(15,23,42,.08);
       --shadow: 0 35px 90px rgba(15,23,42,.08);
       --accent: #0070f3;
       --accent-soft: rgba(0,112,243,.12);
       --ease: cubic-bezier(0.2,0.6,0.3,1);
-      --sans: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --sans: "San Francisco", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+      --serif: 'Times New Roman', Times, serif;
     }
 
     *, *::before, *::after {
@@ -134,7 +129,7 @@
       padding: 160px 64px 100px;
       position: relative;
       overflow: hidden;
-      background: linear-gradient(135deg, #f9fafb 0%, #f3f4fa 35%, #eff2fc 65%, #f0f5f9 100%);
+      background: linear-gradient(135deg, #578ebe 0%, #FFFDE4 100%);
       display: flex;
       align-items: center;
     }
@@ -409,6 +404,15 @@
       border-radius: 999px;
       font-size: .78rem;
       color: var(--text);
+      box-shadow: 0 4px 12px rgba(15,23,42,.08);
+      transition: all .25s var(--ease);
+    }
+
+    .sk-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+      transform: translateY(-2px);
     }
 
     #projects {
@@ -432,6 +436,7 @@
       letter-spacing: .14em;
       text-transform: uppercase;
       cursor: pointer;
+      box-shadow: 0 4px 12px rgba(15,23,42,.08);
       transition: all .25s var(--ease);
     }
 
@@ -440,6 +445,7 @@
       border-color: var(--accent);
       color: var(--accent);
       background: var(--accent-soft);
+      transform: translateY(-2px);
     }
 
     .p-grid {
@@ -764,7 +770,7 @@
 
     #m-title {
       font-size: clamp(1.9rem, 3vw, 2.5rem);
-      font-weight: 800;
+      font-weight: 700;
       color: var(--text);
       margin-bottom: 18px;
       line-height: 1.08;
@@ -836,7 +842,7 @@
 
     .sv-t {
       font-size: 1.55rem;
-      font-weight: 800;
+      font-weight: 700;
       line-height: 1.18;
       color: var(--text);
       margin-bottom: 14px;
@@ -1056,9 +1062,9 @@
   <div class="h-grid"></div>
   <div class="h-glow"></div>
   <div class="h-inner">
-    <p class="h-eye">Portfolio</p>
+    <p class="h-eye"><em>Portfolio</em></p>
     <h1 class="h-name">Lukas<br><em>Ardianto</em></h1>
-    <p class="h-sub">Visual Designer · Branding &amp; Social Media</p>
+    <p class="h-sub"><em>Visual Designer · Branding &amp; Social Media</em></p>
     <div class="h-cta">
       <a href="#projects" class="btn-g">Lihat Proyek</a>
       <a href="#contact"  class="btn-o">Hubungi Saya</a>
@@ -1078,9 +1084,9 @@
       <div class="a-text">
         <p class="s-eye rv">Tentang Saya</p>
         <div class="g-bar rv"></div>
-        <h2 class="s-ttl rv">Mendesain visual<br><em>yang berbicara lebih keras</em><br>daripada kata-kata.</h2>
-        <p class="rv d1">Saya Lukas Ardianto — Graphic Designer dengan fokus pada branding, advertising, dan social media graphic design. Saya percaya desain yang baik bukan hanya indah, tapi juga berbicara langsung kepada audiens yang tepat.</p>
-        <p class="rv d2">Dengan pendekatan yang bersih dan <em>intentional</em>, saya membantu brand membangun identitas visual yang konsisten dan berkesan — dari aset media sosial hingga materi iklan cetak.</p>
+        <h2 class="s-ttl rv">Mendesain visual<br><em>yang bercerita</em><br>lebih dari sekedar kata.</h2>
+        <p class="rv d1">Saya Lukas Ardianto — <em>Graphic Designer</em> dengan fokus pada <em>branding</em>, <em>advertising</em>, dan <em>social media graphic design</em>. Saya percaya desain yang baik bukan hanya indah, tapi juga berbicara langsung kepada audiens yang tepat.</p>
+        <p class="rv d2">Dengan pendekatan yang bersih dan <em>intentional</em>, saya membantu <em>brand</em> membangun identitas visual yang konsisten dan berkesan — dari aset media sosial hingga materi iklan cetak.</p>
         <p class="sk-head rv d3">ALAT &amp; KETERAMPILAN</p>
         <div class="sk-wrap rv d3">
           <span class="sk-tag">CorelDRAW</span>
@@ -1102,7 +1108,7 @@
     <h2 class="s-ttl lt rv">Proyek &amp;<em> Studi Kasus</em></h2>
     <div class="filter-bar rv" id="filter-bar"></div>
     <div class="p-grid" id="p-grid">
-      <p style="grid-column:1/-1;padding:60px;text-align:center;color:var(--muted);font-family:var(--serif);font-style:italic;">Loading projects…</p>
+      <p style="grid-column:1/-1;padding:60px;text-align:center;color:var(--muted);font-family:var(--serif);font-style:italic;"><em>Loading projects…</em></p>
     </div>
   </div>
 </section>
@@ -1117,22 +1123,22 @@
       <div class="sv-card rv">
         <p class="sv-n">01</p>
         <h3 class="sv-t">Social Media Content Design</h3>
-        <p class="sv-d">Desain konten media sosial yang on-brand dan eye-catching — dari feed Instagram, story, hingga template reusable yang konsisten.</p>
+        <p class="sv-d">Desain konten media sosial yang <em>on-brand</em> dan <em>eye-catching</em> — dari <em>feed</em> Instagram, <em>story</em>, hingga template <em>reusable</em> yang konsisten.</p>
       </div>
       <div class="sv-card rv d1">
         <p class="sv-n">02</p>
         <h3 class="sv-t">Brand Visual Identity</h3>
-        <p class="sv-d">Membangun identitas visual brand yang kohesif: logo, color palette, typography system, dan brand guideline yang siap pakai.</p>
+        <p class="sv-d">Membangun identitas visual <em>brand</em> yang kohesif: <em>logo</em>, <em>color palette</em>, <em>typography system</em>, dan <em>brand guideline</em> yang siap pakai.</p>
       </div>
       <div class="sv-card rv d2">
         <p class="sv-n">03</p>
         <h3 class="sv-t">Advertising &amp; Campaign</h3>
-        <p class="sv-d">Materi iklan digital dan cetak — banner ads, flyer promosi, poster event, dan campaign visual yang dirancang untuk menarik perhatian.</p>
+        <p class="sv-d">Materi iklan digital dan cetak — <em>banner ads</em>, <em>flyer</em> promosi, <em>poster event</em>, dan <em>campaign visual</em> yang dirancang untuk menarik perhatian.</p>
       </div>
       <div class="sv-card rv d3">
         <p class="sv-n">04</p>
         <h3 class="sv-t">Poster &amp; Print Design</h3>
-        <p class="sv-d">Desain cetak berkualitas tinggi: poster, brosur, katalog produk, dan materi promosi offline lainnya.</p>
+        <p class="sv-d">Desain cetak berkualitas tinggi: <em>poster</em>, <em>brosur</em>, <em>katalog produk</em>, dan materi promosi offline lainnya.</p>
       </div>
     </div>
   </div>
@@ -1144,7 +1150,7 @@
     <p class="s-eye rv">Mari saling terhubung</p>
     <div class="g-bar dim rv" style="margin:0 auto 22px;"></div>
     <h2 class="s-ttl lt rv">Punya proyek<br><em>yang ingin dikerjakan?</em></h2>
-    <p class="c-intro rv">Saya terbuka untuk proyek freelance, kolaborasi kreatif, dan diskusi tentang branding. Mari buat sesuatu yang berkesan bersama.</p>
+    <p class="c-intro rv">Saya terbuka untuk proyek <em>freelance</em>, kolaborasi kreatif, dan diskusi tentang <em>branding</em>. Mari buat sesuatu yang berkesan bersama.</p>
     <div class="c-links rv">
       <a href="https://wa.me/62882008428457" class="c-lnk">
         <div class="c-ico">
@@ -1160,7 +1166,6 @@
         <span class="c-lb">Email</span>
         <span class="c-vl">lukasardianto@icloud.com</span>
       </a>
-      <!-- ✏️ Replace href with your actual Instagram handle -->
       <a href="https://instagram.com/design.by.ard" class="c-lnk">
         <div class="c-ico">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
@@ -1174,8 +1179,8 @@
 <!-- FOOTER -->
 <footer>
   <span class="f-logo">Lukas Ardianto</span>
-  <span class="f-tag">Designing with intention.</span>
-  <span class="f-copy">© 2026 All rights reserved.</span>
+  <span class="f-tag"><em>Designing with intention.</em></span>
+  <span class="f-copy"><em>© 2026 All rights reserved.</em></span>
 </footer>
 
 <!-- ═══════════════════════════
@@ -1340,15 +1345,7 @@ document.addEventListener('keydown', e => {
 
 /* ══════════════════════════════
    LOAD PROJECTS FROM projects.json
-   ─────────────────────────────
-   To add a project:
-   1. Add a folder under images/  (e.g. images/my-project/)
-   2. Drop cover.jpg + slide images inside
-   3. Add one object to projects.json  ← that's it!
 ══════════════════════════════ */
-const SYMS    = ['✦','◈','◉','⬡','◇','⊹','◆','⟡','◎','✧'];
-// Alternating layout — every 3rd card is 'wide' (spans 2 cols)
-// Adjust by modifying the LAYOUTS array if you prefer a different rhythm
 const LAYOUTS = ['wide','','','','','wide','','','',''];
 
 async function loadProjects() {
@@ -1360,14 +1357,14 @@ async function loadProjects() {
   } catch {
     document.getElementById('p-grid').innerHTML =
       `<p style="grid-column:1/-1;padding:60px;text-align:center;color:var(--muted);font-family:var(--serif);font-style:italic;">
-        No projects found. Edit <code>projects.json</code> and add images to <code>images/</code>.
+        <em>No projects found. Edit <code>projects.json</code> and add images to <code>images/</code>.</em>
       </p>`;
     return;
   }
 
   /* Filter tabs */
   const fb   = document.getElementById('filter-bar');
-  const cats = ['All', ...new Set(projects.map(p => p.category))];
+  const cats = ['Semua', ...new Set(projects.map(p => p.category))];
   cats.forEach((cat, i) => {
     const btn = document.createElement('button');
     btn.className = 'f-btn' + (i === 0 ? ' active' : '');
@@ -1375,7 +1372,7 @@ async function loadProjects() {
     btn.addEventListener('click', () => {
       fb.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      renderCards(cat === 'All' ? projects : projects.filter(p => p.category === cat));
+      renderCards(cat === 'Semua' ? projects : projects.filter(p => p.category === cat));
     });
     fb.appendChild(btn);
   });

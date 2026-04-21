@@ -1,112 +1,107 @@
 [
   {
-    "id": "project-1",
-    "title": "Logo Design - Youth Christian Ministry",
+    "id": "apotles",
+    "title": "Desain Visual Media Sosial untuk Brand APOTLES",
+    "category": "Social Media",
+    "year": "2025",
+    "description": "Merancang visual promosi media sosial untuk produk essential oil APOTLES. Desain difokuskan pada estetika yang bersih, minimalis, dan mewah (luxury) dengan palet warna netral. Pendekatan ini memberikan kesan menenangkan sekaligus profesional, sesuai dengan karakter produk relaksasi.",
+    "tags": ["Social Media", "Instagram", "Content Design"],
+    "cover": "apotles_1.jpeg",
+    "slides": [
+      "images/apotles/apotles_1.jpeg",
+      "images/apotles/apotles_2.jpeg",
+      "images/apotles/apotles_3.jpeg"
+    ]
+  },
+  {
+    "id": "icetamarinduno",
+    "title": "Konten Promosi Media Sosial: Ice Tamarind Uno",
+    "category": "Social Media",
+    "year": "2025",
+    "description": "Menampilkan kekuatan visual produk untuk brand minuman lokal. Fokus pada estetika yang menggugah selera dan penyampaian karakter brand yang segar lewat desain konten media sosial yang modern dan stand-out.",
+    "tags": ["Social Media", "Instagram", "Content Design"],
+    "cover": "images/icetamarinduno/icetamarinduno_cover.jpg",
+    "slides": [
+      "images/icetamarinduno/icetamarinduno_1.jpg"
+    ]
+  },
+  {
+    "id": "icetamarindunologo",
+    "title": "Desain Logo Brand Minuman: Ice Tamarind Uno",
     "category": "Branding",
-    "year": "2019",
-    "description": "Pembuatan logo untuk Team on The Way, sebuah komunitas pemuda Kristen. Logo dirancang dengan elemen yang mencerminkan semangat kebersamaan dan perjalanan spiritual, menggunakan warna yang cerah dan tipografi yang modern.",
-    "tags": ["Logo", "Brand Guide", "Typography"],
-    "cover": "images/project-1/cover.jpg",
-    "slides": [
-      "images/project-1/slide-1.jpg",
-      "images/project-1/slide-2.jpg",
-      "images/project-1/slide-3.jpg"
-    ]
-  },
-  {
-    "id": "project-2",
-    "title": "Social Media Content Design for a Printing Company",
-    "category": "Social Media",
-    "year": "2024",
-    "description": "Desain konten media sosial untuk perusahaan percetakan. Konten dirancang untuk meningkatkan engagement dengan audiens melalui visual yang menarik dan pesan yang jelas untuk mempromosikan produk dan layanan perusahaan.",
-    "tags": ["Instagram", "Content Design", "Campaign"],
-    "cover": "images/project-2/cover.jpg",
-    "slides": [
-      "images/project-2/slide-1.jpg",
-      "images/project-2/slide-2.jpg"
-    ]
-  },
-  {
-    "id": "project-3",
-    "title": "Billboard Design for Government Publication",
-    "category": "Advertising",
     "year": "2025",
-    "description": "Desain billboard untuk publikasi DPRD Kabupaten Temanggung. Billboard dirancang untuk menyampaikan informasi penting kepada masyarakat dengan visual yang kuat dan pesan yang mudah dipahami, menggunakan elemen desain yang sesuai dengan identitas pemerintah daerah.",
-    "tags": ["Billboard", "Print", "Outdoor Media"],
-    "cover": "images/project-3/cover.jpg",
+    "description": "Merancang identitas visual utama untuk Ice Tamarind Uno. Desain logo dibuat agar tampil dinamis, segar, dan langsung melekat di ingatan konsumen, sekaligus mencerminkan keunikan rasa minuman berbahan dasar asam Jawa ini.",
+    "tags": ["Logo", "Branding", "Identity"],
+    "cover": "images/icetamarindunologo/icetamarindunologo_cover.jpg",
     "slides": [
-      "images/project-3/slide-1.jpg",
-      "images/project-3/slide-2.jpg",
-      "images/project-3/slide-3.jpg"
+      "images/icetamarindunologo/icetamarindunologo_1.jpg"
     ]
   },
   {
-    "id": "project-4",
-    "title": "Desain Konten Media Sosial untuk Brand Minuman",
-    "category": "Social Media",
-    "year": "2025",
-    "description": "Desain konten Promosi untuk Media Sosial brand Ice Tamarind Uno, sebuah minuman segar berbahan dasar asam Jawa. Konten dirancang untuk menarik perhatian audiens dengan visual yang menggugah selera dan pesan yang menyampaikan keunikan produk, menggunakan elemen desain yang sesuai dengan identitas merek.",
-    "tags": ["Social Media", "Instagram", "Content Design"],
-    "cover": "images/project-4/cover.jpg",
-    "slides": [
-      "images/project-4/slide-1.jpg",
-      "images/project-4/slide-2.jpg"
-    ]
-  },
-  {
-    "id": "project-5",
-    "title": "Desain Konten Media Sosial untuk Brand Essential Oil",
-    "category": "Advertising",
-    "year": "2025",
-    "description": "Merancang konten media sosial untuk mempromosikan produk essential oil dari brand APOTLES. Konten dirancang dengan visual yang menenangkan dan pesan yang menyampaikan manfaat produk, menggunakan elemen desain yang sesuai dengan identitas merek.",
-    "tags": ["Social Media", "Instagram", "Content Design"],
-    "cover": "images/project-5/cover.jpg",
-    "slides": [
-      "images/project-5/slide-1.jpg",
-      "images/project-5/slide-2.jpg",
-      "images/project-5/slide-3.jpg"
-    ]
-  },
-  {
-    "id": "project-6",
-    "title": "Product Advertising – Visual Campaign",
-    "category": "Advertising",
-    "year": "2025",
-    "description": "Materi iklan digital untuk peluncuran produk baru. Mencakup banner ads berbagai ukuran, carousel ads Instagram, dan visual untuk Facebook Ads dengan pesan yang konsisten.",
-    "tags": ["Ads", "Digital", "Campaign"],
-    "cover": "images/project-5/cover.jpg",
-    "slides": [
-      "images/project-5/slide-1.jpg",
-      "images/project-5/slide-2.jpg",
-      "images/project-5/slide-3.jpg"
-    ]
-  },
-    {
-    "id": "project-6",
-    "title": "Label Sticker Design for Bakery Product",
+    "id": "eb",
+    "title": "Desain Stiker Kemasan Esther Bakery",
     "category": "Printing",
     "year": "2025",
-    "description": "Desain sticker label untuk produk kue dari merk Esther Bakery. Label dirancang dengan visual yang menarik dan pesan yang menyampaikan kelezatan produk, menggunakan elemen desain yang sesuai dengan identitas merek.",
+    "description": "Solusi desain kemasan yang fungsional dan estetis. Stiker label ini dirancang untuk memperkuat daya tarik produk bakery di rak penjualan, dengan tetap memperhatikan detail teknis untuk kebutuhan cetak yang presisi.",
     "tags": ["Label", "Printing", "Branding"],
-    "cover": "images/project-5/cover.jpg",
+    "cover": "images/eb/eb_cover.jpg",
     "slides": [
-      "images/project-5/slide-1.jpg",
-      "images/project-5/slide-2.jpg",
-      "images/project-5/slide-3.jpg"
+      "images/eb/eb_1.jpg",
+      "images/eb/eb_2.jpg"
     ]
   },
-     {
-    "id": "project-7",
-    "title": "Poster Media Sosial untuk Acara Gereja",
+  {
+    "id": "dprdtmg",
+    "title": "Desain Billboard Publikasi DPRD Kabupaten Temanggung",
+    "category": "Advertising",
+    "year": "2025",
+    "description": "Mengerjakan proyek media luar ruang berskala besar untuk instansi pemerintah daerah. Fokus pada keterbacaan yang cepat (glanceability) dan layout yang bersih agar pesan penting dapat tersampaikan dengan efektif kepada masyarakat luas.",
+    "tags": ["Billboard", "Print", "Outdoor Media"],
+    "cover": "images/dprdtmg/dprdtmg_1.jpg",
+    "slides": [
+      "images/dprdtmg/dprdtmg_2.jpg",
+      "images/dprdtmg/dprdtmg_3.jpg"
+    ]
+  },
+  {
+    "id": "paktjip",
+    "title": "Desain Konten Media Sosial Perusahaan Percetakan",
+    "category": "Social Media",
+    "year": "2024",
+    "description": "Pengelolaan konten rutin untuk meningkatkan engagement perusahaan percetakan. Fokus pada edukasi layanan dan promo jasa cetak yang dikemas dalam visual yang rapi dan komunikatif bagi audiens di media sosial.",
+    "tags": ["Instagram", "Content Design", "Campaign"],
+    "cover": "images/paktjip/paktjip_1.jpg",
+    "slides": [
+      "images/paktjip/paktjip_2.jpg"
+    ]
+  },
+  {
+    "id": "totw",
+    "title": "Desain Logo Komunitas Pemuda Kristen",
+    "category": "Branding",
+    "year": "2019",
+    "description": "Eksplorasi identitas visual untuk komunitas Team on The Way. Logo ini merupakan kombinasi simbol perjalanan spiritual dan semangat kebersamaan yang diterjemahkan ke dalam tipografi modern dan palet warna yang dinamis.",
+    "tags": ["Logo", "Brand Guide", "Typography"],
+    "cover": "images/totw/totw_cover.jpg",
+    "slides": [
+      "images/totw/totw_1.jpg",
+      "images/totw/totw_2.jpg",
+      "images/totw/totw_3.jpg"
+    ]
+  },
+  {
+    "id": "GPdI",
+    "title": "Desain Poster Digital untuk Acara Gereja",
     "category": "Social Media",
     "year": "2023-2026",
-    "description": "Desain poster untuk mempromosikan acara gereja di media sosial.",
+    "description": "Pembuatan poster promosi acara yang informatif dan menarik secara visual. Menekankan pada kemudahan akses informasi bagi jemaat melalui tata letak yang bersih dan komposisi yang pas untuk dibagikan di berbagai platform pesan digital.",
     "tags": ["Social Media", "Content Design", "Event Promotion"],
-    "cover": "images/project-5/cover.jpg",
+    "cover": "images/GPdI/GPdI_cover.jpg",
     "slides": [
-      "images/project-5/slide-1.jpg",
-      "images/project-5/slide-2.jpg",
-      "images/project-5/slide-3.jpg"
+      "images/GPdI/GPdI_1.jpg",
+      "images/GPdI/GPdI_2.jpg",
+      "images/GPdI/GPdI_3.jpg",
+      "images/GPdI/GPdI_4.jpg"
     ]
   }
 ]

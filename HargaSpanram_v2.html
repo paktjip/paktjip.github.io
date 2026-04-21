@@ -449,22 +449,36 @@
                     <h3>🏭 Harga Pokok Produksi Spanram</h3>
                     <div class="price" id="hppSpanram">Rp 0</div>
                     <div class="detail" id="detailHppSpanram"></div>
+                    <div style="margin-top:8px; font-size:0.8em; color:#7a8fb5; font-style:italic;">⚠️ Disclaimer: belum termasuk biaya tenaga kerja</div>
                 </div>
 
                 <div class="result-card card-hpp">
                     <h3>🏭 Harga Pokok Produksi Banner + Spanram</h3>
                     <div class="price" id="hpp">Rp 0</div>
                     <div class="detail" id="detailHpp"></div>
+                    <div style="margin-top:8px; font-size:0.8em; color:#7a8fb5; font-style:italic;">⚠️ Disclaimer: belum termasuk biaya tenaga kerja</div>
                 </div>
         </div>
 
         <footer>
-            <strong>Copyright © 2025 PAKTJIP Digital Printing</strong><br>
-           Vibe Coded by Lukas Ardianto using Gemini & Claude AI
+            <strong>Copyright © 2026 PAKTJIP Digital Printing</strong><br>
+           Vibe Coded by Lukas Ardianto using Gemini & Claude AI &nbsp;·&nbsp; v2.0
         </footer>
     </div>
 
     <script>
+        // ============================================================
+        // KONSTANTA HARGA POKOK PRODUKSI (HPP)
+        // Edit nilai-nilai di bawah ini untuk mengubah HPP
+        // ============================================================
+        const HPP = {
+            spanramPerCm:      35,      // Rp/cm  — bahan kayu spanram & kayu penyangga
+            bannerPerM2:    12500,      // Rp/m²  — bahan banner
+            finishingPer100cm: 1000,   // Rp per 100cm panjang — lakban & staples
+            engselDanHak:    7500,      // Rp/set — engsel & hak (flat, bukan per cm)
+        };
+        // ============================================================
+
         function toggleCollapsible() {
             const content = document.getElementById('settingsContent');
             const icon = document.getElementById('collapseIcon');
@@ -546,8 +560,8 @@
                 penyanggaUmum = penyanggaKakiUmum;
                 kakiReseller = tinggiKaki * baseSpanramReseller * 2;
                 kakiUmum = tinggiKaki * baseSpanramUmum * 2;
-                biayaEnselReseller = 7500;
-                biayaEnselUmum = 7500;
+                biayaEnselReseller = HPP.engselDanHak;
+                biayaEnselUmum = HPP.engselDanHak;
                 spanramReseller += penyanggaKakiReseller + kakiReseller + biayaEnselReseller;
                 spanramUmum += penyanggaKakiUmum + kakiUmum + biayaEnselUmum;
             } else if (slide2muka && !withKaki) {
@@ -562,8 +576,8 @@
                 bannerUmum *= 2;
                 kakiReseller = tinggiKaki * baseSpanramReseller * 4;
                 kakiUmum = tinggiKaki * baseSpanramUmum * 4;
-                biayaEnselReseller = 7500;
-                biayaEnselUmum = 7500;
+                biayaEnselReseller = HPP.engselDanHak;
+                biayaEnselUmum = HPP.engselDanHak;
                 spanramReseller += kakiReseller + biayaEnselReseller;
                 spanramUmum += kakiUmum + biayaEnselUmum;
             }
@@ -571,15 +585,15 @@
             let bannerSpanramUmum = bannerUmum + spanramUmum + installationUmum;
 
             // HPP Calculation with same logic as banner + spanram
-            let spanramHppBase = perimeter * 50;
+            let spanramHppBase = perimeter * HPP.spanramPerCm;
             let spanramHppFinal = spanramHppBase;
             if (jumlahKayu > 0) {
-                spanramHppFinal += kayuPenyangga * 50;
+                spanramHppFinal += kayuPenyangga * HPP.spanramPerCm;
             }
             let spanramHppKaki = 0, spanramPenyanggaHpp = 0, spanramBiayaEnselHpp = 0;
             
-            let bannerHpp = ((bannerLength * bannerWidth) / 10000) * 12500;
-            let finishingHpp = (bannerLength / 100) * 1000;  // Lakban & Staples
+            let bannerHpp = ((bannerLength * bannerWidth) / 10000) * HPP.bannerPerM2;
+            let finishingHpp = (bannerLength / 100) * HPP.finishingPer100cm;  // Lakban & Staples
             
             let penyanggaHpp = 0, kakiHpp = 0, biayaEnselHpp = 0;
             let originalBannerHpp = bannerHpp;
@@ -588,10 +602,10 @@
                 // Normal calculation
             } else if (!slide2muka && withKaki) {
                 // Spanram + Kayu Penyangga + Penyangga Kaki + Kaki × 2 + Engsel & Hak
-                penyanggaHpp = minSide * 50;
+                penyanggaHpp = minSide * HPP.spanramPerCm;
                 spanramPenyanggaHpp = penyanggaHpp;
-                kakiHpp = tinggiKaki * 50 * 2;
-                biayaEnselHpp = 7500;
+                kakiHpp = tinggiKaki * HPP.spanramPerCm * 2;
+                biayaEnselHpp = HPP.engselDanHak;
                 spanramHppKaki = kakiHpp;
                 spanramBiayaEnselHpp = biayaEnselHpp;
                 spanramHppFinal += spanramPenyanggaHpp + spanramHppKaki + spanramBiayaEnselHpp;
@@ -602,8 +616,8 @@
                 // Spanram × 2, Banner × 2, Kaki × 4 + Engsel & Hak (tanpa penyangga kaki)
                 spanramHppFinal *= 2;
                 bannerHpp *= 2;
-                kakiHpp = tinggiKaki * 50 * 4;
-                biayaEnselHpp = 7500;
+                kakiHpp = tinggiKaki * HPP.spanramPerCm * 4;
+                biayaEnselHpp = HPP.engselDanHak;
                 spanramHppKaki = kakiHpp;
                 spanramBiayaEnselHpp = biayaEnselHpp;
                 spanramHppFinal += spanramHppKaki + spanramBiayaEnselHpp;
@@ -623,8 +637,8 @@
             if (withKaki) {
                 document.querySelector('#result .result-card:nth-child(2) h3').textContent = '💰 Harga Spanram (Umum) - Sepaket';
                 document.querySelector('#result .result-card:nth-child(4) h3').textContent = '💰 Harga Spanram (Reseller) - Sepaket';
-                let tanpaEnselUmum = spanramUmum - 7500;
-                let tanpaEnselReseller = spanramReseller - 7500;
+                let tanpaEnselUmum = spanramUmum - HPP.engselDanHak;
+                let tanpaEnselReseller = spanramReseller - HPP.engselDanHak;
                 let elUmum = document.getElementById("spanramTanpaEnselUmum");
                 let elReseller = document.getElementById("spanramTanpaEnselReseller");
                 elUmum.style.display = 'block';
@@ -679,18 +693,19 @@
             document.getElementById("detailBannerSpanramUmum").innerHTML = 
                 `<b>${labelSpanramBanner}</b> ${formatRupiah(spanramDisplayUmum)} + <b>Banner</b> ${formatRupiah(bannerDisplayUmum)} + <b>Pemasangan</b> ${formatRupiah(installationUmum)}`;
 
-            let spanramHppBaseWithKayu = (perimeter * 50) + (jumlahKayu > 0 ? kayuPenyangga * 50 : 0);
+            let spanramHppBaseWithKayu = (perimeter * HPP.spanramPerCm) + (jumlahKayu > 0 ? kayuPenyangga * HPP.spanramPerCm : 0);
             let spanramHppDisplay = spanramHppBaseWithKayu * (slide2muka ? 2 : 1);
             
-            let hppSpanramDetail = `<b>Spanram</b> ${formatRupiah(perimeter * 50)} (${perimeter}cm @ Rp 50/cm)${(slide2muka && withKaki) ? ' ×2' : ''}`;
+            let hppSpanramDetail = `<b>Spanram</b> ${formatRupiah(perimeter * HPP.spanramPerCm)} (${perimeter}cm @ Rp ${HPP.spanramPerCm}/cm)${(slide2muka && withKaki) ? ' ×2' : ''}`;
             if (jumlahKayu > 0) {
-                hppSpanramDetail += ` + <b>Kayu Penyangga</b> ${formatRupiah(kayuPenyangga * 50)} (${jumlahKayu}x${minSide}cm)${(slide2muka && withKaki) ? ' ×2' : ''}`;
+                hppSpanramDetail += ` + <b>Kayu Penyangga</b> ${formatRupiah(kayuPenyangga * HPP.spanramPerCm)} (${jumlahKayu}x${minSide}cm @ Rp ${HPP.spanramPerCm}/cm)${(slide2muka && withKaki) ? ' ×2' : ''}`;
             }
             if (spanramPenyanggaHpp > 0) {
-                hppSpanramDetail += ` + <b>Penyangga Kaki</b> ${formatRupiah(spanramPenyanggaHpp)}`;
+                hppSpanramDetail += ` + <b>Penyangga Kaki</b> ${formatRupiah(spanramPenyanggaHpp)} (${minSide}cm @ Rp ${HPP.spanramPerCm}/cm)`;
             }
             if (spanramHppKaki > 0) {
-                hppSpanramDetail += ` + <b>Kaki</b> ${formatRupiah(spanramHppKaki)}`;
+                let jumlahKakiHpp = (slide2muka && withKaki) ? 4 : 2;
+                hppSpanramDetail += ` + <b>Kaki</b> ${formatRupiah(spanramHppKaki)} (${jumlahKakiHpp}x${tinggiKaki}cm @ Rp ${HPP.spanramPerCm}/cm)`;
             }
             if (spanramBiayaEnselHpp > 0) {
                 hppSpanramDetail += ` + <b>Engsel & Hak</b> ${formatRupiah(spanramBiayaEnselHpp)}`;
@@ -699,22 +714,26 @@
 
             let spanramHppBannerDisplay = spanramHppBaseWithKayu * (slide2muka ? 2 : 1);
             let bannerHppDisplay = originalBannerHpp * (slide2muka ? 2 : 1);
-            
-            let hppBannerDetail = `<b>Spanram</b> ${formatRupiah(perimeter * 50)} (${perimeter}cm @ Rp 50/cm)${(slide2muka && withKaki) ? ' ×2' : ''}`;
+            let bannerM2 = (bannerLength * bannerWidth) / 10000;
+            let bannerM2Display = (bannerM2 * (slide2muka ? 2 : 1)).toFixed(2);
+            let finishingMeter = (bannerLength / 100).toFixed(2);
+
+            let hppBannerDetail = `<b>Spanram</b> ${formatRupiah(perimeter * HPP.spanramPerCm)} (${perimeter}cm @ Rp ${HPP.spanramPerCm}/cm)${(slide2muka && withKaki) ? ' ×2' : ''}`;
             if (jumlahKayu > 0) {
-                hppBannerDetail += ` + <b>Kayu Penyangga</b> ${formatRupiah(kayuPenyangga * 50)} (${jumlahKayu}x${minSide}cm)${(slide2muka && withKaki) ? ' ×2' : ''}`;
+                hppBannerDetail += ` + <b>Kayu Penyangga</b> ${formatRupiah(kayuPenyangga * HPP.spanramPerCm)} (${jumlahKayu}x${minSide}cm @ Rp ${HPP.spanramPerCm}/cm)${(slide2muka && withKaki) ? ' ×2' : ''}`;
             }
             if (penyanggaHpp > 0) {
-                hppBannerDetail += ` + <b>Penyangga Kaki</b> ${formatRupiah(penyanggaHpp)}`;
+                hppBannerDetail += ` + <b>Penyangga Kaki</b> ${formatRupiah(penyanggaHpp)} (${minSide}cm @ Rp ${HPP.spanramPerCm}/cm)`;
             }
-            hppBannerDetail += ` + <b>Banner</b> ${formatRupiah(bannerHppDisplay)} (Rp 12.500/m²${slide2muka ? ' x2' : ''})`;
+            hppBannerDetail += ` + <b>Banner</b> ${formatRupiah(bannerHppDisplay)} (${bannerLength}x${bannerWidth}cm @ Rp ${HPP.bannerPerM2.toLocaleString('id-ID')}/m²${slide2muka ? ' ×2' : ''})`;
             if (kakiHpp > 0) {
-                hppBannerDetail += ` + <b>Kaki</b> ${formatRupiah(kakiHpp)}`;
+                let jumlahKakiHpp = (slide2muka && withKaki) ? 4 : 2;
+                hppBannerDetail += ` + <b>Kaki</b> ${formatRupiah(kakiHpp)} (${jumlahKakiHpp}x${tinggiKaki}cm @ Rp ${HPP.spanramPerCm}/cm)`;
             }
             if (biayaEnselHpp > 0) {
                 hppBannerDetail += ` + <b>Engsel & Hak</b> ${formatRupiah(biayaEnselHpp)}`;
             }
-            hppBannerDetail += ` + <b>Lakban & Staples</b> ${formatRupiah(finishingHpp)}`;
+            hppBannerDetail += ` + <b>Lakban & Staples</b> ${formatRupiah(finishingHpp)} (${finishingMeter}m @ Rp ${HPP.finishingPer100cm.toLocaleString('id-ID')}/m)`;
             document.getElementById("detailHpp").innerHTML = hppBannerDetail;
 
             document.getElementById("result").classList.add("show");

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Undangan Pernikahan - Lukas & Kezia</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Beth+Ellen&family=Playfair+Display:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
     <style>
         * {
           margin: 0;
@@ -133,7 +133,7 @@
         .header {
           background: linear-gradient(135deg, rgba(75, 123, 89, 0.9) 0%, rgba(59, 93, 59, 0.9) 100%);
           color: white;
-          padding: 120px 20px;
+          padding: 80px 20px;
           text-align: center;
           position: relative;
           overflow: hidden;
@@ -156,8 +156,8 @@
         }
     
         .header h1 {
-          font-family: 'Great Vibes', cursive;
-          font-size: 3.5em;
+          font-family: 'Beth Ellen', cursive;
+          font-size: 2.5em;
           margin-bottom: 10px;
           position: relative;
           z-index: 1;
@@ -235,10 +235,14 @@
           box-shadow: none !important;
           margin-bottom: 0 !important;
         }
-    
+     .couple-nickname {
+          font-family: 'Beth Ellen', cursive;
+          font-size: 3em;
+          color: #3b5d3b;
+        }
         .couple-name {
-          font-family: 'Great Vibes', cursive;
-          font-size: 2.8em;
+          font-family: 'Playfair Display', serif;
+          font-size: 2.5em;
           color: #3b5d3b;
           margin-bottom: 15px;
         }
@@ -656,13 +660,14 @@
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
           }
+		  }
 		  .section-icon {
-      width: auto; /* Sesuaikan ukuran icon di sini */
-      height: 20px;
-      display: block; /* Memaksa icon mengambil 1 baris penuh di dalam judul */
-      margin: 0 auto 15px auto; /* Otomatis ke tengah dan memberi jarak ke teks bawah */
-      object-fit: contain;
-    }
+  width: auto;   /* mengikuti ukuran font judul */
+  height: 5em;
+  display: block;
+  margin: 0 auto 10px auto;
+  object-fit: contain;
+}
     </style>
 </head>
 
@@ -679,9 +684,9 @@
     <!-- Main Content -->
     <div class="container" id="mainContainer">
         <!-- SNOW CANVAS -->
-        <canvas id="snow-canvas"></canvas>
+        <!-- <canvas id="snow-canvas"></canvas> -->
         <!-- FIXED FLOWERS -->
-        <div class="floating-flower-layer"> <img class="top-flower-fixed" src="undangan/top_flower.webp" alt=""> <img class="left-flower-fixed" src="undangan/element_left.png" alt=""> <img class="right-flower-fixed" src="undangan/element_right.png"
+        <div class="floating-flower-layer"> <img class="top-flower-fixed" src="undangan/element_top.png" alt=""> <img class="left-flower-fixed" src="undangan/element_left.png" alt=""> <img class="right-flower-fixed" src="undangan/element_right.png"
             alt=""> </div>
         <!-- Header -->
         <div class="header">
@@ -723,6 +728,7 @@
                       <img class="photo-flower fl-left"  src="undangan/left_flower.webp"  alt="">
                       <img class="photo-flower fl-right" src="undangan/right_flower.webp" alt="">
                     </div>
+					<div class="couple-nickname">Lukas</div>
                     <div class="couple-name">Lukas Ardianto</div>
                     <div class="couple-parents">
                         Putra dari
@@ -740,6 +746,7 @@
                       <img class="photo-flower fl-left"  src="undangan/left_flower.webp"  alt="">
                       <img class="photo-flower fl-right" src="undangan/right_flower.webp" alt="">
                     </div>
+					<div class="couple-nickname">Kezia</div>
                     <div class="couple-name">Kezia Yunita Santoso</div>
                     <div class="couple-parents">
                         Putri dari

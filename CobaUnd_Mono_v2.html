@@ -20,8 +20,9 @@
       overflow-x: hidden;
       display: flex;
       justify-content: center;
-      min-height: 100vh;
+      height: 100vh;
       padding: 0;
+      overflow: hidden;
     }
     
         /* Popup Overlay */
@@ -109,20 +110,19 @@
       width: 100%;
       max-width: 430px;
       background: #faf7f2;
-      min-height: 100vh;
+      height: 100vh;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      -webkit-overflow-scrolling: touch;
       opacity: 0;
       transition: opacity 0.5s ease;
       position: relative;
-      overflow: hidden;
     }
     
     @media(min-width:768px){
-    
-    
       .container {
         border-radius: 28px;
       }
-      .container{ position: relative; overflow: hidden; }
     }
     
         .container.visible {
@@ -137,6 +137,14 @@
           text-align: center;
           position: relative;
           overflow: hidden;
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          scroll-snap-align: start;
+          scroll-snap-stop: always;
+          flex-shrink: 0;
         }
     
         .header::before {
@@ -173,19 +181,38 @@
     
         /* Section */
         section {
-          padding: 80px 20px;
+          padding: 50px 20px;
           background: white;
-          margin: 30px 20px;
-          border-radius: 20px;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+          margin: 0;
+          border-radius: 0;
+          box-shadow: none;
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          scroll-snap-align: start;
+          scroll-snap-stop: always;
+          flex-shrink: 0;
+          overflow-y: auto;
+          position: relative;
+        }
+
+        section > * {
+          width: 100%;
         }
     
+        /* Section alternating backgrounds */
+        section:nth-child(even) {
+          background: #faf7f2;
+        }
+
         section h2 {
           font-family: 'Playfair Display', serif;
           font-size: 2em;
           color: #3b5d3b;
           text-align: center;
-          margin-bottom: 50px;
+          margin-bottom: 30px;
           position: relative;
           display: inline-block;
           left: 50%;
@@ -208,9 +235,9 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          gap: 60px;
+          gap: 30px;
           flex-wrap: wrap;
-          margin-top: 40px;
+          margin-top: 20px;
         }
     
         .couple-card {
@@ -237,27 +264,27 @@
         }
      .couple-nickname {
           font-family: 'Beth Ellen', cursive;
-          font-size: 3em;
+          font-size: 2.2em;
           color: #3b5d3b;
         }
+
         .couple-name {
           font-family: 'Playfair Display', serif;
-          font-size: 2.5em;
+          font-size: 1.8em;
           color: #3b5d3b;
-          margin-bottom: 15px;
+          margin-bottom: 10px;
         }
-    
+
         .couple-parents {
           color: #666;
-          line-height: 1.8;
-          font-size: 1.05em;
+          line-height: 1.6;
+          font-size: 0.95em;
         }
-    
         .divider {
           font-family: 'Great Vibes', cursive;
           font-size: 3em;
           color: #3b5d3b;
-          margin: 0 20px;
+          margin: 0 10px;
         }
     
 
@@ -265,18 +292,18 @@
         .photo-wrapper {
           position: relative;
           display: inline-block;
-          width: 250px;
-          height: 250px;
-          margin-bottom: 25px;
+          width: 180px;
+          height: 180px;
+          margin-bottom: 20px;
         }
 
         .photo-wrapper img.couple-photo {
-          width: 250px;
-          height: 250px;
+          width: 180px;
+          height: 180px;
           object-fit: cover;
           border-radius: 50%;
-          border: 8px solid #3b5d3b;
-          box-shadow: 0 15px 40px rgba(59, 93, 59, 0.3);
+          border: 6px solid #3b5d3b;
+          box-shadow: 0 10px 30px rgba(59, 93, 59, 0.3);
           transition: transform 0.3s ease;
           margin-bottom: 0;
           display: block;
@@ -323,22 +350,23 @@
         }
 
         @media (max-width: 768px) {
-          .photo-wrapper { width: 200px; height: 200px; }
-          .photo-wrapper img.couple-photo { width: 200px; height: 200px; }
-          .photo-flower { width: 70px; }
-          .photo-flower.fl-left  { left: -22px; }
-          .photo-flower.fl-right { right: -22px; }
+          .photo-wrapper { width: 150px; height: 150px; }
+          .photo-wrapper img.couple-photo { width: 150px; height: 150px; }
+          .photo-flower { width: 60px; }
+          .photo-flower.fl-left  { left: -18px; }
+          .photo-flower.fl-right { right: -18px; }
         }
 
         /* Event Details */
         .event-details {
           background: linear-gradient(135deg, #f5f9f5 0%, #e8f5e9 100%);
           border-radius: 15px;
-          padding: 40px;
-          margin: 40px auto;
+          padding: 25px 30px;
+          margin: 15px auto;
           max-width: 600px;
           text-align: center;
           box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+          width: 100%;
         }
     
         .event-details h3 {
@@ -368,7 +396,7 @@
           display: flex;
           justify-content: center;
           gap: 15px;
-          margin-top: 40px;
+          margin-top: 20px;
           flex-wrap: wrap;
         }
     
@@ -407,19 +435,20 @@
         /* Gallery */
         .gallery {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 25px;
-          margin-top: 40px;
-          padding: 0 20px;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 10px;
+          margin-top: 20px;
+          padding: 0 10px;
+          width: 100%;
         }
     
         .gallery img {
           width: 100%;
           aspect-ratio: 1/1;
           object-fit: cover;
-          border-radius: 15px;
-          border: 5px solid #3b5d3b;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+          border-radius: 10px;
+          border: 3px solid #3b5d3b;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
           transition: transform 0.3s ease, box-shadow 0.3s ease;
           cursor: pointer;
         }
@@ -482,7 +511,14 @@
           color: white;
           padding: 40px 20px;
           text-align: center;
-          margin-top: 50px;
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          scroll-snap-align: start;
+          scroll-snap-stop: always;
+          flex-shrink: 0;
         }
     
         .footer p {
@@ -668,6 +704,50 @@
   margin: 0 auto 10px auto;
   object-fit: contain;
 }
+        /* ===== PAGE INDICATOR DOTS ===== */
+        .page-dots {
+          position: fixed;
+          right: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          z-index: 100;
+        }
+
+        .page-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: rgba(59, 93, 59, 0.3);
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border: 1.5px solid rgba(59, 93, 59, 0.5);
+        }
+
+        .page-dot.active {
+          background: #3b5d3b;
+          transform: scale(1.35);
+        }
+
+        /* Scroll hint arrow */
+        .scroll-hint {
+          position: absolute;
+          bottom: 28px;
+          left: 50%;
+          transform: translateX(-50%);
+          animation: bounceDown 1.8s ease-in-out infinite;
+          opacity: 0.7;
+          z-index: 10;
+          font-size: 1.5em;
+          color: rgba(255,255,255,0.8);
+        }
+
+        @keyframes bounceDown {
+          0%, 100% { transform: translateX(-50%) translateY(0); }
+          50% { transform: translateX(-50%) translateY(8px); }
+        }
     </style>
 </head>
 
@@ -683,18 +763,19 @@
 
     <!-- Main Content -->
     <div class="container" id="mainContainer">
+        <!-- PAGE INDICATOR DOTS -->
+        <nav class="page-dots" id="pageDots"></nav>
         <!-- SNOW CANVAS -->
         <!-- <canvas id="snow-canvas"></canvas> -->
         <!-- FIXED FLOWERS -->
         <div class="floating-flower-layer"> <img class="top-flower-fixed" src="undangan/element_top.png" alt=""> <img class="left-flower-fixed" src="undangan/element_left.png" alt=""> <img class="right-flower-fixed" src="undangan/element_right.png"
             alt=""> </div>
         <!-- Header -->
-        
-		<div class="header">
-		<img src="undangan/header.png" alt="Header" style="width:100%; height:auto; display:block;">
-				    <p>THE WEDDING OF</p>
+        <div class="header">
+				<img src="undangan/header.png" alt="Header" style="width:100%; height:auto; display:block;">
+		    <p>THE WEDDING OF</p>
             <h1>Lukas & Kezia</h1>
-
+            <div class="scroll-hint">↓</div>
         </div>
 		
 		<!-- Bible Verse Section -->
@@ -722,7 +803,7 @@
         <!-- Couple Section -->
         <section>
 		<img src="undangan/icon_3.png" alt="Icon" class="section-icon">
-            <h2>Mempelai</h2>
+            <h2>Mempelai Pria</h2>
             <div class="couple-container">
                 <div class="couple-card">
                     <div class="photo-wrapper">
@@ -740,8 +821,10 @@
                     </div>
                 </div>
 
-                <div class="divider">&</div>
-
+<section>
+		<img src="undangan/icon_3.png" alt="Icon" class="section-icon">
+            <h2>Mempelai Wanita</h2>
+ <div class="couple-container">
                 <div class="couple-card">
                     <div class="photo-wrapper">
                       <img class="couple-photo" src="undangan/Kezia.jpg" alt="Foto Kezia">
@@ -1052,6 +1135,47 @@
 
             draw();
         })();
+        // ===== PAGE DOTS =====
+        (function () {
+            function initPageDots() {
+                const container = document.getElementById('mainContainer');
+                const dotsNav   = document.getElementById('pageDots');
+                
+                // Kumpulkan semua "halaman": header + sections + footer
+                const pages = Array.from(container.querySelectorAll('.header, section, .footer'));
+
+                // Buat dot untuk tiap halaman
+                pages.forEach((page, i) => {
+                    const dot = document.createElement('div');
+                    dot.className = 'page-dot' + (i === 0 ? ' active' : '');
+                    dot.title = 'Halaman ' + (i + 1);
+                    dot.addEventListener('click', () => {
+                        page.scrollIntoView({ behavior: 'smooth' });
+                    });
+                    dotsNav.appendChild(dot);
+                });
+
+                const dots = dotsNav.querySelectorAll('.page-dot');
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+                            const idx = pages.indexOf(entry.target);
+                            dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+                        }
+                    });
+                }, { root: container, threshold: 0.5 });
+
+                pages.forEach(p => observer.observe(p));
+            }
+
+            const origBuka2 = window.bukaUndangan;
+            window.bukaUndangan = function () {
+                origBuka2 && origBuka2();
+                setTimeout(initPageDots, 700);
+            };
+        })();
+
     </script>
 
 </body>

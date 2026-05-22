@@ -12,16 +12,12 @@
       box-sizing: border-box;
     }
 
-   body {
-  font-family: 'Lato', sans-serif;
-  background: #8da98d;
-  color: #2f3e2f;
-  overflow-x: hidden;
-  display: flex;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 0;
-}
+    body {
+      font-family: 'Lato', sans-serif;
+      background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+      color: #2f3e2f;
+      overflow-x: hidden;
+    }
 
     /* Popup Overlay */
     .overlay {
@@ -104,25 +100,12 @@
     }
 
     /* Main Container */
-   .container {
-  width: 100%;
-  max-width: 430px;
-  background: #faf7f2;
-  min-height: 100vh;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-@media(min-width:768px){
-
-
-  .container {
-    border-radius: 28px;
-  }
-  .container{ position: relative; overflow: hidden; }
-}
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
 
     .container.visible {
       opacity: 1;
@@ -285,7 +268,7 @@
     }
 
     .event-info::before {
-      content: '';
+      content: '📍';
       font-size: 1.3em;
     }
 
@@ -440,87 +423,6 @@
       }
     }
 
-
-/* ===== FLOATING FLOWERS ===== */
-
-.floating-flower-layer {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 430px;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 1;
-  
-  /* TAMBAHAN UNTUK ROUNDED CORNERS */
-  border-radius: 28px; /* Ganti '30px' dengan nilai border-radius yang dipakai di container utama Anda */
-  
-  /* BUG FIX UNTUK SAFARI/iOS */
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
-}
-/* TOP FLOWER */
-.top-flower-fixed {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(430px, 100vw);
-}
-
-/* SIDE FLOWERS */
-.left-flower-fixed,
-.right-flower-fixed {
-  position: absolute;
-  bottom: -15px;
-  width: 160px;
-  transform-origin: bottom center;
-  animation: sway 5s ease-in-out infinite;
-}
-
-/* Karena container sudah fix max 430px, kita bisa menyederhanakan posisinya */
-.left-flower-fixed {
-  left: -50px; /* Langsung ditarik keluar ke kiri dari batas container */
-}
-
-.right-flower-fixed { 
-  right: -50px; /* Langsung ditarik keluar ke kanan dari batas container */
-  animation-name: swayRight; /* Khusus bunga kanan */
-}
-
-/* GOYANG HALUS */
-@keyframes sway {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(2deg); }
-  50% { transform: rotate(0deg); }
-  75% { transform: rotate(-2deg); }
-  100% { transform: rotate(0deg); }
-}
-
-@keyframes swayRight {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(-2deg); }
-  50% { transform: rotate(0deg); }
-  75% { transform: rotate(2deg); }
-  100% { transform: rotate(0deg); }
-}
-
-/* MOBILE */
-@media(max-width: 768px) {
-  .left-flower-fixed {
-    left: -40px;
-    width: 130px;
-  }
-
-  .right-flower-fixed {
-    right: -40px;
-    width: 130px;
-  }
-}
-
-
     /* Responsive */
     @media (max-width: 768px) {
       .header h1 {
@@ -562,13 +464,6 @@
 </head>
 <body>
 
-
-
-
-
-
-
-
   <!-- Popup -->
   <div class="overlay" id="overlay">
     <div class="popup">
@@ -580,8 +475,7 @@
 
   <!-- Main Content -->
   <div class="container" id="mainContainer">
-  <!-- FIXED FLOWERS -->
-   <div class="floating-flower-layer"> <img class="top-flower-fixed" src="https://paktjip.github.io/undangan/top_flower.webp" alt=""> <img class="left-flower-fixed" src="https://paktjip.github.io/undangan/left_flower.webp" alt=""> <img class="right-flower-fixed" src="https://paktjip.github.io/undangan/right_flower.webp" alt=""> </div>
+    
     <!-- Header -->
     <div class="header">
       <h1>Lukas & Kezia</h1>
@@ -648,12 +542,10 @@
           <div>📅 Sabtu, 11 Maret 2028</div>
           <div>📍 Gereja GPdI COTW Temanggung</div>
         </div>
-      </div>
-	   <div class="event-details">
         <h3>✨ Resepsi</h3>
         <div class="event-info" style="flex-direction: column; gap: 5px;">
           <div>📅 Sabtu, 11 Maret 2028</div>
-          <div>🕑 Pukul 11.00 - Selesai</div>
+          <div>📅 Pukul 11.00 - Selesai</div>
           <div>📍 RM. Kampoeng Sawah Temanggung</div>
           <div style="margin-top: 15px; font-style: italic; color: #666;">Jl. Gatot Subroto Kebonsari Temanggung</div>
         </div>
@@ -667,6 +559,14 @@
         <div class="countdown-box">
           <div class="countdown-number" id="hours">00</div>
           <div class="countdown-label">Jam</div>
+        </div>
+        <div class="countdown-box">
+          <div class="countdown-number" id="minutes">00</div>
+          <div class="countdown-label">Menit</div>
+        </div>
+        <div class="countdown-box">
+          <div class="countdown-number" id="seconds">00</div>
+          <div class="countdown-label">Detik</div>
         </div>
       </div>
     </section>

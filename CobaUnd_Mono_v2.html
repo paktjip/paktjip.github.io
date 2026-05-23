@@ -112,11 +112,14 @@
       background: #faf7f2;
       height: 100vh;
       overflow-y: scroll;
-      scroll-snap-type: y mandatory;
+scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scroll-padding: 0;
       -webkit-overflow-scrolling: touch;
       opacity: 0;
       transition: opacity 0.5s ease;
       position: relative;
+  height: 100svh; /* Mengunci tinggi berdasarkan layar terkecil saat URL bar muncul */
     }
     
     @media(min-width:768px){
@@ -130,22 +133,55 @@
         }
     
         /* Header Section */
-        .header {
-          background: linear-gradient(135deg, rgba(75, 123, 89, 0.9) 0%, rgba(59, 93, 59, 0.9) 100%);
-          color: white;
-          padding: 80px 20px;
-          text-align: center;
-          position: relative;
-          overflow: hidden;
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          scroll-snap-align: start;
-          scroll-snap-stop: always;
-          flex-shrink: 0;
-        }
+.header {
+  background: linear-gradient(135deg, rgba(75, 123, 89, 0.9) 0%, rgba(59, 93, 59, 0.9) 100%);
+  color: white;
+  text-align: center;
+  position: relative;
+  overflow: hidden; 
+  border-top-left-radius: 28px;  
+  border-top-right-radius: 28px; 
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  
+  /* --- UBAH / TAMBAHKAN DUA BARIS INI --- */
+  justify-content: center;   /* Tetap biarkan center bawaan */
+  padding-top: 300px;         /* Berikan dorongan ekstra dari atas agar semua konten turun bersamaan */
+  /* -------------------------------------- */
+
+  align-items: center;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  flex-shrink: 0;
+}
+
+/* KODE BARU: MEMAKSA GAMBAR FULL KE SAMPING & MEMENUHI BACKGROUND */
+.header-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Memaksa gambar menutup seluruh area tanpa merusak rasio foto */
+  object-position: center; /* Memastikan bagian tengah foto tetap fokus */
+  z-index: 0; /* Menaruh gambar di paling belakang konten teks */
+  pointer-events: none; /* Agar gambar tidak bisa di-klik/drag tak sengaja */
+}
+
+/* Memastikan teks "THE WEDDING OF" dkk berada di depan gambar */
+.header p, .header h1, .header .scroll-hint {
+  position: relative;
+  z-index: 1;
+}
+
+/* Siku kembali di layar HP */
+@media (max-width: 767px) {
+  .header {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
     
         .header::before {
           content: '';
@@ -163,40 +199,44 @@
           100% { transform: rotate(360deg); }
         }
     
-        .header h1 {
-          font-family: 'Beth Ellen', cursive;
-          font-size: 2.5em;
-          margin-bottom: 10px;
-          position: relative;
-          z-index: 1;
-          animation: fadeInDown 1s ease;
-        }
-    
+.header h1 {
+  font-family: 'Beth Ellen', cursive;
+  font-size: 2.5em;
+  position: relative;
+  z-index: 1;
+  animation: fadeInDown 1s ease;
+
+  /* --- TAMBAHKAN / SESUAIKAN BARIS INI --- */
+  margin-top: -20px;     /* Memperkecil jarak atas dengan teks "THE WEDDING OF" */
+}
         .header p {
           font-size: 1.2em;
           position: relative;
           z-index: 1;
           animation: fadeInUp 1s ease 0.3s backwards;
+		  
         }
     
         /* Section */
-        section {
-          padding: 50px 20px;
-          background: white;
-          margin: 0;
-          border-radius: 0;
-          box-shadow: none;
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          scroll-snap-align: start;
-          scroll-snap-stop: always;
-          flex-shrink: 0;
-          overflow-y: auto;
-          position: relative;
-        }
+section {
+  padding: 0 20px; /* Aman: tidak akan menambah tinggi vertikal */
+  background: white;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  height: 100vh; /* Pas setinggi layar HP */
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  flex-shrink: 0;
+  overflow: hidden; /* Mengunci scroll ganda yang bikin hentakan */
+  position: relative;
+  box-sizing: border-box;
+}
 
         section > * {
           width: 100%;
@@ -458,53 +498,169 @@
           box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
         }
     
-        /* Gift Section */
-        .gift-card {
-          background: linear-gradient(135deg, #fff 0%, #f9fdf9 100%);
-          border-radius: 15px;
-          padding: 35px;
-          margin: 30px auto;
-          max-width: 400px;
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-          border: 2px solid #3b5d3b;
-          text-align: center;
-        }
-    
-        .gift-card h4 {
-          font-family: 'Playfair Display', serif;
-          color: #3b5d3b;
-          font-size: 1.5em;
-          margin-bottom: 20px;
-        }
-    
-        .gift-card p {
-          color: #555;
-          margin: 10px 0;
-          font-size: 1.1em;
-        }
-    
-        .gift-card strong {
-          color: #3b5d3b;
-          font-size: 1.2em;
-        }
-    
-        .copy-button {
-          margin-top: 20px;
-          padding: 10px 25px;
-          background: #3b5d3b;
-          color: white;
-          border: none;
-          border-radius: 25px;
-          cursor: pointer;
-          font-size: 1em;
-          transition: all 0.3s ease;
-        }
-    
-        .copy-button:hover {
-          background: #2f4a2f;
-          transform: translateY(-2px);
-        }
-    
+/* Gift Section */
+.gift-card {
+  background: linear-gradient(135deg, #fff 0%, #f9fdf9 100%);
+  border-radius: 15px;
+  padding: 25px; /* Dikurangi sedikit agar lebih ringkas */
+  margin: 20px auto;
+  max-width: 400px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border: 2px solid #3b5d3b;
+}
+
+/* Bungkus utama untuk membagi kiri dan kanan */
+.card-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px; /* Jarak antara kolom kiri dan kanan */
+  margin-bottom: 15px; /* Jarak ke tombol salin */
+}
+
+/* Sisi Kiri: Logo Bank */
+.bank-logo h4 {
+  font-family: 'Playfair Display', serif;
+  color: #3b5d3b;
+  font-size: 1.4em;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Sisi Kanan: Teks Informasi */
+.account-info {
+  text-align: right; /* Menyejajarkan teks ke kanan agar rapi */
+  flex-grow: 1;
+}
+
+.account-info .owner-name {
+  color: #333;
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 0 0 4px 0; /* Margin bawah tipis untuk memisah dengan nomor */
+}
+
+.account-info .account-number {
+  color: #3b5d3b;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Tombol Salin (Full Width agar seimbang) */
+.copy-button {
+  width: 100%;
+  padding: 10px 0;
+  background: #3b5d3b;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.95em;
+  transition: all 0.3s ease;
+}
+
+.copy-button:hover {
+  background: #2f4a2f;
+  transform: translateY(-2px);
+}    
+/* Styling Latar Belakang Popup (Overlay) */
+.modal-overlay {
+  display: none; /* Tersembunyi secara default */
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Efek gelap transparan */
+  backdrop-filter: blur(4px);    /* Efek blur halus di latar belakang */
+  z-index: 9999;                 /* Memastikan popup berada di paling depan */
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Kotak Putih Isi Popup */
+.modal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 15px;
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  animation: popupSkala 0.3s ease-out; /* Animasi muncul mumbul halus */
+}
+
+@keyframes popupSkala {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #3b5d3b;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Frame Gambar QRIS */
+.qris-container {
+  background: #f9fdf9;
+  padding: 10px;
+  border: 1px solid #e0eee0;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.qris-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 5px;
+}
+
+/* Tata Letak Tombol Unduh & Tutup */
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-download, .btn-close {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+/* Tombol Unduh (Warna Hijau Tema) */
+.btn-download {
+  background: #3b5d3b;
+  color: white;
+}
+
+.btn-download:hover {
+  background: #2f4a2f;
+}
+
+/* Tombol Tutup (Warna Abu-Abu Netral) */
+.btn-close {
+  background: #f0f0f0;
+  color: #555;
+}
+
+.btn-close:hover {
+  background: #e0e0e0;
+}
         /* Footer */
         .footer {
           background: #3b5d3b;
@@ -577,7 +733,7 @@
       max-width: 430px;
       overflow: hidden;
       pointer-events: none;
-      z-index: 1;
+      z-index: 99999;
       
       /* TAMBAHAN UNTUK ROUNDED CORNERS */
       border-radius: 28px; /* Ganti '30px' dengan nilai border-radius yang dipakai di container utama Anda */
@@ -772,7 +928,7 @@
             alt=""> </div>
         <!-- Header -->
         <div class="header">
-				<img src="undangan/header.png" alt="Header" style="width:100%; height:auto; display:block;">
+				<img src="undangan/header.png" alt="Header" class="header-bg">
 		    <p>THE WEDDING OF</p>
             <h1>Lukas & Kezia</h1>
             <div class="scroll-hint">↓</div>
@@ -802,7 +958,6 @@
 
         <!-- Couple Section -->
         <section>
-		<img src="undangan/icon_3.png" alt="Icon" class="section-icon">
             <h2>Mempelai Pria</h2>
             <div class="couple-container">
                 <div class="couple-card">
@@ -816,14 +971,13 @@
                     <div class="couple-parents">
                         Putra dari
                         <br> Bapak Yehezkiel Yulianto
-                        <br> dan
-                        <br> Ibu Elisabeth Suwarti (✝)
+						<br> dan
+						<br> Ibu Elisabeth Suwarti (†)
                     </div>
                 </div>
 </div>
 </section>
 <section>
-		<img src="undangan/icon_3.png" alt="Icon" class="section-icon">
             <h2>Mempelai Wanita</h2>
  <div class="couple-container">
                 <div class="couple-card">
@@ -847,19 +1001,21 @@
         <!-- Event Section -->
         <section>
 		
-            <h2>Waktu & Tempat</h2>
-            <div class="event-details">
 			<img src="undangan/icon_4.png" alt="Icon" class="section-icon">
-                <h3>Pemberkatan Pernikahan</h3>
-                <div class="event-info" style="flex-direction: column; gap: 5px;">
+                <h2>Pemberkatan Pernikahan</h2>
+ <div class="couple-container">
+        <div class="event-info" style="flex-direction: column; gap: 5px;">
                     <div>📅 Sabtu, 11 Maret 2028</div>
                     <div>📍 Gereja GPdI COTW Temanggung</div>
                 </div>
             </div>
-            <div class="event-details">
-			<img src="undangan/icon_5.png" alt="Icon" class="section-icon">
-                <h3>Resepsi</h3>
-                <div class="event-info" style="flex-direction: column; gap: 5px;">
+		</section>
+		<section>
+		
+		<img src="undangan/icon_5.png" alt="Icon" class="section-icon">
+                <h2>Resepsi</h2>
+ <div class="couple-container">
+				<div class="event-info" style="flex-direction: column; gap: 5px;">
                     <div>📅 Sabtu, 11 Maret 2028</div>
                     <div>🕑 Pukul 11.00 - Selesai</div>
                     <div>📍 Coming Soon</div>
@@ -867,9 +1023,7 @@
                     <a href="https://maps.google.com/?q=RM+Kampoeng+Sawah+Temanggung" target="_blank" class="copy-button" style="text-decoration: none; display: inline-block; margin-top: 20px;">
                         🗺️ Buka Maps
                     </a>
-                </div>
-            </div>
-
+</div>
             <div class="countdown-container" id="countdown">
                 <div class="countdown-box">
                     <div class="countdown-number" id="days">00</div>
@@ -888,7 +1042,9 @@
                     <div class="countdown-label">Detik</div>
                 </div>
             </div>
-        </section>
+			</div>
+					</section>
+
 
         <!-- Gallery -->
         <section>
@@ -908,7 +1064,7 @@
         <section>
 		<img src="undangan/icon_7.png" alt="Icon" class="section-icon">
             <h2>Kado Pernikahan</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+            <p style="text-align: center; color: #666; margin-bottom: 10px;">
                 Doa restu Anda adalah hadiah terindah bagi kami. Namun, apabila memberi merupakan ungkapan kasih, dengan penuh syukur dapat disampaikan melalui:
             </p>
             <div style="text-align: center;">
@@ -917,24 +1073,41 @@
                 </button>
             </div>
             <div id="kado-container" style="display: none; margin-top: 20px;">
-                <div class="gift-card">
-                    <h4>🏦 Bank BCA</h4>
-                    <p><strong>1234567890</strong></p>
-                    <p>a.n. Lukas Ardianto</p>
-                    <button class="copy-button" onclick="copyRekening()">Salin Nomor Rekening</button>
-                </div>
-                <div class="gift-card">
-                    <h4>🏦 Bank BRI</h4>
-                    <p><strong>1234567890</strong></p>
-                    <p>a.n. Kezia Yunita Santoso</p>
-                    <button class="copy-button" onclick="copyRekening2()">Salin Nomor Rekening</button>
-                </div>
-                <div class="gift-card">
-                    <h4>🏦 QRIS</h4>
-                    <img src="undangan/QRIS.jpg" style="max-width:100%; height:auto; display:block;">
-                    <p>Keycha Craft</p>
-                </div>
-            </div>
+<div class="gift-card">
+    <div class="card-content">
+        <div class="bank-logo">
+            <h4>🏦 BCA</h4>
+        </div>
+        <div class="account-info">
+            <p class="owner-name">Lukas Ardianto</p>
+            <p class="account-number">1234567890</p>
+        </div>
+    </div>
+    <button class="copy-button" onclick="copyRekening()">Salin Nomor Rekening</button>
+</div>
+<div class="gift-card">
+    <div class="card-content">
+        <div class="bank-logo">
+            <h4>🏦 BRI</h4>
+        </div>
+        <div class="account-info">
+            <p class="owner-name">Kezia Yunita Santoso</p>
+            <p class="account-number">1234567890</p>
+        </div>
+    </div>
+    <button class="copy-button" onclick="copyRekening2()">Salin Nomor Rekening</button>
+</div>
+<div class="gift-card">
+    <div class="card-content">
+    <div class="bank-logo">
+        <h4>🏦 QRIS</h4>
+    </div>
+    <div class="account-info">
+        <!-- Fungsi onclick diubah menjadi openQris() agar lebih deskriptif -->
+        <button class="copy-button" onclick="openQris()">Tampilkan QRIS</button>
+    </div>
+</div>
+
         </section>
 
         <!-- Footer -->
@@ -949,6 +1122,20 @@
         </div>
 
     </div>
+	<div id="qrisModal" class="modal-overlay" onclick="closeQrisOuter(event)">
+    <div class="modal-content">
+        <!-- Wadah Gambar QRIS -->
+        <div class="qris-container">
+            <img src="undangan/QRIS.jpg" alt="QRIS Undangan" id="qrisImage">
+        </div>
+        
+        <!-- Tombol Aksi di Dalam Popup -->
+        <div class="modal-actions">
+            <a href="undangan/QRIS.jpg" download="QRIS_Undangan.jpg" class="btn-download">Unduh QRIS</a>
+            <button class="btn-close" onclick="closeQris()">Tutup</button>
+        </div>
+    </div>
+</div>
 
     <script>
         // Get guest name from URL
@@ -1176,7 +1363,44 @@
                 setTimeout(initPageDots, 700);
             };
         })();
+// Fungsi untuk membuka popup QRIS
+function openQris() {
+    document.getElementById('qrisModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden'; /* Mengunci scroll layar utama */
+}
 
+// Fungsi untuk menutup popup via tombol Tutup
+function closeQris() {
+    document.getElementById('qrisModal').style.display = 'none';
+    document.body.style.overflow = 'auto'; /* Mengaktifkan kembali scroll layar */
+}
+
+// Fungsi ekstra: Menutup popup jika tamu mengetuk area luar kotak putih
+function closeQrisOuter(event) {
+    const modal = document.getElementById('qrisModal');
+    if (event.target === modal) {
+        closeQris();
+    }
+}
+// Mengunci tinggi asli layar agar tidak terganggu URL Bar HP
+function lockViewportHeight() {
+    const vh = window.innerHeight;
+    
+    // Kunci elemen container
+    const container = document.querySelector('.container');
+    if (container) container.style.height = `${vh}px`;
+    
+    // Kunci semua section dan header
+    const sections = document.querySelectorAll('section, .header');
+    sections.forEach(sec => {
+        sec.style.height = `${vh}px`;
+    });
+}
+
+// Jalankan saat halaman selesai dimuat
+window.addEventListener('DOMContentLoaded', lockViewportHeight);
+// Jalankan ulang jika layar berputar (landscape/portrait)
+window.addEventListener('resize', lockViewportHeight);
     </script>
 
 </body>

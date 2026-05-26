@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Undangan Pernikahan - Lukas & Kezia</title>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Beth+Ellen&family=Playfair+Display:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
     <style>
@@ -15,7 +15,7 @@
     
        body {
       font-family: 'Lato', sans-serif;
-      background: #a8bf9e;
+      background: #8da98d;
       color: #2f3e2f;
       overflow-x: hidden;
       display: flex;
@@ -23,30 +23,6 @@
       height: 100vh;
       padding: 0;
       overflow: hidden;
-    }
-    /* Watercolor background hanya di desktop */
-    @media (min-width: 768px) {
-      body {
-        background-color: #b5c9ae;
-        background-image:
-          /* Blotch besar kiri atas — hijau tua */
-          radial-gradient(ellipse 55% 40% at 8% 12%,  rgba(80,115,80,0.38)  0%, transparent 70%),
-          /* Blotch sedang kanan atas — sage terang */
-          radial-gradient(ellipse 38% 30% at 88% 6%,  rgba(180,210,165,0.45) 0%, transparent 65%),
-          /* Blotch besar kanan tengah — hijau medium */
-          radial-gradient(ellipse 48% 55% at 96% 50%, rgba(100,145,95,0.32)  0%, transparent 68%),
-          /* Blotch kiri bawah — toska pucat */
-          radial-gradient(ellipse 50% 38% at 4%  82%,  rgba(140,185,150,0.4)  0%, transparent 65%),
-          /* Blotch bawah tengah — krem kehijau */
-          radial-gradient(ellipse 60% 28% at 52% 98%,  rgba(170,200,155,0.35) 0%, transparent 60%),
-          /* Blotch tengah — sangat transparan, softener */
-          radial-gradient(ellipse 70% 60% at 50% 45%,  rgba(195,220,185,0.18) 0%, transparent 75%),
-          /* Noise tekstur — titik-titik halus */
-          radial-gradient(ellipse 18% 18% at 22% 35%, rgba(90,130,85,0.18)  0%, transparent 55%),
-          radial-gradient(ellipse 14% 22% at 75% 68%, rgba(70,110,70,0.15)  0%, transparent 55%),
-          radial-gradient(ellipse 22% 14% at 60% 22%, rgba(155,195,140,0.22) 0%, transparent 55%),
-          radial-gradient(ellipse 16% 20% at 35% 78%, rgba(110,155,100,0.2)  0%, transparent 55%);
-      }
     }
     
         /* Popup Overlay */
@@ -135,19 +111,15 @@
       max-width: 430px;
       background: #faf7f2;
       height: 100vh;
-      height: 100svh;
-      height: 100dvh;
       overflow-y: scroll;
-      scroll-snap-type: y mandatory;
-      scroll-behavior: smooth;
-      scroll-padding: 0;
+scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scroll-padding: 0;
       -webkit-overflow-scrolling: touch;
       opacity: 0;
       transition: opacity 0.5s ease;
       position: relative;
-      /* Safe area inset untuk Safari iPhone notch/home bar */
-      padding-bottom: env(safe-area-inset-bottom, 0px);
-      box-sizing: border-box;
+  height: 100svh; /* Mengunci tinggi berdasarkan layar terkecil saat URL bar muncul */
     }
     
     @media(min-width:768px){
@@ -173,16 +145,18 @@
   color: white;
   text-align: center;
   position: relative;
-  overflow: hidden;
-  border-top-left-radius: 28px;
-  border-top-right-radius: 28px;
+  overflow: hidden; 
+  border-top-left-radius: 28px;  
+  border-top-right-radius: 28px; 
   height: 100vh;
-  height: 100svh;
-  height: 100dvh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding-top: 300px;
+  
+  /* --- UBAH / TAMBAHKAN DUA BARIS INI --- */
+  justify-content: center;   /* Tetap biarkan center bawaan */
+  padding-top: 300px;         /* Berikan dorongan ekstra dari atas agar semua konten turun bersamaan */
+  /* -------------------------------------- */
+
   align-items: center;
   scroll-snap-align: center;
   scroll-snap-stop: always;
@@ -252,14 +226,13 @@
     
         /* Section */
 section {
-  padding: 0 20px;
+  padding: 0 20px; /* Aman: tidak akan menambah tinggi vertikal */
   background: white;
   margin: 0;
   border-radius: 0;
   box-shadow: none;
-  height: 100vh;
+  height: 100vh; /* Pas setinggi layar HP */
   height: 100svh;
-  height: 100dvh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -267,7 +240,7 @@ section {
   scroll-snap-align: center;
   scroll-snap-stop: always;
   flex-shrink: 0;
-  overflow: hidden;
+  overflow: hidden; /* Mengunci scroll ganda yang bikin hentakan */
   position: relative;
   box-sizing: border-box;
 }
@@ -311,6 +284,7 @@ section {
           align-items: center;
           gap: 30px;
           flex-wrap: wrap;
+          margin-top: 20px;
         }
     
         .couple-card {
@@ -365,14 +339,14 @@ section {
         .photo-wrapper {
           position: relative;
           display: inline-block;
-          width: 140px;
-          height: 140px;
-          margin-bottom: 16px;
+          width: 180px;
+          height: 180px;
+          margin-bottom: 20px;
         }
 
         .photo-wrapper img.couple-photo {
-          width: 140px;
-          height: 140px;
+          width: 180px;
+          height: 180px;
           object-fit: cover;
           border-radius: 50%;
           border: 6px solid #3b5d3b;
@@ -388,20 +362,20 @@ section {
 
         .photo-flower {
           position: absolute;
-          width: 70px;
+          width: 90px;
           pointer-events: none;
-          bottom: -14px;
+          bottom: -18px;
           filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
         }
 
         .photo-flower.fl-left {
-          left: -22px;
+          left: -28px;
           transform-origin: bottom right;
           animation: flowerSwayLeft 4s ease-in-out infinite;
         }
 
         .photo-flower.fl-right {
-          right: -22px;
+          right: -28px;
           transform-origin: bottom left;
           animation: flowerSwayRight 4.4s ease-in-out infinite;
         }
@@ -423,11 +397,11 @@ section {
         }
 
         @media (max-width: 768px) {
-          .photo-wrapper { width: 120px; height: 120px; }
-          .photo-wrapper img.couple-photo { width: 120px; height: 120px; }
-          .photo-flower { width: 55px; bottom: -12px; }
-          .photo-flower.fl-left  { left: -18px; }
-          .photo-flower.fl-right { right: -18px; }
+          .photo-wrapper { width: 140px; height: 140px; }
+          .photo-wrapper img.couple-photo { width: 140px; height: 140px; }
+          .photo-flower { width: 65px; bottom: -14px; }
+          .photo-flower.fl-left  { left: -22px; }
+          .photo-flower.fl-right { right: -22px; }
         }
 
         /* Event Details */
@@ -469,6 +443,7 @@ section {
           display: flex;
           justify-content: center;
           gap: 15px;
+          margin-top: 20px;
           flex-wrap: wrap;
         }
     
@@ -507,8 +482,8 @@ section {
         /* Gallery */
         .gallery {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 15px;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 10px;
           margin-top: 20px;
           padding: 0 10px;
           width: 100%;
@@ -700,8 +675,6 @@ section {
           padding: 40px 20px;
           text-align: center;
           height: 100vh;
-          height: 100svh;
-          height: 100dvh;
           display: flex;
           flex-direction: column;
           justify-content: center;
@@ -885,8 +858,8 @@ section {
           }
     
           .gallery {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
           }
 		  }
 		  .section-icon {
@@ -896,101 +869,6 @@ section {
   margin: 0 auto 10px auto;
   object-fit: contain;
 }
-
-    /* ===== PHOTO LIGHTBOX ===== */
-    .lightbox-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.92);
-      z-index: 99999;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .lightbox-overlay.open { display: flex; }
-    .lightbox-overlay img {
-      max-width: 100%;
-      max-height: 75vh;
-      border-radius: 12px;
-      object-fit: contain;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
-      animation: lbFadeIn 0.25s ease;
-    }
-    @keyframes lbFadeIn {
-      from { opacity: 0; transform: scale(0.92); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-    .lightbox-close {
-      margin-top: 24px;
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.6);
-      background: rgba(255,255,255,0.12);
-      color: white;
-      font-size: 1.6em;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s ease;
-      line-height: 1;
-    }
-    .lightbox-close:hover { background: rgba(255,255,255,0.25); }
-    .gallery img { cursor: zoom-in; }
-
-    /* ===== LOVE STORY ===== */
-    .love-story-timeline {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
-      margin-top: 16px;
-      box-sizing: border-box;
-      overflow-y: auto;
-      max-height: calc(100svh - 170px);
-      padding-bottom: 8px;
-      scrollbar-width: none;   /* Firefox */
-      -ms-overflow-style: none; /* IE/Edge */
-    }
-    .love-story-timeline::-webkit-scrollbar { display: none; } /* Chrome/Safari */
-    .ls-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      width: 100%;
-    }
-    /* Pill tahun */
-    .ls-pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid #2f3e2f;
-      border-radius: 999px;
-      padding: 6px 22px;
-      font-family: 'Playfair Display', serif;
-      font-size: 1em;
-      font-weight: 700;
-      color: #2f3e2f;
-      background: transparent;
-      min-width: 90px;
-    }
-    /* Teks di bawah pill */
-    .ls-desc {
-      font-size: 0.88em;
-      color: #555;
-      line-height: 1.55;
-      margin-top: 6px;
-      max-width: 280px;
-    }
-    /* Spasi antar item tanpa garis */
-    .ls-item { margin-bottom: 14px; }
-
         /* ===== PAGE INDICATOR DOTS ===== */
         .page-dots {
           position: fixed;
@@ -1021,152 +899,24 @@ section {
         /* Scroll hint arrow */
         .scroll-hint {
           position: absolute;
-          bottom: 32px;
+          bottom: 28px;
           left: 50%;
           transform: translateX(-50%);
+          animation: bounceDown 1.8s ease-in-out infinite;
+          opacity: 0.7;
           z-index: 10;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 4px;
-          animation: scrollHintFade 2.4s ease-in-out infinite;
-        }
-        .scroll-hint-text { display: none; }
-        .scroll-hint-dots {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 3px;
-        }
-        .scroll-hint-dots span {
-          display: block;
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          background: rgba(255,255,255,0.9);
-          animation: dotDrop 1.4s ease-in-out infinite;
-        }
-        .scroll-hint-dots span:nth-child(2) { animation-delay: 0.18s; opacity: 0.7; }
-        .scroll-hint-dots span:nth-child(3) { animation-delay: 0.36s; opacity: 0.45; }
-        @keyframes dotDrop {
-          0%, 100% { transform: translateY(0); opacity: 1; }
-          50%       { transform: translateY(5px); opacity: 0.4; }
-        }
-        @keyframes scrollHintFade {
-          0%, 100% { opacity: 0.9; }
-          50%       { opacity: 0.45; }
+          font-size: 1.5em;
+          color: rgba(255,255,255,0.8);
         }
 
         @keyframes bounceDown {
           0%, 100% { transform: translateX(-50%) translateY(0); }
           50% { transform: translateX(-50%) translateY(8px); }
         }
-
-    /* ===== LIGHTBOX ===== */
-    .lightbox-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.92);
-      z-index: 999998;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .lightbox-overlay.open { display: flex; }
-    .lightbox-img {
-      max-width: 100%;
-      max-height: 75vh;
-      object-fit: contain;
-      border-radius: 12px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
-      animation: lbFadeIn 0.25s ease;
-    }
-    @keyframes lbFadeIn {
-      from { opacity: 0; transform: scale(0.93); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-    .lightbox-close {
-      margin-top: 24px;
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.5);
-      background: rgba(255,255,255,0.12);
-      color: white;
-      font-size: 1.5em;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-    }
-    .lightbox-close:hover { background: rgba(255,255,255,0.28); }
-
-    /* ===== LOVE STORY TIMELINE ===== */
-    .love-story-timeline {
-      position: relative;
-      width: 100%;
-
-      box-sizing: border-box;
-      overflow-y: auto;
-      max-height: calc(100svh - 160px);
-    }
-
-    .ls-item {
-      position: relative;
-      margin-bottom: 28px;
-    }
-    .ls-item:last-child { margin-bottom: 0; }
-    .ls-dot {
-      position: absolute;
-      top: 5px;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #fff;
-      border: 3px solid #3b5d3b;
-      box-shadow: 0 0 0 3px rgba(59,93,59,0.15);
-    }
-    .ls-content {
-      background: #fff;
-      border-radius: 12px;
-      padding: 14px 16px;
-      box-shadow: 0 4px 16px rgba(59,93,59,0.1);
-      border-left: 3px solid #3b5d3b;
-    }
-    .ls-year {
-      font-size: 0.78em;
-      font-weight: 700;
-      color: #4a7c59;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 2px;
-    }
-    .ls-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05em;
-      color: #3b5d3b;
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-    .ls-desc {
-      font-size: 0.9em;
-      color: #666;
-      line-height: 1.6;
-    }
     </style>
 </head>
 
 <body>
-    <!-- Lightbox -->
-    <div class="lightbox-overlay" id="lightbox" onclick="closeLightboxOutside(event)">
-        <img class="lightbox-img" id="lightbox-img" src="" alt="Foto">
-        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-    </div>
-
     <!-- Popup -->
     <div class="overlay" id="overlay">
         <div class="popup">
@@ -1190,11 +940,7 @@ section {
 				<img src="undangan/header.png" alt="Header" class="header-bg">
 		    <p>THE WEDDING OF</p>
             <h1>Lukas & Kezia</h1>
-            <div class="scroll-hint">
-<div class="scroll-hint-dots">
-              <span></span><span></span><span></span>
-            </div>
-          </div>
+            <div class="scroll-hint">↓</div>
         </div>
 		
 		<!-- Bible Verse Section -->
@@ -1281,9 +1027,9 @@ section {
 				<div class="event-info" style="flex-direction: column; gap: 5px;">
                     <div>📅 Sabtu, 11 Maret 2028</div>
                     <div>🕑 Pukul 11.00 - Selesai</div>
-                    <div>📍 Kledung Park Temanggung</div>
-                    <div style="font-style: italic; color: #666;">Jl. </div>
-                    <a href="https://maps.google.com/?q=Kledung+Park+Temanggung" target="_blank" class="copy-button" style="text-decoration:none; display:inline-block; margin-top:16px; width:auto; padding:10px 28px; text-align:center;">
+                    <div>📍 Coming Soon</div>
+                    <div style="margin-top: 15px; font-style: italic; color: #666;">Jl. </div>
+                    <a href="https://maps.google.com/?q=RM+Kampoeng+Sawah+Temanggung" target="_blank" class="copy-button" style="text-decoration: none; display: inline-block; margin-top: 20px;">
                         🗺️ Buka Maps
                     </a>
 </div>
@@ -1309,139 +1055,81 @@ section {
 					</section>
 
 
-
-        <!-- Love Story Section -->
-        <section style="background: linear-gradient(135deg, #faf7f2 0%, #f0f7f0 100%);">
-            <img src="undangan/icon_ls.png" alt="Icon" class="section-icon" onerror="this.style.display='none'">
-            <h2>Love Story</h2>
-            <div class="love-story-timeline">
-                <div class="ls-item">
-                    <div class="ls-pill">2018</div>
-                    <div class="ls-desc">Pertama Bertemu — Sebuah tatapan yang mengawali segalanya.</div>
-                </div>
-                <div class="ls-item">
-                    <div class="ls-pill">2018</div>
-                    <div class="ls-desc">Pertama Bertemu — Sebuah tatapan yang mengawali segalanya.</div>
-                </div>
-                <div class="ls-item">
-                    <div class="ls-pill">2018</div>
-                    <div class="ls-desc">Pertama Bertemu — Sebuah tatapan yang mengawali segalanya.</div>
-                </div>				
-
-                <div class="ls-item">
-                    <div class="ls-pill">2019</div>
-                    <div class="ls-desc">Mulai Dekat — Dari teman biasa menjadi sahabat yang saling mengenal.</div>
-                </div>
-
-                <div class="ls-item">
-                    <div class="ls-pill">2021</div>
-                    <div class="ls-desc">Resmi Berpacaran — Kami memutuskan menjalani hidup bersama dalam ikatan cinta.</div>
-                </div>
-
-                <div class="ls-item">
-                    <div class="ls-pill">2027</div>
-                    <div class="ls-desc">Lamaran — Sebuah pertanyaan kecil yang mengubah hidup kami selamanya.</div>
-                </div>
-
-                <div class="ls-item">
-                    <div class="ls-pill">2028 💍</div>
-                    <div class="ls-desc">Hari Pernikahan — Kami melangkah bersama menuju babak baru yang penuh berkat.</div>
-                </div>
-
-            </div>
-        </section>
-
         <!-- Gallery -->
         <section>
 		<img src="undangan/icon_6.png" alt="Icon" class="section-icon">
             <h2>Galeri Foto</h2>
             <div class="gallery">
-                <img src="undangan/1.jpeg" alt="Foto 1" onclick="openLightbox('undangan/1.jpeg')">
-                <img src="undangan/2.jpeg" alt="Foto 2" onclick="openLightbox('undangan/2.jpeg')">
-                <img src="undangan/3.jpg" alt="Foto 3" onclick="openLightbox('undangan/3.jpg')">
-                <img src="undangan/4.jpg" alt="Foto 4" onclick="openLightbox('undangan/4.jpg')">
-                <img src="undangan/5.jpg" alt="Foto 5" onclick="openLightbox('undangan/5.jpg')">
-                <img src="undangan/6.jpg" alt="Foto 6" onclick="openLightbox('undangan/6.jpg')">
+                <img src="undangan/1.jpg" alt="Foto 1">
+                <img src="undangan/2.jpg" alt="Foto 2">
+                <img src="undangan/3.jpg" alt="Foto 3">
+                <img src="undangan/4.jpg" alt="Foto 4">
+                <img src="undangan/5.jpg" alt="Foto 5">
+                <img src="undangan/6.jpg" alt="Foto 6">
             </div>
         </section>
 
         <!-- Gift Section -->
         <section>
-          <img src="undangan/icon_7.png" alt="Icon" class="section-icon">
-          <h2>Kado Pernikahan</h2>
-          <p style="text-align: center; color: #666; margin-bottom: 16px; line-height: 1.6; font-size: 0.95em;">
-            Doa restu Anda adalah hadiah terindah bagi kami. Namun, apabila memberi merupakan ungkapan kasih, dengan penuh syukur dapat disampaikan melalui:
-          </p>
-          <div style="text-align: center; margin-bottom: 16px;">
-            <button class="copy-button" onclick="bukaKado()" id="btn-kado" style="font-size: 1.05em; padding: 13px 35px; width: auto;">
-              🎁 Klik di Sini
-            </button>
-          </div>
-          <div id="kado-container" style="display: none; width: 100%;">
-            <div class="gift-card" style="margin: 0 auto 10px; max-width: 320px;">
-              <div class="card-content">
-                <div class="bank-logo"><h4>🏦 BCA</h4></div>
-                <div class="account-info">
-                  <p class="owner-name">Lukas Ardianto</p>
-                  <p class="account-number">1234567890</p>
-                </div>
-              </div>
-              <button class="copy-button" onclick="copyRekening()">Salin Nomor Rekening</button>
+		<img src="undangan/icon_7.png" alt="Icon" class="section-icon">
+            <h2>Kado Pernikahan</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 10px;">
+                Doa restu Anda adalah hadiah terindah bagi kami. Namun, apabila memberi merupakan ungkapan kasih, dengan penuh syukur dapat disampaikan melalui:
+            </p>
+            <div style="text-align: center;">
+                <button class="copy-button" onclick="bukaKado()" id="btn-kado" style="font-size: 1.1em; padding: 15px 35px;">
+                    🎁 Klik di Sini
+                </button>
             </div>
-            <div class="gift-card" style="margin: 0 auto 10px; max-width: 320px;">
-              <div class="card-content">
-                <div class="bank-logo"><h4>🏦 BRI</h4></div>
-                <div class="account-info">
-                  <p class="owner-name">Kezia Yunita Santoso</p>
-                  <p class="account-number">1234567890</p>
-                </div>
-              </div>
-              <button class="copy-button" onclick="copyRekening2()">Salin Nomor Rekening</button>
-            </div>
-            <div style="text-align: center; margin-top: 6px;">
-              <button class="copy-button" style="width: auto; padding: 10px 28px;" onclick="openQris()">🏦 Tampilkan QRIS</button>
-            </div>
-          </div>
+            <div id="kado-container" style="display: none; margin-top: 20px;">
+<div class="gift-card">
+    <div class="card-content">
+        <div class="bank-logo">
+            <h4>🏦 BCA</h4>
+        </div>
+        <div class="account-info">
+            <p class="owner-name">Lukas Ardianto</p>
+            <p class="account-number">1234567890</p>
+        </div>
+    </div>
+    <button class="copy-button" onclick="copyRekening()">Salin Nomor Rekening</button>
+</div>
+<div class="gift-card">
+    <div class="card-content">
+        <div class="bank-logo">
+            <h4>🏦 BRI</h4>
+        </div>
+        <div class="account-info">
+            <p class="owner-name">Kezia Yunita Santoso</p>
+            <p class="account-number">1234567890</p>
+        </div>
+    </div>
+    <button class="copy-button" onclick="copyRekening2()">Salin Nomor Rekening</button>
+</div>
+<div class="gift-card">
+    <div class="card-content">
+    <div class="bank-logo">
+        <h4>🏦 QRIS</h4>
+    </div>
+    <div class="account-info">
+        <button class="copy-button" onclick="openQris()">Tampilkan QRIS</button>
+    </div>
+</div>
+
         </section>
 
-        <!-- Ucapan Terima Kasih -->
+        <!-- Footer -->
         <section>
-		          <img src="undangan/icon_7.png" alt="Icon" class="section-icon">
-		            <h2>Terima Kasih</h2>
-          <div style="text-align:center">
-            <p style="color:#555; line-height:1.9; font-size:0.97em;">
-              Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu di hari pernikahan kami.
-            </p>
-            <p style="margin-top: 18px; color:#3b5d3b; font-style:italic; font-size:0.95em; line-height:1.7;">
-              Atas segala doa dan restunya,<br>kami ucapkan terima kasih yang sebesar-besarnya.
-            </p>
-            <div style="margin-top:28px; font-family:'Great Vibes',cursive; font-size:2em; color:#3b5d3b;">
-              Lukas &amp; Kezia
-            </div>
-          </div>
+            <p style="text-align: center">Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Anda berkenan hadir dan memberikan doa restu untuk pernikahan kami.
+                <br>Atas doa & restunya, kami ucapkan terima kasih.</p>
         </section>
 
         <div class="footer">
-          <div style="font-size:1.8em; margin-bottom:12px;">💍</div>
-          <div style="font-family:'Beth Ellen',cursive; font-size:2em; letter-spacing:1px; margin-bottom:8px;">
-            Lukas &amp; Kezia
-          </div>
-          <div style="width:50px; height:1px; background:rgba(255,255,255,0.4); margin:12px auto;"></div>
-          <div style="font-size:0.95em; opacity:0.85; letter-spacing:2px; text-transform:uppercase;">
-            11 · III · 2028
-          </div>
-          <div style="margin-top:20px; font-size:0.82em; opacity:0.6; font-style:italic; line-height:1.7;">
-            "Apa yang telah dipersatukan Allah,<br>tidak boleh diceraikan manusia."
-          </div>
+            <div style="font-size: 1.1em;">Lukas & Kezia</div>
+            <div style="margin-top: 20px; font-size: 0.9em;">11 Maret 2028</div>
         </div>
 
-    
-    <!-- PHOTO LIGHTBOX -->
-    <div class="lightbox-overlay" id="photoLightbox" onclick="closeLightbox(event)">
-        <img id="lightboxImg" src="" alt="Foto besar">
-        <button class="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
     </div>
-</div>
 	<div id="qrisModal" class="modal-overlay" onclick="closeQrisOuter(event)">
     <div class="modal-content">
         <!-- Wadah Gambar QRIS -->
@@ -1525,22 +1213,6 @@ section {
             btnKado.style.display = "none";
         }
 
-
-
-        // ===== LIGHTBOX =====
-        function openLightbox(src) {
-            document.getElementById('lightbox-img').src = src;
-            document.getElementById('lightbox').classList.add('open');
-            document.getElementById('mainContainer').style.overflow = 'hidden';
-        }
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.remove('open');
-            document.getElementById('lightbox-img').src = '';
-            document.getElementById('mainContainer').style.overflow = '';
-        }
-        function closeLightboxOutside(e) {
-            if (e.target === document.getElementById('lightbox')) closeLightbox();
-        }
 
         // ===== SCROLL REVEAL =====
         (function () {
@@ -1717,20 +1389,25 @@ function closeQrisOuter(event) {
         closeQris();
     }
 }
-// Viewport height dikunci via CSS 100dvh + env(safe-area-inset-bottom)
+// Mengunci tinggi asli layar agar tidak terganggu URL Bar HP
+function lockViewportHeight() {
+    const vh = window.innerHeight;
+    
+    // Kunci elemen container
+    const container = document.querySelector('.container');
+    if (container) container.style.height = `${vh}px`;
+    
+    // Kunci semua section dan header
+    const sections = document.querySelectorAll('section, .header');
+    sections.forEach(sec => {
+        sec.style.height = `${vh}px`;
+    });
+}
 
-        // ===== PHOTO LIGHTBOX =====
-        function openLightbox(src) {
-            document.getElementById('lightboxImg').src = src;
-            document.getElementById('photoLightbox').classList.add('open');
-            document.getElementById('mainContainer').style.overflow = 'hidden';
-        }
-        function closeLightbox(e) {
-            if (e && e.target !== document.getElementById('photoLightbox') 
-                   && e.target !== document.querySelector('.lightbox-close')) return;
-            document.getElementById('photoLightbox').classList.remove('open');
-            document.getElementById('mainContainer').style.overflow = '';
-        }
+// Jalankan saat halaman selesai dimuat
+window.addEventListener('DOMContentLoaded', lockViewportHeight);
+// Jalankan ulang jika layar berputar (landscape/portrait)
+window.addEventListener('resize', lockViewportHeight);
     </script>
 
 </body>

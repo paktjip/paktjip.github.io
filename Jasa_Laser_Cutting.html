@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Jasa Laser Cutting - PAKTJIP DIGIPRINT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a8c5a5 0%, #7fa87c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6b8e6b 0%, #4a6f4a 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #d4e8d4;
+            font-size: 1em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #4a6f4a;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8f4e8;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        input, select {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #7fa87c;
+        }
+
+        .inline-inputs {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .time-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .time-input-group input {
+            text-align: center;
+        }
+
+        .time-input-group label {
+            grid-column: 1 / -1;
+            margin-bottom: 8px;
+        }
+
+        .separator {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #7fa87c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+        }
+
+        .calculate-button {
+            background: linear-gradient(135deg, #4a6f4a 0%, #6b8e6b 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(74, 111, 74, 0.3);
+            margin-top: 10px;
+        }
+
+        .calculate-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 111, 74, 0.4);
+        }
+
+        .calculate-button:active {
+            transform: translateY(0);
+        }
+
+        .result-section {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #e8f4e8 0%, #d4e8d4 100%);
+            border-radius: 12px;
+        }
+
+        .result-section.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-item {
+            margin-bottom: 20px;
+        }
+
+        .result-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-label {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #4a6f4a;
+        }
+
+        .result-item.total {
+            padding-top: 15px;
+            border-top: 2px solid rgba(74, 111, 74, 0.2);
+            margin-top: 15px;
+        }
+
+        .result-value.total {
+            font-size: 2.2em;
+        }
+
+        .breakdown {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 8px;
+            font-weight: 400;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #f8f9f8;
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
+            border-top: 1px solid #e8f4e8;
+        }
+
+        footer strong {
+            color: #4a6f4a;
+        }
+
+        .info-box {
+            background: #f0f5f0;
+            border-left: 4px solid #7fa87c;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .inline-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .time-input-group {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .result-value {
+                font-size: 1.5em;
+            }
+
+            .result-value.total {
+                font-size: 1.8em;
+            }
+
+            .separator {
+                display: none;
+            }
+
+            .time-input-group input:first-of-type {
+                order: 1;
+            }
+
+            .time-input-group input:last-of-type {
+                order: 3;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⏱️ Kalkulator Jasa Laser Cutting</h1>
+            <p>Konversi Waktu & Perhitungan Biaya</p>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                ℹ️ Masukkan waktu dalam format menit:detik dan jumlah lembar. Hasil akan dihitung otomatis dengan minimum order Rp10.000.
+            </div>
+
+            <form id="laserForm">
+                <div class="section-title">Input Waktu</div>
+                
+                <div class="form-group">
+                    <div class="time-input-group">
+                        <label for="menit">Waktu (Menit : Detik)</label>
+                        <input type="number" id="menit" name="menit" placeholder="0" min="0" max="999" value="0" oninput="hitungBiaya()">
+                        <input type="number" id="detik" name="detik" placeholder="0" min="0" max="59" value="0" oninput="hitungBiaya()">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="jumlahLembar">Jumlah Lembar</label>
+                    <input type="number" id="jumlahLembar" name="jumlahLembar" placeholder="Contoh: 5" min="1" value="1" oninput="hitungBiaya()">
+                </div>
+
+                <div class="section-title">Detail Biaya</div>
+
+                <div class="form-group">
+                    <label for="hargaPerMenit">Harga Jasa per Menit (Rp)</label>
+                    <input type="number" id="hargaPerMenit" name="hargaPerMenit" placeholder="Contoh: 3000" min="0" step="100" value="3000" oninput="hitungBiaya()">
+                </div>
+            </form>
+
+            <div class="result-section" id="resultSection">
+                <div class="result-item">
+                    <div class="result-label">Konversi Waktu ke Desimal (Menit)</div>
+                    <div class="result-value" id="desimalPerLembarOutput">0.00</div>
+                </div>
+
+                <div class="result-item" id="totalDesimalItem">
+                    <div class="result-label">Total Konversi Waktu ke Desimal (Menit)</div>
+                    <div class="result-value" id="totalDesimalOutput">0.00</div>
+                </div>
+
+                <div class="result-item" id="biayaPerLembarItem">
+                    <div class="result-label">Biaya per Lembar</div>
+                    <div class="result-value" id="biayaPerLembarOutput">Rp 0</div>
+                </div>
+
+                <div class="result-item total">
+                    <div class="result-label">💰 Total Biaya</div>
+                    <div class="result-value total" id="biayaTotalOutput">Rp 0</div>
+                    <div class="breakdown" id="breakdownOutput"></div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <strong>Copyright © 2026 PAKTJIP Digital Printing</strong><br>
+            Vibe Coded by Lukas Ardianto using Claude AI
+        </footer>
+    </div>
+
+    <script>
+        function hitungBiaya() {
+            const menit = parseInt(document.getElementById("menit").value) || 0;
+            const detik = parseInt(document.getElementById("detik").value) || 0;
+            const jumlahLembar = parseInt(document.getElementById("jumlahLembar").value) || 1;
+            const hargaPerMenit = parseInt(document.getElementById("hargaPerMenit").value) || 0;
+
+            // Konversi ke desimal per lembar
+            const totalDetik = (menit * 60) + detik;
+            const desimalPerLembar = totalDetik / 60;
+            const desimalPerLembarRounded = Math.round(desimalPerLembar * 100) / 100;
+
+            // Total desimal (per lembar × jumlah lembar)
+            const totalDesimal = desimalPerLembar * jumlahLembar;
+            const totalDesimalRounded = Math.round(totalDesimal * 100) / 100;
+
+            // Hitung biaya per lembar
+            const biayaPerLembar = desimalPerLembar * hargaPerMenit;
+            const biayaPerLembarRounded = Math.round(biayaPerLembar);
+
+            // Hitung total biaya (per lembar × jumlah lembar)
+            const biayaAsli = biayaPerLembar * jumlahLembar;
+            const biayaAsliRounded = Math.round(biayaAsli);
+
+            // Terapkan minimum order Rp10.000
+            const MINIMUM_ORDER = 10000;
+            const biayaTotal = Math.max(biayaAsliRounded, MINIMUM_ORDER);
+
+            // Format ke Rupiah
+            const formattedBiayaPerLembar = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(biayaPerLembarRounded);
+
+            const formattedBiayaTotal = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(biayaTotal);
+
+            // Update display
+            document.getElementById("desimalPerLembarOutput").innerText = desimalPerLembarRounded.toFixed(2);
+            
+            // Tampilkan total desimal dan biaya per lembar hanya jika jumlah lembar > 1
+            const totalDesimalItem = document.getElementById("totalDesimalItem");
+            const biayaPerLembarItem = document.getElementById("biayaPerLembarItem");
+            
+            if (jumlahLembar > 1) {
+                totalDesimalItem.style.display = "block";
+                biayaPerLembarItem.style.display = "block";
+                document.getElementById("totalDesimalOutput").innerText = totalDesimalRounded.toFixed(2);
+                document.getElementById("biayaPerLembarOutput").innerText = formattedBiayaPerLembar;
+            } else {
+                totalDesimalItem.style.display = "none";
+                biayaPerLembarItem.style.display = "none";
+            }
+
+            // Breakdown calculation
+            let breakdownText = "";
+            if (jumlahLembar > 1) {
+                breakdownText = `(${desimalPerLembarRounded} menit × Rp${hargaPerMenit.toLocaleString('id-ID')} × ${jumlahLembar} lembar)`;
+            } else {
+                breakdownText = `(${desimalPerLembarRounded} menit × Rp${hargaPerMenit.toLocaleString('id-ID')})`;
+            }
+            
+            // Tambahkan keterangan jika menggunakan minimum order
+            if (biayaTotal > biayaAsliRounded) {
+                breakdownText += `<br><span style="font-size: 0.8em; color: #d97706; font-weight: 500;">⚠️ Harga disesuaikan dengan minimum order Rp10.000</span>`;
+            }
+            
+            document.getElementById("breakdownOutput").innerHTML = breakdownText;
+            document.getElementById("biayaTotalOutput").innerText = formattedBiayaTotal;
+
+            // Tampilkan hasil dengan animasi
+            const resultSection = document.getElementById("resultSection");
+            if (!resultSection.classList.contains("show")) {
+                resultSection.classList.add("show");
+            }
+        }
+
+        // Validasi input detik (max 59)
+        document.getElementById("detik").addEventListener("change", function() {
+            if (this.value > 59) {
+                this.value = 59;
+            }
+        });
+
+        // Trigger hitung saat page load
+        window.addEventListener("load", function() {
+            hitungBiaya();
+        });
+    </script>
+</body>
+</html>

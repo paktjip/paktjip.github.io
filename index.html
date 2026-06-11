@@ -6,14 +6,14 @@
     <title>PAKTJIP Digital Printing</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
+ 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #a8c5a5 0%, #7fa87c 100%);
             min-height: 100vh;
             padding: 20px;
         }
-
+ 
         /* Saat konten terbuka: kunci scroll di body, biarkan iframe yang scroll */
         body.page-open {
             overflow: hidden;
@@ -30,7 +30,7 @@
             border-radius: 0;
             box-shadow: none;
         }
-
+ 
         /* ── PASSWORD ── */
         .password-container {
             max-width: 400px;
@@ -83,11 +83,11 @@
             font-weight: 500;
         }
         .error-message.show { display: block; animation: shake 0.5s; }
-
+ 
         /* ── MAIN APP ── */
         #app { max-width: 900px; margin: 0 auto; display: none; }
         #app.show { display: block; animation: fadeIn 0.5s ease-out; }
-
+ 
         /* ── MENU VIEW ── */
         #menu-view {
             background: white;
@@ -145,7 +145,7 @@
             line-height: 1.6;
         }
         footer strong { color: #4a6f4a; }
-
+ 
         /* ── CONTENT VIEW ── */
         #content-view {
             display: none;
@@ -196,11 +196,11 @@
         }
         #iframe-container iframe {
             width: 100%;
+            height: 100%;
             border: none;
-            min-height: 500px;
             display: block;
         }
-
+ 
         /* ── ANIMATIONS ── */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -211,7 +211,7 @@
             25%  { transform: translateX(-10px); }
             75%  { transform: translateX(10px); }
         }
-
+ 
         /* ── RESPONSIVE ── */
         @media (max-width: 768px) {
             .header h1 { font-size: 1.8em; }
@@ -221,6 +221,7 @@
             .menu-btn .text  { font-size: 1em; }
         }
     </style>
+
 
     <script>
         /* ─── CONFIG: tambah fitur baru cukup di sini ─── */

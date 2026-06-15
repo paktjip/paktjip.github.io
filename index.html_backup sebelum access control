@@ -103,12 +103,6 @@
         }
         .header h1 { font-size: 2.2em; margin-bottom: 10px; }
         .content { padding: 40px 30px; }
-        #links-grid {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 30px;
-        }
-        .category-section { margin-bottom: 20px; }
         .links-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -207,17 +201,6 @@
             display: block;
         }
  
-        .category-label {
-            text-align: center;
-            font-size: 0.75em;
-            font-weight: 700;
-            color: #7aaa7a;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin: 28px 0 10px;
-        }
-        .category-label:first-child { margin-top: 0; }
-
         /* ── ANIMATIONS ── */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -243,25 +226,19 @@
     <script>
         /* ─── CONFIG: tambah fitur baru cukup di sini ─── */
         const MENU_ITEMS = [
-            // ── Helpful Tools ──
-            { category: "🛠️ Helpful Tools", emoji: "🔄️", label: "Konversi PDF ke Gambar",               file: "PDF2IMG.html" },
-            { category: "🛠️ Helpful Tools", emoji: "📐",  label: "Hitung Rasio Ukuran Cetak",            file: "Kalkulator_Ukuran_Cetak.html" },
-            { category: "🛠️ Helpful Tools", emoji: "✂️",  label: "Hitung Potongan Kertas",               file: "Hitung_Potong_Kertas.html" },
-            { category: "🛠️ Helpful Tools", emoji: "📕",  label: "Hitung Ketebalan Punggung Buku",       file: "Hitung_Punggung_Buku.html" },
-
-            // ── Administrasi ──
-            { category: "📋 Administrasi",  emoji: "📖",  label: "Hitung Harga Buku",                    file: "Hitung_Harga_Buku_2026.html" },
-            { category: "📋 Administrasi",  emoji: "🖼️",  label: "Hitung Harga Spanram",                 file: "HargaSpanram_v2.html" },
-            { category: "📋 Administrasi",  emoji: "⚡",  label: "Hitung Jasa Laser Cutting",            file: "Jasa_Laser_Cutting.html" },
-            { category: "📋 Administrasi",  emoji: "🔑",  label: "Hitung Harga Gantungan Kunci Akrilik", file: "Hitung_Ganci_Akrilik.html" },
-            { category: "📋 Administrasi",  emoji: "✅",  label: "Template Approval Pesanan",            file: "ApprovalPesanan.html" },
+            { emoji: "🔄️", label: "Konversi PDF ke Gambar",               file: "PDF2IMG.html" },
+            {emoji: "📐", label: "Hitung Rasio Ukuran Cetak",            file: "Kalkulator_Ukuran_Cetak.html" },
+            { emoji: "✂️", label: "Hitung Potongan Kertas",               file: "Hitung_Potong_Kertas.html" },
+            { emoji: "📖", label: "Hitung Harga Buku",                    file: "Hitung_Harga_Buku_2026.html" },
+            { emoji: "📕", label: "Hitung Ketebalan Punggung Buku",       file: "Hitung_Punggung_Buku.html" },
+            { emoji: "🖼️", label: "Hitung Harga Spanram",                 file: "HargaSpanram_v2.html" },
+            { emoji: "⚡", label: "Hitung Jasa Laser Cutting",            file: "Jasa_Laser_Cutting.html" },
+            { emoji: "🔑", label: "Hitung Harga Gantungan Kunci Akrilik", file: "Hitung_Ganci_Akrilik.html" },
+            { emoji: "✅", label: "Template Approval Pesanan",            file: "ApprovalPesanan.html" },
         ];
 
         /* ─── Auth ─── */
-        const PASSWORDS = [
-            { hash: "3b9f22265fb9a4281cc63324eb6507ded33a35dfe65b84e7dac044447fb45f82", allowedCategories: null },
-            { hash: "a3b526a602e29419b8222bef1fc44519261f4ee9f1c91747ebdcac02e82bfd78", allowedCategories: ["🛠️ Helpful Tools"] },
-        ];
+        const STORED_HASH = "3b9f22265fb9a4281cc63324eb6507ded33a35dfe65b84e7dac044447fb45f82";
 
         async function h(m) {
             const b  = new TextEncoder().encode(m);
@@ -272,12 +249,9 @@
         async function checkPassword() {
             const p = document.getElementById("password");
             const e = document.getElementById("errorMessage");
-            const inputHash = await h(p.value);
-            const matched = PASSWORDS.find(pw => pw.hash === inputHash);
-            if (matched) {
+            if ((await h(p.value)) === STORED_HASH) {
                 sessionStorage.setItem("auth", "true");
                 sessionStorage.setItem("exp", Date.now() + 24*60*60*1000);
-                sessionStorage.setItem("allowedCategories", JSON.stringify(matched.allowedCategories));
                 showApp();
             } else {
                 e.textContent = "❌ Password salah! Silakan coba lagi.";
@@ -308,37 +282,12 @@
         function buildMenu() {
             const grid = document.getElementById("links-grid");
             grid.innerHTML = "";
-
-            const allowed = JSON.parse(sessionStorage.getItem("allowedCategories"));
-
-            const grouped = new Map();
             MENU_ITEMS.forEach(item => {
-                if (allowed && !allowed.includes(item.category)) return;
-                if (!grouped.has(item.category)) grouped.set(item.category, []);
-                grouped.get(item.category).push(item);
-            });
-
-            grouped.forEach((items, category) => {
-                // Wrapper per kategori — di luar grid
-                const section = document.createElement("div");
-                section.className = "category-section";
-
-                const label = document.createElement("h3");
-                label.className = "category-label";
-                label.textContent = category;
-                section.appendChild(label);
-
-                const subGrid = document.createElement("div");
-                subGrid.className = "links-grid";
-                items.forEach(item => {
-                    const btn = document.createElement("button");
-                    btn.className = "menu-btn";
-                    btn.innerHTML = `<span class="emoji">${item.emoji}</span><span class="text">${item.label}</span>`;
-                    btn.addEventListener("click", () => openPage(item.file, item.label));
-                    subGrid.appendChild(btn);
-                });
-                section.appendChild(subGrid);
-                grid.appendChild(section);
+                const btn = document.createElement("button");
+                btn.className = "menu-btn";
+                btn.innerHTML = `<span class="emoji">${item.emoji}</span><span class="text">${item.label}</span>`;
+                btn.addEventListener("click", () => openPage(item.file, item.label));
+                grid.appendChild(btn);
             });
         }
 

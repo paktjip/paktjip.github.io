@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canva PDF Fixer for CorelDRAW</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #a8c5a5 0%, #7fa87c 100%);
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 700px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        overflow: hidden;
+    }
+
+    .header {
+        background: linear-gradient(135deg, #6b8e6b 0%, #4a6f4a 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .header h1 { font-size: 2em; margin-bottom: 10px; }
+    .header p { color: #d4e8d4; font-size: 1.1em; }
+
+    .content { padding: 30px; }
+
+    .section-title {
+        font-size: 1.1em;
+        font-weight: 600;
+        color: #4a6f4a;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e8f4e8;
+    }
+
+    .dropzone {
+        border: 2px dashed #b0c8b0;
+        border-radius: 12px;
+        padding: 40px 24px;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color 0.3s, background 0.3s;
+        position: relative;
+        margin-bottom: 20px;
+        background: #f8fdf8;
+    }
+    .dropzone:hover, .dropzone.dragover {
+        border-color: #4a6f4a;
+        background: #e8f4e8;
+    }
+    .dropzone input {
+        position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .dropzone-icon {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+    .dropzone h3 { font-size: 1em; font-weight: 600; color: #333; margin-bottom: 5px; }
+    .dropzone p { font-size: 0.9em; color: #888; }
+
+    .file-info {
+        display: none;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        background: #f0f7f0;
+        border-radius: 8px;
+        border: 1px solid #e8f4e8;
+        margin-bottom: 20px;
+    }
+    .file-icon { font-size: 1.8em; }
+    .file-meta { flex: 1; min-width: 0; }
+    .file-name { font-size: 0.95em; font-weight: 600; color: #333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-size { font-size: 0.8em; color: #888; margin-top: 2px; }
+
+    .btn-icon {
+        background: none; border: none; cursor: pointer;
+        color: #aaa; font-size: 1.2em; padding: 4px 8px;
+        border-radius: 6px; transition: color 0.2s, background 0.2s;
+        line-height: 1;
+    }
+    .btn-icon:hover { color: #c0392b; background: #fdf0f0; }
+
+    .preview-box {
+        display: none;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #e8f4e8;
+    }
+    .preview-header {
+        font-size: 0.85em;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #4a6f4a;
+        padding: 10px 15px;
+        background: #f0f7f0;
+        border-bottom: 1px solid #e8f4e8;
+    }
+    .preview-body {
+        background: #e8e8e8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 16px;
+    }
+    .preview-body canvas {
+        display: block;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        border-radius: 4px;
+    }
+    .preview-loading {
+        font-size: 0.9em;
+        color: #888;
+        padding: 30px;
+    }
+
+    .diag-box {
+        display: none;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #e8f4e8;
+        margin-bottom: 20px;
+    }
+    .diag-header {
+        font-size: 0.85em;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #4a6f4a;
+        padding: 10px 15px;
+        background: #f0f7f0;
+        border-bottom: 1px solid #e8f4e8;
+    }
+    .diag-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 10px 15px;
+        border-bottom: 1px solid #f0f7f0;
+        background: white;
+    }
+    .diag-item:last-child { border-bottom: none; }
+    .diag-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        flex-shrink: 0; margin-top: 4px;
+    }
+    .diag-dot.warn { background: #ffa500; }
+    .diag-dot.ok { background: #4a6f4a; }
+    .diag-label { font-size: 0.9em; font-weight: 600; color: #333; }
+    .diag-detail { font-size: 0.8em; color: #888; margin-top: 2px; }
+
+    .status-box {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 0.9em;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+    .status-box.info { background: #e8f4e8; color: #4a6f4a; border: 1px solid #b0c8b0; }
+    .status-box.success { background: #e8f4e8; color: #2d6a2d; border: 1px solid #7fa87c; }
+    .status-box.danger { background: #fdf0f0; color: #c0392b; border: 1px solid #f0b8b8; }
+
+    .calculate-button {
+        background: linear-gradient(135deg, #4a6f4a 0%, #6b8e6b 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 1.1em;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+        box-shadow: 0 4px 15px rgba(74, 111, 74, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    .calculate-button:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(74, 111, 74, 0.4);
+    }
+    .calculate-button:active { transform: translateY(0); }
+    .calculate-button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .download-button {
+        background: linear-gradient(135deg, #2d6a2d 0%, #4a8f4a 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 1.1em;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+        box-shadow: 0 4px 15px rgba(45, 106, 45, 0.3);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 10px;
+    }
+    .download-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(45, 106, 45, 0.4);
+    }
+
+    footer {
+        text-align: center;
+        padding: 25px;
+        background: #f8f9f8;
+        color: #666;
+        font-size: 0.9em;
+        line-height: 1.6;
+        border-top: 1px solid #e8f4e8;
+    }
+    footer strong { color: #4a6f4a; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spin { display: inline-block; animation: spin 0.8s linear infinite; }
+
+    @media (max-width: 480px) {
+        .header h1 { font-size: 1.5em; }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🔧 Canva PDF Fixer</h1>
+        <p>Mengatasi masalah kompatibilitas PDF Canva saat dibuka di CorelDRAW.</p>
+    </div>
+
+    <div class="content">
+        <div class="section-title">Upload File PDF</div>
+
+        <div class="file-info" id="fileInfo">
+            <div class="file-icon">📄</div>
+            <div class="file-meta">
+                <div class="file-name" id="fileName"></div>
+                <div class="file-size" id="fileSize"></div>
+            </div>
+            <button class="btn-icon" onclick="resetTool()" aria-label="Hapus file">✕</button>
+        </div>
+
+        <div class="dropzone" id="dropzone" ondragover="onDragOver(event)" ondrop="onDrop(event)" ondragleave="onDragLeave(event)">
+            <input type="file" accept=".pdf" onchange="handleFile(this.files[0])" id="fileInput">
+            <div class="dropzone-icon">📤</div>
+            <h3>Drop file PDF di sini</h3>
+            <p>atau klik untuk pilih file</p>
+        </div>
+
+        <div class="preview-box" id="previewBox">
+            <div class="preview-header">Preview Halaman 1</div>
+            <div class="preview-body" id="previewBody">
+                <div class="preview-loading">Memuat preview...</div>
+            </div>
+        </div>
+
+        <div class="diag-box" id="diagBox">
+            <div class="diag-header">Hasil Diagnosis</div>
+            <div id="diagItems"></div>
+        </div>
+
+        <div class="status-box" id="statusBox"></div>
+
+        <button class="calculate-button" id="btnFix" onclick="fixPDF()" style="display:none;">
+            ✏️ Perbaiki PDF
+        </button>
+
+        <button class="download-button" id="btnDownload" onclick="downloadFixed()">
+            ⬇️ Download Hasil
+        </button>
+    </div>
+
+    <footer>
+        <strong>Copyright © 2026 PAKTJIP Digital Printing</strong><br>
+        Vibe Coded by Lukas Ardianto using Claude AI
+    </footer>
+</div>
+
+<script>
+let originalBytes = null;
+let fixedBytes = null;
+let originalFileName = '';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+function onDragOver(e) {
+    e.preventDefault();
+    document.getElementById('dropzone').classList.add('dragover');
+}
+function onDragLeave() {
+    document.getElementById('dropzone').classList.remove('dragover');
+}
+function onDrop(e) {
+    e.preventDefault();
+    document.getElementById('dropzone').classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.name.toLowerCase().endsWith('.pdf')) handleFile(file);
+    else showStatus('Hanya file PDF yang didukung.', 'danger');
+}
+
+function handleFile(file) {
+    if (!file) return;
+    originalFileName = file.name;
+    const reader = new FileReader();
+    reader.onload = e => {
+        originalBytes = new Uint8Array(e.target.result);
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('fileSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
+        document.getElementById('fileInfo').style.display = 'flex';
+        document.getElementById('dropzone').style.display = 'none';
+        document.getElementById('previewBox').style.display = 'block';
+        renderPreview(originalBytes);
+        diagnose(originalBytes);
+        document.getElementById('btnFix').style.display = 'flex';
+        document.getElementById('btnDownload').style.display = 'none';
+    };
+    reader.readAsArrayBuffer(file);
+}
+
+async function renderPreview(bytes) {
+    const body = document.getElementById('previewBody');
+    body.innerHTML = '<div class="preview-loading">Memuat preview...</div>';
+    try {
+        const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(bytes) }).promise;
+        const page = await pdf.getPage(1);
+
+        // Base viewport at scale 1 to get true page dimensions
+        const baseViewport = page.getViewport({ scale: 1 });
+
+        // Max display box available inside the preview body (width AND height)
+        const maxDisplayWidth = Math.min(body.clientWidth - 32, 500) || 500;
+        const maxDisplayHeight = 420;
+        const displayScale = Math.min(
+            maxDisplayWidth / baseViewport.width,
+            maxDisplayHeight / baseViewport.height
+        );
+
+        // Render at higher resolution for sharpness, then scale down via CSS
+        const dpr = window.devicePixelRatio || 1;
+        const renderScale = displayScale * dpr;
+        const viewport = page.getViewport({ scale: renderScale });
+
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(viewport.width);
+        canvas.height = Math.round(viewport.height);
+        // Lock CSS size explicitly so aspect ratio can't be distorted by layout
+        canvas.style.width = Math.round(viewport.width / dpr) + 'px';
+        canvas.style.height = Math.round(viewport.height / dpr) + 'px';
+
+        const ctx = canvas.getContext('2d');
+        await page.render({ canvasContext: ctx, viewport }).promise;
+
+        body.innerHTML = '';
+        body.appendChild(canvas);
+    } catch (err) {
+        body.innerHTML = '<div class="preview-loading">Tidak bisa menampilkan preview (' + err.message + ')</div>';
+    }
+}
+
+function diagnose(bytes) {
+    const str = new TextDecoder('latin1').decode(bytes);
+    const checks = [
+        {
+            label: 'Line ending CRLF setelah stream',
+            detail: count => `Ditemukan ${count} stream dengan \\r\\n`,
+            count: (str.match(/stream\r\n/g) || []).length,
+            bad: c => c > 0
+        },
+        {
+            label: 'Tagged PDF — StructTreeRoot',
+            detail: () => 'Struktur aksesibilitas yang tidak dikenali CorelDRAW',
+            count: str.includes('/StructTreeRoot') ? 1 : 0,
+            bad: c => c > 0
+        },
+        {
+            label: 'XMP Metadata stream',
+            detail: () => 'Metadata XML tambahan dari Canva',
+            count: str.includes('<?xpacket') ? 1 : 0,
+            bad: c => c > 0
+        },
+        {
+            label: 'MarkInfo / Lang',
+            detail: () => 'Penanda tagged PDF di catalog',
+            count: (str.includes('/MarkInfo') ? 1 : 0) + (str.includes('/Lang') ? 1 : 0),
+            bad: c => c > 0
+        }
+    ];
+
+    const container = document.getElementById('diagItems');
+    container.innerHTML = '';
+    checks.forEach(c => {
+        const isWarn = c.bad(c.count);
+        const div = document.createElement('div');
+        div.className = 'diag-item';
+        div.innerHTML = `
+            <div class="diag-dot ${isWarn ? 'warn' : 'ok'}"></div>
+            <div>
+                <div class="diag-label">${c.label}</div>
+                <div class="diag-detail">${isWarn ? c.detail(c.count) : 'Tidak ada masalah'}</div>
+            </div>`;
+        container.appendChild(div);
+    });
+    document.getElementById('diagBox').style.display = 'block';
+}
+
+function showStatus(msg, type) {
+    const box = document.getElementById('statusBox');
+    box.className = 'status-box ' + type;
+    box.style.display = 'flex';
+    box.innerHTML = msg;
+}
+
+async function fixPDF() {
+    if (!originalBytes) return;
+    const btnFix = document.getElementById('btnFix');
+    btnFix.disabled = true;
+    btnFix.innerHTML = `<span class="spin">⟳</span> Memproses...`;
+    showStatus('⏳ Sedang memperbaiki PDF...', 'info');
+
+    try {
+        await new Promise(r => setTimeout(r, 40));
+
+        let bytes = fixStreamCRLF(new Uint8Array(originalBytes));
+
+        const { PDFDocument, PDFName } = PDFLib;
+        const pdfDoc = await PDFDocument.load(bytes, { ignoreEncryption: true, updateMetadata: false });
+
+        const catalog = pdfDoc.catalog;
+        ['Metadata', 'StructTreeRoot', 'MarkInfo', 'Lang', 'ViewerPreferences', 'Outlines'].forEach(key => {
+            try { if (catalog.has(PDFName.of(key))) catalog.delete(PDFName.of(key)); } catch(e) {}
+        });
+
+        const saved = await pdfDoc.save({ useObjectStreams: false, addDefaultPage: false });
+        fixedBytes = fixStreamCRLF(saved);
+
+        const str = new TextDecoder('latin1').decode(fixedBytes);
+        const remaining = (str.match(/stream\r\n/g) || []).length;
+        const hasStruct = str.includes('/StructTreeRoot');
+        const hasXMP = str.includes('<?xpacket');
+
+        let detail = [];
+        if (remaining === 0) detail.push('CRLF diperbaiki');
+        if (!hasStruct) detail.push('StructTreeRoot dihapus');
+        if (!hasXMP) detail.push('XMP dihapus');
+
+        showStatus('✅ Selesai — ' + detail.join(', '), 'success');
+        btnFix.style.display = 'none';
+        document.getElementById('btnDownload').style.display = 'flex';
+
+    } catch(err) {
+        showStatus('❌ Gagal: ' + err.message, 'danger');
+        btnFix.disabled = false;
+        btnFix.innerHTML = '✏️ Coba Lagi';
+    }
+}
+
+function fixStreamCRLF(bytes) {
+    const pat = [115,116,114,101,97,109,13,10];
+    const repl = [115,116,114,101,97,109,10];
+    const out = [];
+    let i = 0;
+    while (i < bytes.length) {
+        let match = i + pat.length <= bytes.length;
+        if (match) {
+            for (let j = 0; j < pat.length; j++) {
+                if (bytes[i+j] !== pat[j]) { match = false; break; }
+            }
+        }
+        if (match) { for (const b of repl) out.push(b); i += pat.length; }
+        else { out.push(bytes[i++]); }
+    }
+    return new Uint8Array(out);
+}
+
+function downloadFixed() {
+    if (!fixedBytes) return;
+    const blob = new Blob([fixedBytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = originalFileName.replace(/\.pdf$/i, '') + '_fixed.pdf';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function resetTool() {
+    originalBytes = null; fixedBytes = null; originalFileName = '';
+    document.getElementById('fileInfo').style.display = 'none';
+    document.getElementById('previewBox').style.display = 'none';
+    document.getElementById('diagBox').style.display = 'none';
+    document.getElementById('statusBox').style.display = 'none';
+    document.getElementById('btnFix').style.display = 'none';
+    document.getElementById('btnFix').disabled = false;
+    document.getElementById('btnFix').innerHTML = '✏️ Perbaiki PDF';
+    document.getElementById('btnDownload').style.display = 'none';
+    document.getElementById('dropzone').style.display = 'block';
+    document.getElementById('fileInput').value = '';
+}
+</script>
+</body>
+</html>

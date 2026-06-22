@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hitung Biaya Kupon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a8c5a5 0%, #7fa87c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6b8e6b 0%, #4a6f4a 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #d4e8d4;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #4a6f4a;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8f4e8;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        input, select {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+            background-color: #fff;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #7fa87c;
+        }
+
+        /* Visualisasi Kupon */
+        .visualisasi-container {
+            background: #f8f9f8;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 2px solid #e8f4e8;
+        }
+
+        .visualisasi-container h3 {
+            color: #4a6f4a;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .kupon-preview {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .a4-paper {
+            width: 200px;
+            height: 283px;
+            border: 2px solid #4a6f4a;
+            background-color: white;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .kupon-item {
+            position: absolute;
+            border: 1px dashed #7fa87c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #4a6f4a;
+            font-weight: bold;
+        }
+
+        /* Layouts (Sama seperti sebelumnya) */
+        .a4-paper.layout-1-6 .kupon-item { width: 33.33%; height: 50%; }
+        .a4-paper.layout-1-6 .kupon-item:nth-child(1) { top: 0; left: 0; }
+        .a4-paper.layout-1-6 .kupon-item:nth-child(2) { top: 0; left: 33.33%; }
+        .a4-paper.layout-1-6 .kupon-item:nth-child(3) { top: 0; left: 66.66%; }
+        .a4-paper.layout-1-6 .kupon-item:nth-child(4) { top: 50%; left: 0; }
+        .a4-paper.layout-1-6 .kupon-item:nth-child(5) { top: 50%; left: 33.33%; }
+        .a4-paper.layout-1-6 .kupon-item:nth-child(6) { top: 50%; left: 66.66%; }
+
+        .a4-paper.layout-1-8 .kupon-item { width: 25%; height: 50%; }
+        .a4-paper.layout-1-8 .kupon-item:nth-child(1) { top: 0; left: 0; }
+        .a4-paper.layout-1-8 .kupon-item:nth-child(2) { top: 0; left: 25%; }
+        .a4-paper.layout-1-8 .kupon-item:nth-child(3) { top: 0; left: 50%; }
+        .a4-paper.layout-1-8 .kupon-item:nth-child(4) { top: 0; left: 75%; }
+        .a4-paper.layout-1-8 .kupon-item:nth-child(5) { top: 50%; left: 0; }
+        .a4-paper.layout-1-8 .kupon-item:nth-child(6) { top: 50%; left: 25%; }
+        .a4-paper.layout-1-8 .kupon-item:nth-child(7) { top: 50%; left: 50%; }
+        .a4-paper.layout-1-8 .kupon-item:nth-child(8) { top: 50%; left: 75%; }
+
+        .a4-paper.layout-1-10 .kupon-item { width: 20%; height: 50%; }
+        .a4-paper.layout-1-10 .kupon-item:nth-child(1) { top: 0; left: 0; }
+        .a4-paper.layout-1-10 .kupon-item:nth-child(2) { top: 0; left: 20%; }
+        .a4-paper.layout-1-10 .kupon-item:nth-child(3) { top: 0; left: 40%; }
+        .a4-paper.layout-1-10 .kupon-item:nth-child(4) { top: 0; left: 60%; }
+        .a4-paper.layout-1-10 .kupon-item:nth-child(5) { top: 0; left: 80%; }
+        .a4-paper.layout-1-10 .kupon-item:nth-child(6) { top: 50%; left: 0; }
+        .a4-paper.layout-1-10 .kupon-item:nth-child(7) { top: 50%; left: 20%; }
+        .a4-paper.layout-1-10 .kupon-item:nth-child(8) { top: 50%; left: 40%; }
+        .a4-paper.layout-1-10 .kupon-item:nth-child(9) { top: 50%; left: 60%; }
+        .a4-paper.layout-1-10 .kupon-item:nth-child(10) { top: 50%; left: 80%; }
+
+        .a4-paper.layout-1-5h .kupon-item { width: 100%; height: 20%; }
+        .a4-paper.layout-1-5h .kupon-item:nth-child(1) { top: 0; left: 0; }
+        .a4-paper.layout-1-5h .kupon-item:nth-child(2) { top: 20%; left: 0; }
+        .a4-paper.layout-1-5h .kupon-item:nth-child(3) { top: 40%; left: 0; }
+        .a4-paper.layout-1-5h .kupon-item:nth-child(4) { top: 60%; left: 0; }
+        .a4-paper.layout-1-5h .kupon-item:nth-child(5) { top: 80%; left: 0; }
+
+        .a4-paper.layout-1-6h .kupon-item { width: 100%; height: 16.66%; }
+        .a4-paper.layout-1-6h .kupon-item:nth-child(1) { top: 0; left: 0; }
+        .a4-paper.layout-1-6h .kupon-item:nth-child(2) { top: 16.66%; left: 0; }
+        .a4-paper.layout-1-6h .kupon-item:nth-child(3) { top: 33.32%; left: 0; }
+        .a4-paper.layout-1-6h .kupon-item:nth-child(4) { top: 49.98%; left: 0; }
+        .a4-paper.layout-1-6h .kupon-item:nth-child(5) { top: 66.64%; left: 0; }
+        .a4-paper.layout-1-6h .kupon-item:nth-child(6) { top: 83.30%; left: 0; }
+
+        .kupon-info {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e8f4e8;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 0.9em;
+            border-bottom: 1px dashed #eee;
+        }
+        .info-row:last-child { border-bottom: none; }
+
+        .info-label { font-weight: 600; color: #666; }
+        .info-value { color: #333; }
+
+        /* Hasil Output */
+        #outputSection {
+            display: none;
+            margin-top: 30px;
+        }
+
+        #outputSection.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #e8f4e8 0%, #d4e8d4 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .output-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .output-item {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .output-label {
+            display: block;
+            font-weight: 600;
+            color: #4a6f4a;
+            font-size: 0.85em;
+            margin-bottom: 4px;
+        }
+
+        .output-value {
+            color: #333;
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+
+        .books-estimate {
+            background: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+            line-height: 1.6;
+            border-left: 4px solid #4a6f4a;
+            color: #333;
+        }
+
+        .final-price {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .final-price .output-label {
+            font-size: 1.1em;
+            margin-bottom: 0;
+        }
+
+        .final-price .output-value {
+            font-size: 1.4em;
+            color: #4a6f4a;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #4a6f4a 0%, #6b8e6b 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(74, 111, 74, 0.3);
+            margin-top: 10px;
+            display: none;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 111, 74, 0.4);
+        }
+        
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+
+        .copy-feedback {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #d4e8d4;
+            color: #4a6f4a;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.95em;
+            font-weight: 600;
+            display: none;
+        }
+
+        .copy-feedback.show {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #f8f9f8;
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
+            border-top: 1px solid #e8f4e8;
+        }
+
+        footer strong {
+            color: #4a6f4a;
+        }
+
+        @media (max-width: 768px) {
+            .output-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Hitung Biaya Cetak Kupon</h1>
+            <p>Perhitungan Kebutuhan Kertas & Biaya Cetak</p>
+        </div>
+
+        <div class="content">
+            <div class="section-title">Pengaturan Harga & Kebutuhan</div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="hargaPerLembar">Harga Cetak per Lembar (Rp)</label>
+                    <input type="number" id="hargaPerLembar" placeholder="Contoh: 5.000" value="1250" min="0" step="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="biayaFinishing">Biaya Finishing (Rp)</label>
+                    <input type="number" id="biayaFinishing" placeholder="Contoh: 15000" value="15000" min="0" step="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="threshold">Threshold Pembagian Buku (lembar)</label>
+                    <input type="number" id="threshold" placeholder="Contoh: 140" value="140" min="100" max="150" required>
+                </div>
+            </div>
+
+            <div class="section-title">Spesifikasi Kupon</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="ukuranKupon">Ukuran Kupon</label>
+                    <select id="ukuranKupon" required>
+                        <option value="">-- Pilih Ukuran --</option>
+                        <option value="1/6">1/6</option>
+                        <option value="1/8">1/8</option>
+                        <option value="1/10">1/10</option>
+                        <option value="1/5H">1/5 Horizontal</option>
+                        <option value="1/6H">1/6 Horizontal</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="jumlahKupon">Jumlah Kupon</label>
+                    <input type="number" id="jumlahKupon" placeholder="Contoh: 2500" min="1" required>
+                </div>
+            </div>
+
+            <!-- Visualisasi Kupon -->
+            <div id="visualisasiSection" style="display: none;">
+                <div class="visualisasi-container">
+                    <h3>Visualisasi Ukuran Kupon pada A4</h3>
+                    <div class="kupon-preview">
+                        <div class="a4-paper" id="a4Paper"></div>
+                    </div>
+                    <div class="kupon-info" id="kuponInfo"></div>
+                </div>
+            </div>
+
+            <!-- Output Section -->
+            <div class="result-card" id="outputSection">
+                <div class="output-grid">
+                    <div class="output-item">
+                        <span class="output-label">Ukuran Kupon:</span>
+                        <span class="output-value" id="outputUkuran">-</span>
+                    </div>
+                    <div class="output-item">
+                        <span class="output-label">Kebutuhan Kupon:</span>
+                        <span class="output-value" id="outputKebutuhan">-</span>
+                    </div>
+                    <div class="output-item">
+                        <span class="output-label">Kupon Jadi:</span>
+                        <span class="output-value" id="outputKuponJadi">-</span>
+                    </div>
+                    <div class="output-item">
+                        <span class="output-label">Jumlah Lembar:</span>
+                        <span class="output-value" id="outputLembar">-</span>
+                    </div>
+                </div>
+                
+                <div class="books-estimate" id="outputBuku"></div>
+                
+                <div class="final-price">
+                    <span class="output-label">Biaya Final:</span>
+                    <span class="output-value" id="outputBiaya">-</span>
+                </div>
+            </div>
+
+            <button class="copy-btn" id="copyBtn">📋 Salin Hasil</button>
+            <div class="copy-feedback" id="copyFeedback">Hasil telah disalin ke clipboard!</div>
+        </div>
+
+        <footer>
+            <strong>Copyright © 2026 PAKTJIP Digital Printing</strong><br>
+           Vibe Coded by Lukas Ardianto &nbsp;·&nbsp; v2.0
+        </footer>
+    </div>
+
+    <script>
+        const form = document.getElementById('kuponForm');
+        const hargaPerLembarInput = document.getElementById('hargaPerLembar');
+        const biayaFinishingInput = document.getElementById('biayaFinishing');
+        const thresholdInput = document.getElementById('threshold');
+        const ukuranKuponSelect = document.getElementById('ukuranKupon');
+        const jumlahKuponInput = document.getElementById('jumlahKupon');
+        
+        const outputSection = document.getElementById('outputSection');
+        const copyBtn = document.getElementById('copyBtn');
+        const copyFeedback = document.getElementById('copyFeedback');
+        const visualisasiSection = document.getElementById('visualisasiSection');
+        const a4Paper = document.getElementById('a4Paper');
+        const kuponInfo = document.getElementById('kuponInfo');
+        
+        // Data visualisasi untuk setiap ukuran
+        const visualisasiData = {
+            '1/6': { title: '1/6 (3 Kolom × 2 Baris)', layout: 'layout-1-6', kupon: 6, layoutDesc: '3 kolom × 2 baris', dimensi: '~70 × 141 mm' },
+            '1/8': { title: '1/8 (4 Kolom × 2 Baris)', layout: 'layout-1-8', kupon: 8, layoutDesc: '4 kolom × 2 baris', dimensi: '~52.5 × 141 mm' },
+            '1/10': { title: '1/10 (5 Kolom × 2 Baris)', layout: 'layout-1-10', kupon: 10, layoutDesc: '5 kolom × 2 baris', dimensi: '~42 × 141 mm' },
+            '1/5H': { title: '1/5 Horizontal (5 Baris)', layout: 'layout-1-5h', kupon: 5, layoutDesc: '1 kolom × 5 baris', dimensi: '~210 × 59 mm' },
+            '1/6H': { title: '1/6 Horizontal (6 Baris)', layout: 'layout-1-6h', kupon: 6, layoutDesc: '1 kolom × 6 baris', dimensi: '~210 × 49 mm' }
+        };
+        
+        function showVisualisasi(ukuran) {
+            if (!ukuran || !visualisasiData[ukuran]) {
+                visualisasiSection.style.display = 'none';
+                return;
+            }
+            
+            const data = visualisasiData[ukuran];
+            a4Paper.innerHTML = '';
+            a4Paper.className = `a4-paper ${data.layout}`;
+            
+            for (let i = 1; i <= data.kupon; i++) {
+                const item = document.createElement('div');
+                item.className = 'kupon-item';
+                item.textContent = i;
+                a4Paper.appendChild(item);
+            }
+            
+            kuponInfo.innerHTML = `
+                <div class="info-row"><span class="info-label">Dimensi kupon:</span><span class="info-value">${data.dimensi}</span></div>
+            `;
+            
+            visualisasiSection.style.display = 'block';
+        }
+        
+        const kuponPerLembar = { '1/6': 6, '1/8': 8, '1/10': 10, '1/5H': 5, '1/6H': 6 };
+        
+        function hitungKuponJadi(jumlahKupon, kuponPerLembarValue) {
+            const lembarDibutuhkan = Math.ceil(jumlahKupon / kuponPerLembarValue);
+            const kuponJadi = lembarDibutuhkan * kuponPerLembarValue;
+            return { lembarDibutuhkan, kuponJadi };
+        }
+        
+ function hitungPembagianBuku(lembar, ukuran, threshold) {
+            let hasilBuku = [];
+            
+            if (lembar > 100) {
+                const kelompokPenuh = Math.floor(lembar / 100);
+                const sisaLembar = lembar % 100;
+                
+                if (sisaLembar === 0) {
+                    // Jika lembar tepat kelipatan 100, gabungkan semua jadi 1 jenis buku
+                    hasilBuku.push({ jumlah: kelompokPenuh * ukuran, kuponPerBuku: 100 });
+                } else {
+                    // Jika ada sisa, gabungkan sisa dengan 1 kelompok 100 terakhir
+                    const kelompokPenuhMinusSatu = kelompokPenuh - 1;
+                    
+                    if (kelompokPenuhMinusSatu > 0) {
+                        hasilBuku.push({ jumlah: kelompokPenuhMinusSatu * ukuran, kuponPerBuku: 100 });
+                    }
+                    
+                    const gabungan = 100 + sisaLembar;
+                    
+                    if (gabungan <= threshold) {
+                        hasilBuku.push({ jumlah: ukuran, kuponPerBuku: gabungan });
+                    } else {
+                        const kupon2 = Math.floor(gabungan / 2);
+                        const kupon3 = Math.ceil(gabungan / 2);
+                        
+                        if (gabungan % 2 === 0) {
+                            hasilBuku.push({ jumlah: ukuran * 2, kuponPerBuku: kupon2 });
+                        } else {
+                            hasilBuku.push({ jumlah: ukuran, kuponPerBuku: kupon2 });
+                            hasilBuku.push({ jumlah: ukuran, kuponPerBuku: kupon3 });
+                        }
+                    }
+                }
+            } else if (lembar > 50) {
+                const bukuCount = ukuran;
+                const kuponPerBuku = (lembar * ukuran) / bukuCount;
+                hasilBuku.push({ jumlah: bukuCount, kuponPerBuku: Math.round(kuponPerBuku) });
+            } else {
+                let bukuCount = ukuran;
+                if (ukuran === 6 || ukuran === 8 || ukuran === 10) {
+                    bukuCount = ukuran / 2;
+                }
+                const kuponPerBuku = (lembar * ukuran) / bukuCount;
+                hasilBuku.push({ jumlah: bukuCount, kuponPerBuku: Math.round(kuponPerBuku) });
+            }
+            
+            return hasilBuku;
+        }
+        
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(angka);
+        }
+        
+        function formatTanggal() {
+            const now = new Date();
+            const hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const tanggal = now.getDate();
+            const bulanNama = bulan[now.getMonth()];
+            const tahun = now.getFullYear();
+            const jam = String(now.getHours()).padStart(2, '0');
+            const menit = String(now.getMinutes()).padStart(2, '0');
+            return `${hari[now.getDay()]}, ${tanggal} ${bulanNama} ${tahun} ${jam}.${menit}`;
+        }
+        
+        function generateTeksaSalin(ukuran, kebutuhan, kuponJadi, bukuData, biaya) {
+            let bukuText = '';
+            let bukuCount = 0;
+            for (let i = 0; i < bukuData.length; i++) {
+                if (bukuData[i].jumlah > 0) {
+                    if (bukuCount > 0) bukuText += ' + ';
+                    bukuText += `${bukuData[i].jumlah} buku (${bukuData[i].kuponPerBuku} kupon/buku)`;
+                    bukuCount++;
+                }
+            }
+            return `Ukuran kupon: ${ukuran}\nKebutuhan kupon: ${kebutuhan}\nKupon jadi: ${kuponJadi}\nJumlah buku: ${bukuText}\nBiaya: ${biaya}\n\n> *Jumlah buku* merupakan hasil perhitungan sistem berdasarkan spesifikasi produksi. Hasil akhir dapat bervariasi tergantung optimalisasi finishing oleh tim produksi, namun jumlah kupon yang tercetak tetap sesuai tanpa adanya pengurangan.\n\n*PAKTJIP Digital Printing*\nDihitung pada ${formatTanggal()}`;
+        }
+        
+        function updateOutput() {
+            const jumlahKupon = parseInt(jumlahKuponInput.value);
+            const ukuran = ukuranKuponSelect.value;
+            const hargaPerLembar = parseInt(hargaPerLembarInput.value) || 0;
+            const biayaFinishing = parseInt(biayaFinishingInput.value) || 0;
+            const threshold = parseInt(thresholdInput.value) || 0;
+            
+            if (!jumlahKupon || !ukuran) {
+                outputSection.classList.remove('show');
+                copyBtn.style.display = 'none';
+                return;
+            }
+            
+            const kuponPerLembarValue = kuponPerLembar[ukuran];
+            const { lembarDibutuhkan, kuponJadi } = hitungKuponJadi(jumlahKupon, kuponPerLembarValue);
+            const bukuData = hitungPembagianBuku(lembarDibutuhkan, kuponPerLembarValue, threshold);
+            const totalBiaya = (lembarDibutuhkan * hargaPerLembar) + biayaFinishing;
+            
+            document.getElementById('outputUkuran').textContent = ukuran;
+            document.getElementById('outputKebutuhan').textContent = jumlahKupon.toLocaleString('id-ID');
+            document.getElementById('outputKuponJadi').textContent = kuponJadi.toLocaleString('id-ID');
+            document.getElementById('outputLembar').textContent = lembarDibutuhkan.toLocaleString('id-ID') + ' lembar';
+            
+            let bukuHtml = '';
+            let bukuCount = 0;
+            for (let i = 0; i < bukuData.length; i++) {
+                if (bukuData[i].jumlah > 0) {
+                    if (bukuCount > 0) bukuHtml += ' + ';
+                    bukuHtml += `<strong>${bukuData[i].jumlah} buku</strong> (${bukuData[i].kuponPerBuku} kupon/buku)`;
+                    bukuCount++;
+                }
+            }
+            document.getElementById('outputBuku').innerHTML = 'Jumlah buku: ' + bukuHtml;
+            document.getElementById('outputBiaya').textContent = formatRupiah(totalBiaya);
+            
+            const teksaSalin = generateTeksaSalin(ukuran, jumlahKupon, kuponJadi, bukuData, formatRupiah(totalBiaya));
+            copyBtn.setAttribute('data-copy-text', teksaSalin);
+            
+            outputSection.classList.add('show');
+            copyBtn.style.display = 'block';
+        }
+        
+        // Event listeners
+        hargaPerLembarInput.addEventListener('change', updateOutput);
+        biayaFinishingInput.addEventListener('change', updateOutput);
+        thresholdInput.addEventListener('change', updateOutput);
+        ukuranKuponSelect.addEventListener('change', function() {
+            updateOutput();
+            showVisualisasi(this.value);
+        });
+        jumlahKuponInput.addEventListener('input', updateOutput);
+        
+        copyBtn.addEventListener('click', function() {
+            const teks = this.getAttribute('data-copy-text');
+            navigator.clipboard.writeText(teks).then(() => {
+                copyFeedback.classList.add('show');
+                setTimeout(() => { copyFeedback.classList.remove('show'); }, 2000);
+            }).catch(err => { console.error('Gagal menyalin:', err); });
+        });
+    </script>
+</body>
+</html>

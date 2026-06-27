@@ -100,7 +100,26 @@
             color: white;
             padding: 40px 30px;
             text-align: center;
+            position: relative;
         }
+        .logout-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1.5px solid rgba(255,255,255,0.5);
+            border-radius: 8px;
+            padding: 7px 14px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+        .logout-btn:hover { background: rgba(255,255,255,0.3); border-color: white; }
         .header h1 { font-size: 2.2em; margin-bottom: 10px; }
         .content { padding: 40px 30px; }
         #links-grid {
@@ -218,7 +237,24 @@
         }
         .category-label:first-child { margin-top: 0; }
 
-        /* ── ANIMATIONS ── */
+        #logout-topbar-btn {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1.5px solid rgba(255,255,255,0.5);
+            border-radius: 8px;
+            padding: 7px 14px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+            margin-left: auto;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        #logout-topbar-btn:hover { background: rgba(255,255,255,0.3); border-color: white; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -277,9 +313,9 @@
             const inputHash = await h(p.value);
             const matched = PASSWORDS.find(pw => pw.hash === inputHash);
             if (matched) {
-                sessionStorage.setItem("auth", "true");
-                sessionStorage.setItem("exp", Date.now() + 24*60*60*1000);
-                sessionStorage.setItem("allowedCategories", JSON.stringify(matched.allowedCategories));
+                localStorage.setItem("auth", "true");
+                localStorage.setItem("exp", Date.now() + 30*24*60*60*1000); // 30 hari
+                localStorage.setItem("allowedCategories", JSON.stringify(matched.allowedCategories));
                 showApp();
             } else {
                 e.textContent = "❌ Password salah! Silakan coba lagi.";
@@ -292,9 +328,27 @@
         }
 
         function checkAuth() {
-            const auth = sessionStorage.getItem("auth");
-            const exp  = sessionStorage.getItem("exp");
+            const auth = localStorage.getItem("auth");
+            const exp  = localStorage.getItem("exp");
             if (auth === "true" && exp && Date.now() < parseInt(exp)) showApp();
+        }
+
+        function logout() {
+            localStorage.removeItem("auth");
+            localStorage.removeItem("exp");
+            localStorage.removeItem("allowedCategories");
+            // Reset tampilan
+            document.getElementById("app").style.display = "none";
+            document.getElementById("app").classList.remove("show");
+            document.getElementById("content-view").classList.remove("show");
+            document.getElementById("menu-view").style.display = "block";
+            document.body.classList.remove("page-open");
+            document.querySelector(".password-container").style.display = "";
+            document.getElementById("password").value = "";
+            document.getElementById("password").focus();
+            // Reset iframe cache
+            Object.keys(iframeCache).forEach(k => { iframeCache[k].remove(); delete iframeCache[k]; });
+            activeFile = null;
         }
 
         /* ─── App init ─── */
@@ -311,7 +365,7 @@
             const grid = document.getElementById("links-grid");
             grid.innerHTML = "";
 
-            const allowed = JSON.parse(sessionStorage.getItem("allowedCategories"));
+            const allowed = JSON.parse(localStorage.getItem("allowedCategories"));
 
             const grouped = new Map();
             MENU_ITEMS.forEach(item => {
@@ -438,6 +492,7 @@
         <!-- MENU VIEW -->
         <div id="menu-view">
             <div class="header">
+                <button class="logout-btn" onclick="logout()" title="Logout">🚪 Logout</button>
                 <h1>Utilities</h1>
 				<h2>PAKTJIP Digital Printing</h2>
             </div>
@@ -460,6 +515,7 @@
             <div class="content-topbar">
                 <button id="back-btn">← Kembali</button>
                 <span id="page-title"></span>
+                <button id="logout-topbar-btn" onclick="logout()" title="Logout">🚪 Logout</button>
             </div>
             <div id="iframe-container"></div>
         </div>

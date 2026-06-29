@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hitung Biaya Kupon</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -350,12 +349,12 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1 id="pageTitle">Hitung Biaya Cetak Kupon</h1>
-            <p id="pageSubtitle">Perhitungan Kebutuhan Kertas & Biaya Cetak</p>
+            <h1>Hitung Biaya Cetak Kupon</h1>
+            <p>Perhitungan Kebutuhan Kertas & Biaya Cetak</p>
         </div>
 
         <div class="content">
-            <div class="section-title" id="sectionHarga">Pengaturan Harga & Kebutuhan</div>
+            <div class="section-title">Pengaturan Harga & Kebutuhan</div>
             
             <div class="form-grid">
                 <div class="form-group">
@@ -433,39 +432,6 @@
 
             <button class="copy-btn" id="copyBtn">📋 Salin Hasil</button>
             <div class="copy-feedback" id="copyFeedback">Hasil telah disalin ke clipboard!</div>
-
-            <!-- Generator Nomor Urut -->
-            <div class="section-title" style="margin-top: 30px;">Generator Nomor Urut XLSX</div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Ukuran Kupon</label>
-                    <input type="text" id="csvUkuranDisplay" readonly style="background:#f0f5f0; color:#4a6f4a; font-weight:600; cursor:default;" placeholder="(dari form atas)">
-                </div>
-                <div class="form-group">
-                    <label>Kupon Jadi</label>
-                    <input type="text" id="csvJumlahDisplay" readonly style="background:#f0f5f0; color:#4a6f4a; font-weight:600; cursor:default;" placeholder="(dari hasil perhitungan)">
-                </div>
-                <div class="form-group">
-                    <label for="csvStartNomor">Nomor Awal</label>
-                    <input type="number" id="csvStartNomor" placeholder="Contoh: 101" min="0" value="1">
-                </div>
-                <div class="form-group">
-                    <label for="csvFormatDigit">Format Digit</label>
-                    <select id="csvFormatDigit">
-                        <option value="0">Tanpa padding (1, 101, 1001)</option>
-                        <option value="3">3 digit (001, 101, 1001)</option>
-                        <option value="4">4 digit (0001, 0101, 1001)</option>
-                        <option value="5" selected>5 digit (00001, 00101, 01001)</option>
-                        <option value="6">6 digit (000001, 000101, 001001)</option>
-                        <option value="7">7 digit (0000001, 0000101, 0001001)</option>
-                    </select>
-                </div>
-            </div>
-
-            <div id="csvPreviewInfo" style="display:none; background:#f8f9f8; border:2px solid #e8f4e8; border-radius:10px; padding:14px 18px; margin-bottom:16px; font-size:0.93em; color:#4a6f4a; line-height:1.8;"></div>
-
-            <button class="copy-btn" id="csvGenerateBtn" style="display:block; background: linear-gradient(135deg, #4a6f4a 0%, #6b8e6b 100%);">⬇️ Generate & Download Excel</button>
-            <div class="copy-feedback" id="csvFeedback">File Excel berhasil diunduh!</div>
         </div>
 
         <footer>
@@ -651,120 +617,7 @@
             copyBtn.style.display = 'block';
         }
         
-        copyBtn.addEventListener('click', function() {
-            const teks = this.getAttribute('data-copy-text');
-            navigator.clipboard.writeText(teks).then(() => {
-                copyFeedback.classList.add('show');
-                setTimeout(() => { copyFeedback.classList.remove('show'); }, 2000);
-            }).catch(err => { console.error('Gagal menyalin:', err); });
-        });
-
-        // === GENERATOR NOMOR URUT CSV ===
-        const csvUkuranDisplay  = document.getElementById('csvUkuranDisplay');
-        const csvJumlahDisplay  = document.getElementById('csvJumlahDisplay');
-        const csvStartNomorInput  = document.getElementById('csvStartNomor');
-        const csvFormatDigitSelect = document.getElementById('csvFormatDigit');
-        const csvGenerateBtn = document.getElementById('csvGenerateBtn');
-        const csvFeedback = document.getElementById('csvFeedback');
-        const csvPreviewInfo = document.getElementById('csvPreviewInfo');
-
-        const kuponPerLembarCSV = { '1/6': 6, '1/8': 8, '1/10': 10, '1/5H': 5, '1/6H': 6 };
-
-        // Ambil nilai aktif dari form atas
-        function getCSVSource() {
-            const ukuran = ukuranKuponSelect.value;
-            // Baca dari teks outputKuponJadi (sudah diformat dengan toLocaleString)
-            const kuponJadiTeks = document.getElementById('outputKuponJadi').textContent.replace(/\./g, '').replace(/,/g, '');
-            const kuponJadi = parseInt(kuponJadiTeks);
-            return { ukuran, kuponJadi: isNaN(kuponJadi) ? null : kuponJadi };
-        }
-
-        function formatNomor(n, digit) {
-            if (digit === 0) return String(n);
-            return String(n).padStart(digit, '0');
-        }
-
-        function updateCSVPreview() {
-            const { ukuran, kuponJadi } = getCSVSource();
-            const startNomor = parseInt(csvStartNomorInput.value);
-            const digit = parseInt(csvFormatDigitSelect.value);
-
-            // Sync display fields
-            csvUkuranDisplay.value = ukuran || '';
-            csvJumlahDisplay.value = kuponJadi != null ? kuponJadi.toLocaleString('id-ID') : '';
-
-            if (!ukuran || kuponJadi == null || isNaN(startNomor)) {
-                csvPreviewInfo.style.display = 'none';
-                return;
-            }
-
-            const kolom = kuponPerLembarCSV[ukuran];
-            const baris = Math.ceil(kuponJadi / kolom);
-
-            // Baris ringkasan
-            let html = `<strong>Preview:</strong> ${kuponJadi.toLocaleString('id-ID')} kupon → ${kolom} kolom × ${baris} baris data<br>`;
-
-            // Per-kolom detail
-            for (let c = 0; c < kolom; c++) {
-                const nomorAwal = startNomor + (c * baris);
-                const nomorAkhir = nomorAwal + baris - 1;
-                html += `<strong>Kolom ${c + 1}:</strong> ${formatNomor(nomorAwal, digit)} sampai ${formatNomor(nomorAkhir, digit)}`;
-                if (c < kolom - 1) html += '<br>';
-            }
-
-            csvPreviewInfo.innerHTML = html;
-            csvPreviewInfo.style.display = 'block';
-        }
-
-        function generateCSV() {
-            const { ukuran, kuponJadi } = getCSVSource();
-            const startNomor = parseInt(csvStartNomorInput.value);
-            const digit = parseInt(csvFormatDigitSelect.value);
-
-            if (!ukuran) { alert('Pilih ukuran kupon di form atas terlebih dahulu.'); return; }
-            if (!kuponJadi || kuponJadi < 1) { alert('Isi jumlah kupon di form atas terlebih dahulu.'); return; }
-            if (isNaN(startNomor) || startNomor < 0) { alert('Masukkan nomor awal yang valid.'); return; }
-
-            const kolom = kuponPerLembarCSV[ukuran];
-            const baris = Math.ceil(kuponJadi / kolom);
-
-            // Buat baris data
-            const rows = [];
-            for (let r = 0; r < baris; r++) {
-                const row = [];
-                for (let c = 0; c < kolom; c++) {
-                    row.push(formatNomor(startNomor + (c * baris) + r, digit));
-                }
-                rows.push(row);
-            }
-
-            // Baris 1 = judul = duplikat baris data pertama
-            const allRows = [rows[0].slice(), ...rows];
-
-            // Pakai SheetJS: set tipe 's' (string) agar leading zero tidak hilang di Excel
-            const wb = XLSX.utils.book_new();
-            const wsData = allRows.map(r => r.map(v => ({ v: v, t: 's' })));
-            const ws = XLSX.utils.aoa_to_sheet(wsData);
-            XLSX.utils.book_append_sheet(wb, ws, 'Nomor Kupon');
-            const filename = `nomor_kupon_${ukuran.replace('/', '')}_${formatNomor(startNomor, digit)}.xlsx`;
-            XLSX.writeFile(wb, filename);
-
-            csvFeedback.classList.add('show');
-            setTimeout(() => { csvFeedback.classList.remove('show'); }, 2000);
-        }
-
-        csvStartNomorInput.addEventListener('input', updateCSVPreview);
-        csvFormatDigitSelect.addEventListener('change', updateCSVPreview);
-        csvGenerateBtn.addEventListener('click', generateCSV);
-
-        // Patch updateOutput agar selalu sync CSV preview setelah hitung
-        const _origUpdateOutput = updateOutput;
-        updateOutput = function() {
-            _origUpdateOutput();
-            setTimeout(updateCSVPreview, 0);
-        };
-
-        // Attach semua event listeners (satu kali, di sini)
+        // Event listeners
         hargaPerLembarInput.addEventListener('change', updateOutput);
         biayaFinishingInput.addEventListener('change', updateOutput);
         thresholdInput.addEventListener('change', updateOutput);
@@ -773,30 +626,14 @@
             showVisualisasi(this.value);
         });
         jumlahKuponInput.addEventListener('input', updateOutput);
-
-        // === ROLE-BASED VISIBILITY (baca dari localStorage index.html) ===
-        (function applyRole() {
-            try {
-                const allowed = JSON.parse(localStorage.getItem('allowedCategories'));
-                // null = full access (password "196b")
-                // ["🛠️ Helpful Tools"] = restricted (password "desain")
-                if (allowed && !allowed.includes('📋 Administrasi')) {
-                    // Ganti teks judul & section
-                    document.getElementById('pageTitle').textContent = 'Generator Nomor Urut Kupon';
-                    document.getElementById('pageSubtitle').textContent = 'Perhitungan Kebutuhan Kertas & Generator Nomor Urut';
-                    document.getElementById('sectionHarga').textContent = 'Pengaturan';
-
-                    // Sembunyikan elemen sensitif
-                    const hide = [
-                        document.querySelector('.form-group:has(#hargaPerLembar)'),
-                        document.querySelector('.form-group:has(#biayaFinishing)'),
-                        document.querySelector('.final-price'),
-                        document.getElementById('copyBtn'),
-                    ];
-                    hide.forEach(el => { if (el) el.style.display = 'none'; });
-                }
-            } catch(e) {}
-        })();
+        
+        copyBtn.addEventListener('click', function() {
+            const teks = this.getAttribute('data-copy-text');
+            navigator.clipboard.writeText(teks).then(() => {
+                copyFeedback.classList.add('show');
+                setTimeout(() => { copyFeedback.classList.remove('show'); }, 2000);
+            }).catch(err => { console.error('Gagal menyalin:', err); });
+        });
     </script>
 </body>
 </html>

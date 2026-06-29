@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Image - Pembagi Gambar</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --secondary: #06b6d4;
+            --secondary-light: #22d3ee;
+            --dark-bg: #0f1419;
+            --dark-card: #1a1f2e;
+            --dark-hover: #252d3d;
+            --border: #2d3748;
+            --text-primary: #e5e7eb;
+            --text-secondary: #9ca3af;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #0f1419 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Animated background gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+            animation: aura 15s ease-in-out infinite;
+        }
+
+        @keyframes aura {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(30px, 30px);
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(26, 31, 46, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        inset 0 0 1px rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(90deg, var(--primary) 0%, transparent 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(139, 92, 246, 0.4);
+            border-radius: 16px;
+            padding: 50px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(26, 31, 46, 0.4);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: rgba(139, 92, 246, 0.6);
+            background: rgba(26, 31, 46, 0.6);
+        }
+
+        .upload-area:hover::before {
+            opacity: 1;
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(139, 92, 246, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-area input {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .upload-text {
+            font-size: 14px;
+            color: var(--text-primary);
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .upload-text small {
+            color: var(--text-secondary);
+            display: block;
+            margin-top: 6px;
+        }
+
+        .preview-container {
+            max-height: 400px;
+            overflow: auto;
+            border-radius: 12px;
+            padding: 12px;
+            background: rgba(26, 31, 46, 0.4);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        .preview-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .preview-container::-webkit-scrollbar-track {
+            background: rgba(139, 92, 246, 0.05);
+            border-radius: 4px;
+        }
+
+        .preview-container::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.3);
+            border-radius: 4px;
+        }
+
+        .preview-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.5);
+        }
+
+        .preview-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .control-group {
+            background: rgba(26, 31, 46, 0.4);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            border-left: 3px solid var(--primary);
+        }
+
+        .control-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .radio-option:hover {
+            background: rgba(139, 92, 246, 0.15);
+        }
+
+        .radio-option input[type="radio"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .radio-option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+            position: relative;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 13px;
+            background: rgba(26, 31, 46, 0.5);
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(139, 92, 246, 0.1);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .input-group input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 8px;
+            background: rgba(139, 92, 246, 0.05);
+            transition: all 0.2s;
+        }
+
+        .checkbox-option:hover {
+            background: rgba(139, 92, 246, 0.15);
+        }
+
+        .checkbox-option input[type="checkbox"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-option label {
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn:hover::before {
+            opacity: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            grid-column: 1 / -1;
+            border: 1px solid rgba(139, 92, 246, 0.5);
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(26, 31, 46, 0.6);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(26, 31, 46, 0.8);
+            border-color: var(--primary);
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-small {
+            padding: 8px 12px;
+            font-size: 11px;
+            border-radius: 6px;
+        }
+
+        .output-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .output-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(26, 31, 46, 0.4);
+            border: 1px solid var(--border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .output-item:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.2);
+        }
+
+        .output-item-image {
+            width: 100%;
+            height: 140px;
+            overflow: hidden;
+            background: rgba(15, 20, 25, 0.5);
+        }
+
+        .output-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .output-item-info {
+            padding: 8px;
+            background: rgba(15, 20, 25, 0.6);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border);
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .output-item-buttons {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 20, 25, 0.85);
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            padding: 12px;
+        }
+
+        .output-item:hover .output-item-buttons {
+            opacity: 1;
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 7px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .download-btn.copy {
+            background: rgba(139, 92, 246, 0.3);
+        }
+
+        .info-box {
+            background: rgba(6, 182, 212, 0.1);
+            border-left: 3px solid var(--secondary);
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: var(--secondary-light);
+            line-height: 1.5;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .error-box {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid #ef4444;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #fca5a5;
+            line-height: 1.5;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--primary);
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(139, 92, 246, 0.2);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .stats {
+            background: rgba(26, 31, 46, 0.4);
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+        }
+
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+        }
+
+        .stats-item strong {
+            color: var(--text-primary);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .download-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .download-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(26, 31, 46, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s;
+        }
+
+        .download-item:hover {
+            border-color: var(--primary);
+            background: rgba(26, 31, 46, 0.6);
+        }
+
+        .download-item-name {
+            font-size: 13px;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-family: 'Courier New', monospace;
+        }
+
+        .download-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .quality-slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(to right, 
+                var(--primary) 0%, 
+                var(--secondary) 100%);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            margin-top: 8px;
+        }
+
+        .quality-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+            transition: all 0.2s;
+        }
+
+        .quality-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+
+        .quality-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+            transition: all 0.2s;
+        }
+
+        .quality-slider::-moz-range-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+
+        .quality-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        .quality-value {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔀 Split Image</h1>
+            <p>Bagi gambar Anda menjadi potongan-potongan dengan mudah</p>
+        </div>
+
+        <div class="content">
+            <!-- Upload Section -->
+            <div class="section">
+                <div class="section-title">📤 Unggah Gambar</div>
+                
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📸</div>
+                    <div class="upload-text">
+                        <strong>Klik atau seret gambar ke sini</strong><br>
+                        <small>PNG, JPG, WebP, atau BMP</small>
+                    </div>
+                    <input type="file" id="fileInput" accept="image/*">
+                </div>
+            </div>
+
+            <!-- Preview & Controls Section -->
+            <div id="preview" style="display:none;">
+                <div class="section">
+                    <div class="section-title">👁️ Preview</div>
+                    <div style="max-width: 400px; margin: 0 auto;">
+                        <div class="preview-container">
+                            <img id="previewImg" alt="Preview">
+                        </div>
+                    </div>
+
+                    <div id="controls" class="section" style="margin-top: 30px;">
+                            <div class="section-title">⚙️ Pengaturan</div>
+                            
+                            <!-- Split Direction -->
+                            <div class="control-group">
+                                <label class="control-label">Arah Pemisahan</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="splitVertical" name="splitMode" value="vertical" checked>
+                                        <label for="splitVertical">Vertikal (atas-bawah)</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="splitHorizontal" name="splitMode" value="horizontal">
+                                        <label for="splitHorizontal">Horizontal (kiri-kanan)</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="splitBoth" name="splitMode" value="both">
+                                        <label for="splitBoth">Keduanya (Grid)</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Vertical Controls -->
+                            <div id="verticalControls" class="control-group">
+                                <label class="control-label">Vertikal - Bagi Berdasarkan</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="vertQuantity" name="vertMode" value="quantity" checked>
+                                        <label for="vertQuantity">Jumlah Blok (tinggi sama)</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="vertHeight" name="vertMode" value="height">
+                                        <label for="vertHeight">Tinggi Blok (px)</label>
+                                    </div>
+                                </div>
+                                <div class="input-group" id="vertQuantityInput">
+                                    <input type="number" id="vertQtyValue" placeholder="Jumlah" min="1" value="2">
+                                </div>
+                                <div class="input-group" id="vertHeightInput" style="display:none;">
+                                    <input type="number" id="vertHeightValue" placeholder="Tinggi (px)" min="1" value="100">
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="vertOverlap">
+                                    <label for="vertOverlap">Overlap Blok</label>
+                                </div>
+                                <div class="input-group" id="vertOverlapInput" style="display:none;">
+                                    <input type="number" id="vertOverlapValue" placeholder="Overlap (px)" min="0" value="0">
+                                </div>
+                            </div>
+
+                            <!-- Horizontal Controls -->
+                            <div id="horizontalControls" class="control-group" style="display:none;">
+                                <label class="control-label">Horizontal - Bagi Berdasarkan</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="horQuantity" name="horMode" value="quantity" checked>
+                                        <label for="horQuantity">Jumlah Blok (lebar sama)</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="horWidth" name="horMode" value="width">
+                                        <label for="horWidth">Lebar Blok (px)</label>
+                                    </div>
+                                </div>
+                                <div class="input-group" id="horQuantityInput">
+                                    <input type="number" id="horQtyValue" placeholder="Jumlah" min="1" value="2">
+                                </div>
+                                <div class="input-group" id="horWidthInput" style="display:none;">
+                                    <input type="number" id="horWidthValue" placeholder="Lebar (px)" min="1" value="100">
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="horOverlap">
+                                    <label for="horOverlap">Overlap Blok</label>
+                                </div>
+                                <div class="input-group" id="horOverlapInput" style="display:none;">
+                                    <input type="number" id="horOverlapValue" placeholder="Overlap (px)" min="0" value="0">
+                                </div>
+                            </div>
+
+                            <!-- Output Format -->
+                            <div class="control-group">
+                                <label class="control-label">Format Output</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="formatSame" name="format" value="same" checked>
+                                        <label for="formatSame">Sama seperti input</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="formatPng" name="format" value="png">
+                                        <label for="formatPng">PNG</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="formatJpg" name="format" value="jpg">
+                                        <label for="formatJpg">JPG/JPEG</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="formatWebp" name="format" value="webp">
+                                        <label for="formatWebp">WebP</label>
+                                    </div>
+                                </div>
+                                <label class="control-label" style="margin-top: 14px;">Kualitas</label>
+                                <input type="range" id="quality" class="quality-slider" min="1" max="100" value="90">
+                                <div class="quality-display">
+                                    <span>Rendah</span>
+                                    <span class="quality-value" id="qualityValue">90%</span>
+                                    <span>Tinggi</span>
+                                </div>
+                            </div>
+
+                            <div class="button-group">
+                                <button class="btn btn-primary" id="splitBtn" onclick="splitImage()">🔪 Potong Gambar</button>
+                                <button class="btn btn-secondary" id="resetBtn" onclick="reset()">↻ Reset</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="infoBox" class="info-box" style="display:none; margin-top: 20px;">
+                        <div class="stats">
+                            <div class="stats-item">
+                                <strong>Dimensi:</strong>
+                                <span id="imageDims">-</span>
+                            </div>
+                            <div class="stats-item">
+                                <strong>Ukuran:</strong>
+                                <span id="imageSize">-</span>
+                            </div>
+                            <div class="stats-item">
+                                <strong>Potongan:</strong>
+                                <span id="pieceCount">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="errorBox" class="error-box" style="display:none; margin-top: 20px;"></div>
+                </div>
+            </div>
+
+            <!-- Output Section -->
+            <div id="outputSection" style="display:none;">
+                <div class="section">
+                    <div class="section-title">📦 Hasil Potongan</div>
+                    
+                    <div id="loading" class="loading">
+                        <div class="spinner"></div>
+                        <p style="margin-top: 12px; font-size: 13px;">Sedang memproses...</p>
+                    </div>
+
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab('grid', event)">Grid View</button>
+                        <button class="tab-btn" onclick="switchTab('download', event)">Download</button>
+                    </div>
+
+                    <div id="gridTab" class="tab-content active">
+                        <div id="outputGrid" class="output-grid"></div>
+                    </div>
+
+                    <div id="downloadTab" class="tab-content">
+                        <button class="btn btn-primary" onclick="downloadAll()" style="margin-bottom: 20px;">
+                            📥 Download Semua (ZIP)
+                        </button>
+                        <div id="downloadList" class="download-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentImage = null;
+        let outputPieces = [];
+        let inputFormat = 'png';
+        let originalFileName = '';
+
+        // Setup event listeners
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        // Split mode radio handlers
+        document.querySelectorAll('input[name="splitMode"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const mode = e.target.value;
+                document.getElementById('verticalControls').style.display = 
+                    (mode === 'vertical' || mode === 'both') ? 'block' : 'none';
+                document.getElementById('horizontalControls').style.display = 
+                    (mode === 'horizontal' || mode === 'both') ? 'block' : 'none';
+            });
+        });
+
+        // Vertical mode handlers
+        document.querySelectorAll('input[name="vertMode"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const mode = e.target.value;
+                document.getElementById('vertQuantityInput').style.display = 
+                    mode === 'quantity' ? 'flex' : 'none';
+                document.getElementById('vertHeightInput').style.display = 
+                    mode === 'height' ? 'flex' : 'none';
+            });
+        });
+
+        // Horizontal mode handlers
+        document.querySelectorAll('input[name="horMode"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const mode = e.target.value;
+                document.getElementById('horQuantityInput').style.display = 
+                    mode === 'quantity' ? 'flex' : 'none';
+                document.getElementById('horWidthInput').style.display = 
+                    mode === 'width' ? 'flex' : 'none';
+            });
+        });
+
+        // Overlap checkbox handlers
+        document.getElementById('vertOverlap').addEventListener('change', (e) => {
+            document.getElementById('vertOverlapInput').style.display = 
+                e.target.checked ? 'flex' : 'none';
+        });
+
+        document.getElementById('horOverlap').addEventListener('change', (e) => {
+            document.getElementById('horOverlapInput').style.display = 
+                e.target.checked ? 'flex' : 'none';
+        });
+
+        // Quality slider
+        document.getElementById('quality').addEventListener('input', (e) => {
+            document.getElementById('qualityValue').textContent = e.target.value + '%';
+        });
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                showError('Silakan pilih file gambar yang valid');
+                return;
+            }
+
+            // Extract filename without extension
+            const nameWithoutExt = file.name.replace(/\.[^/.]+$/, '');
+            originalFileName = nameWithoutExt;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    currentImage = img;
+                    inputFormat = file.type.split('/')[1].toLowerCase();
+                    if (inputFormat === 'jpeg') inputFormat = 'jpg';
+
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('preview').style.display = 'block';
+                    document.getElementById('controls').style.display = 'block';
+                    document.getElementById('infoBox').style.display = 'block';
+                    document.getElementById('outputSection').style.display = 'none';
+
+                    // Update info
+                    document.getElementById('imageDims').textContent = 
+                        `${img.width} × ${img.height} px`;
+                    document.getElementById('imageSize').textContent = 
+                        `${(file.size / 1024).toFixed(2)} KB`;
+                    document.getElementById('errorBox').style.display = 'none';
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function splitImage() {
+            if (!currentImage) return;
+
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('outputSection').style.display = 'none';
+
+            setTimeout(() => {
+                try {
+                    outputPieces = [];
+                    const mode = document.querySelector('input[name="splitMode"]:checked').value;
+                    
+                    if (mode === 'vertical') {
+                        splitVertical();
+                    } else if (mode === 'horizontal') {
+                        splitHorizontal();
+                    } else {
+                        splitBoth();
+                    }
+
+                    // Wait untuk semua pieces ter-generate
+                    setTimeout(() => {
+                        displayOutput();
+                        document.getElementById('pieceCount').textContent = outputPieces.length;
+                        document.getElementById('loading').classList.remove('active');
+                        document.getElementById('outputSection').style.display = 'block';
+                    }, 500);
+                } catch (err) {
+                    showError('Terjadi kesalahan: ' + err.message);
+                    document.getElementById('loading').classList.remove('active');
+                }
+            }, 100);
+        }
+
+        function splitVertical() {
+            const img = currentImage;
+            const mode = document.querySelector('input[name="vertMode"]:checked').value;
+            const overlap = document.getElementById('vertOverlap').checked ? 
+                parseInt(document.getElementById('vertOverlapValue').value) || 0 : 0;
+
+            let pieces = [];
+            
+            if (mode === 'quantity') {
+                const quantity = parseInt(document.getElementById('vertQtyValue').value) || 1;
+                const blockHeight = img.height / quantity;
+                
+                for (let i = 0; i < quantity; i++) {
+                    const y = i * blockHeight - (i > 0 ? overlap : 0);
+                    const h = blockHeight + (i > 0 ? overlap : 0) + (i < quantity - 1 ? overlap : 0);
+                    pieces.push({ x: 0, y: Math.max(0, y), w: img.width, h: Math.min(h, img.height - y) });
+                }
+            } else {
+                const blockHeight = parseInt(document.getElementById('vertHeightValue').value) || 100;
+                let y = 0;
+                let idx = 0;
+                
+                while (y < img.height) {
+                    const startY = Math.max(0, y - (idx > 0 ? overlap : 0));
+                    const h = Math.min(blockHeight + (idx > 0 ? overlap : 0) + overlap, img.height - startY);
+                    pieces.push({ x: 0, y: startY, w: img.width, h });
+                    y += blockHeight;
+                    idx++;
+                }
+            }
+
+            extractPieces(pieces);
+        }
+
+        function splitHorizontal() {
+            const img = currentImage;
+            const mode = document.querySelector('input[name="horMode"]:checked').value;
+            const overlap = document.getElementById('horOverlap').checked ? 
+                parseInt(document.getElementById('horOverlapValue').value) || 0 : 0;
+
+            let pieces = [];
+            
+            if (mode === 'quantity') {
+                const quantity = parseInt(document.getElementById('horQtyValue').value) || 1;
+                const blockWidth = img.width / quantity;
+                
+                for (let i = 0; i < quantity; i++) {
+                    const x = i * blockWidth - (i > 0 ? overlap : 0);
+                    const w = blockWidth + (i > 0 ? overlap : 0) + (i < quantity - 1 ? overlap : 0);
+                    pieces.push({ x: Math.max(0, x), y: 0, w: Math.min(w, img.width - x), h: img.height });
+                }
+            } else {
+                const blockWidth = parseInt(document.getElementById('horWidthValue').value) || 100;
+                let x = 0;
+                let idx = 0;
+                
+                while (x < img.width) {
+                    const startX = Math.max(0, x - (idx > 0 ? overlap : 0));
+                    const w = Math.min(blockWidth + (idx > 0 ? overlap : 0) + overlap, img.width - startX);
+                    pieces.push({ x: startX, y: 0, w, h: img.height });
+                    x += blockWidth;
+                    idx++;
+                }
+            }
+
+            extractPieces(pieces);
+        }
+
+        function splitBoth() {
+            const img = currentImage;
+            const vertMode = document.querySelector('input[name="vertMode"]:checked').value;
+            const horMode = document.querySelector('input[name="horMode"]:checked').value;
+            const vertOverlap = document.getElementById('vertOverlap').checked ? 
+                parseInt(document.getElementById('vertOverlapValue').value) || 0 : 0;
+            const horOverlap = document.getElementById('horOverlap').checked ? 
+                parseInt(document.getElementById('horOverlapValue').value) || 0 : 0;
+
+            let vertPieces = [];
+            let horPieces = [];
+
+            // Vertical division
+            if (vertMode === 'quantity') {
+                const quantity = parseInt(document.getElementById('vertQtyValue').value) || 1;
+                const blockHeight = img.height / quantity;
+                for (let i = 0; i < quantity; i++) {
+                    const y = i * blockHeight - (i > 0 ? vertOverlap : 0);
+                    vertPieces.push({ start: Math.max(0, y), size: blockHeight + (i > 0 ? vertOverlap : 0) + (i < quantity - 1 ? vertOverlap : 0) });
+                }
+            } else {
+                const blockHeight = parseInt(document.getElementById('vertHeightValue').value) || 100;
+                let y = 0;
+                let idx = 0;
+                while (y < img.height) {
+                    const startY = Math.max(0, y - (idx > 0 ? vertOverlap : 0));
+                    vertPieces.push({ start: startY, size: Math.min(blockHeight + (idx > 0 ? vertOverlap : 0) + vertOverlap, img.height - startY) });
+                    y += blockHeight;
+                    idx++;
+                }
+            }
+
+            // Horizontal division
+            if (horMode === 'quantity') {
+                const quantity = parseInt(document.getElementById('horQtyValue').value) || 1;
+                const blockWidth = img.width / quantity;
+                for (let i = 0; i < quantity; i++) {
+                    const x = i * blockWidth - (i > 0 ? horOverlap : 0);
+                    horPieces.push({ start: Math.max(0, x), size: blockWidth + (i > 0 ? horOverlap : 0) + (i < quantity - 1 ? horOverlap : 0) });
+                }
+            } else {
+                const blockWidth = parseInt(document.getElementById('horWidthValue').value) || 100;
+                let x = 0;
+                let idx = 0;
+                while (x < img.width) {
+                    const startX = Math.max(0, x - (idx > 0 ? horOverlap : 0));
+                    horPieces.push({ start: startX, size: Math.min(blockWidth + (idx > 0 ? horOverlap : 0) + horOverlap, img.width - startX) });
+                    x += blockWidth;
+                    idx++;
+                }
+            }
+
+            // Create grid
+            let pieces = [];
+            for (let v of vertPieces) {
+                for (let h of horPieces) {
+                    pieces.push({ x: h.start, y: v.start, w: h.size, h: v.size });
+                }
+            }
+
+            extractPieces(pieces);
+        }
+
+        function extractPieces(pieces) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const format = document.querySelector('input[name="format"]:checked').value;
+            const finalFormat = format === 'same' ? inputFormat : format;
+            const quality = parseInt(document.getElementById('quality').value) / 100;
+
+            for (let i = 0; i < pieces.length; i++) {
+                const piece = pieces[i];
+                canvas.width = piece.w;
+                canvas.height = piece.h;
+                ctx.drawImage(currentImage, piece.x, piece.y, piece.w, piece.h, 0, 0, piece.w, piece.h);
+                
+                canvas.toBlob((blob) => {
+                    outputPieces.push({
+                        index: i,
+                        blob: blob,
+                        url: URL.createObjectURL(blob),
+                        format: finalFormat
+                    });
+                }, `image/${finalFormat === 'jpg' ? 'jpeg' : finalFormat}`, quality);
+            }
+        }
+
+        function displayOutput() {
+            const grid = document.getElementById('outputGrid');
+            grid.innerHTML = '';
+
+            // Sort by index
+            const sorted = [...outputPieces].sort((a, b) => a.index - b.index);
+
+            for (let piece of sorted) {
+                const div = document.createElement('div');
+                div.className = 'output-item';
+                const fileName = `${originalFileName}-${piece.index + 1}.${piece.format}`;
+                const imageDiv = document.createElement('div');
+                imageDiv.className = 'output-item-image';
+                imageDiv.innerHTML = `<img src="${piece.url}" alt="Piece ${piece.index + 1}">`;
+                
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'output-item-info';
+                infoDiv.textContent = `${piece.index + 1}`;
+                
+                const buttonsDiv = document.createElement('div');
+                buttonsDiv.className = 'output-item-buttons';
+                buttonsDiv.innerHTML = `
+                    <button class="download-btn" onclick="downloadSingle(${piece.index}, '${fileName}')">📥 Download</button>
+                    <button class="download-btn copy" onclick="copyImageToClipboard(${piece.index})">📋 Copy Image</button>
+                `;
+                
+                div.appendChild(imageDiv);
+                div.appendChild(infoDiv);
+                div.appendChild(buttonsDiv);
+                grid.appendChild(div);
+            }
+
+            // Download list
+            const downloadList = document.getElementById('downloadList');
+            downloadList.innerHTML = '';
+            for (let piece of sorted) {
+                const fileName = `${originalFileName}-${piece.index + 1}.${piece.format}`;
+                const div = document.createElement('div');
+                div.className = 'download-item';
+                div.innerHTML = `
+                    <span class="download-item-name">${fileName}</span>
+                    <div class="download-item-actions">
+                        <button class="btn btn-secondary btn-small" onclick="downloadSingle(${piece.index}, '${fileName}')">Download</button>
+                        <button class="btn btn-secondary btn-small" onclick="copyImageToClipboard(${piece.index})">Copy Image</button>
+                    </div>
+                `;
+                downloadList.appendChild(div);
+            }
+        }
+
+        function downloadSingle(index, fileName) {
+            const piece = outputPieces.find(p => p.index === index);
+            if (piece) {
+                const a = document.createElement('a');
+                a.href = piece.url;
+                a.download = fileName;
+                a.click();
+            }
+        }
+
+        function copyImageToClipboard(index) {
+            const piece = outputPieces.find(p => p.index === index);
+            if (piece) {
+                piece.blob.arrayBuffer().then(buffer => {
+                    const data = new ClipboardItem({
+                        [piece.blob.type]: new Blob([buffer], { type: piece.blob.type })
+                    });
+                    navigator.clipboard.write([data]).then(() => {
+                        // Visual feedback
+                        const btn = event.target;
+                        const originalText = btn.textContent;
+                        btn.textContent = '✓ Copied!';
+                        setTimeout(() => {
+                            btn.textContent = originalText;
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Failed to copy image:', err);
+                        alert('Gagal copy image ke clipboard');
+                    });
+                });
+            }
+        }
+
+        async function downloadAll() {
+            const zip = new JSZip();
+            const sorted = [...outputPieces].sort((a, b) => a.index - b.index);
+            
+            for (let piece of sorted) {
+                const fileName = `${originalFileName}-${piece.index + 1}.${piece.format}`;
+                const data = await piece.blob.arrayBuffer();
+                zip.file(fileName, data);
+            }
+            
+            // Generate timestamp: dd-mm-yyyy-hhhmmmsss
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
+            
+            const timestamp = `${day}-${month}-${year}_${hours}h${minutes}m${seconds}s`;
+            const zipFileName = `${originalFileName}-splitted_${timestamp}.zip`;
+            
+            const blob = await zip.generateAsync({ type: 'blob' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = zipFileName;
+            a.click();
+        }
+
+        function switchTab(tab, event) {
+            event.preventDefault();
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tab + 'Tab').classList.add('active');
+        }
+
+        function reset() {
+            currentImage = null;
+            outputPieces = [];
+            originalFileName = '';
+            fileInput.value = '';
+            document.getElementById('preview').style.display = 'none';
+            document.getElementById('infoBox').style.display = 'none';
+            document.getElementById('outputSection').style.display = 'none';
+            document.getElementById('errorBox').style.display = 'none';
+            document.getElementById('outputGrid').innerHTML = '';
+        }
+
+        function showError(message) {
+            const errorBox = document.getElementById('errorBox');
+            errorBox.textContent = message;
+            errorBox.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

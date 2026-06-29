@@ -243,9 +243,9 @@
         .category-label:first-child { margin-top: 0; }
 
         #logout-topbar-btn {
-            background: rgba(255,255,255,0.15);
+background: rgba(255, 0, 0, 0.15); /* merah transparan */
             color: white;
-            border: 1.5px solid rgba(255,255,255,0.5);
+    border: 1.5px solid rgba(255, 0, 0, 0.5); 
             border-radius: 8px;
             padding: 7px 14px;
             font-size: 0.85em;
@@ -259,7 +259,8 @@
             white-space: nowrap;
             flex-shrink: 0;
         }
-        #logout-topbar-btn:hover { background: rgba(255,255,255,0.3); border-color: white; }
+        #logout-topbar-btn:hover {     background: rgba(255, 0, 0, 0.3); /* lebih pekat saat hover */
+    border-color: rgba(255, 0, 0, 0.7); }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -521,7 +522,7 @@
             <div class="content-topbar">
                 <button id="back-btn">← Kembali</button>
                 <span id="page-title"></span>
-                <button id="logout-topbar-btn" onclick="logout()" title="Logout">🚪 Logout</button>
+                <button id="logout-topbar-btn" onclick="logout()" title="Logout">➜] Logout</button>
             </div>
             <div id="iframe-container"></div>
         </div>

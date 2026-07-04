@@ -60,14 +60,14 @@
     grid-template-columns: 330px 380px 1fr;
     align-items:start;
   }
-  @media (max-width: 1180px){ .app{ grid-template-columns: 300px 1fr; } .preview-pane{ display:none; } }
+  @media (max-width: 1180px){ .app{ grid-template-columns: 300px 1fr; } .preview-pane{ grid-column: 1 / -1; } }
   @media (max-width: 760px){ .app{ grid-template-columns: 1fr; } }
 
   .pane{ height: calc(100vh - 61px); overflow-y:auto; }
   .library-pane{ padding: 18px 18px 60px; border-right: 1px solid var(--rule); position:sticky; top:0; }
   .cart-pane{ padding: 18px 20px 40px; border-right: 1px solid var(--rule); position:sticky; top:0; background: var(--paper-alt); }
   .preview-pane{ padding: 18px 24px 60px; position:sticky; top:0; }
-  @media (max-width: 1180px){ .library-pane, .cart-pane{ position:static; height:auto; } }
+  @media (max-width: 1180px){ .library-pane, .cart-pane, .preview-pane{ position:static; height:auto; } }
   @media (max-width: 760px){ .pane{ height:auto; border-right:none; border-bottom:1px solid var(--rule); } }
 
   /* ---------- Library: search + tabs + list ---------- */
@@ -166,7 +166,7 @@
     border:1px dashed var(--rule); border-radius:var(--radius); padding:20px 12px; text-align:center;
     color: var(--ink-soft); font-size:12.5px;
   }
-  .export-btn{ width:100%; padding:12px; font-size:14px; margin-top:10px; }
+  .export-btn{ width:100%; padding:12px; font-size:14px; margin-top:10px; max-width:620px;}
 
   /* ---------- Preview pane ---------- */
   .preview-pane h2.title{ font-family:'Fraunces', serif; font-size:19px; margin: 0 0 4px; color: var(--indigo-deep); }
@@ -264,7 +264,6 @@
     <div class="cart-list" id="cartList"></div>
 
     <button class="btn dashed" id="addBreakBtn">+ Tambah Break / Pembatas Sesi</button>
-    <button class="btn export-btn" id="exportBtn" disabled>Unduh PDF</button>
   </aside>
 
   <!-- RIGHT: preview -->
@@ -272,6 +271,7 @@
     <h2 class="title">Pratinjau</h2>
     <div class="sub">Tampilan lagu-lagu sesuai urutan di daftar pujian.</div>
     <div class="preview-sheet" id="previewSheet"></div>
+	<button class="btn export-btn" id="exportBtn" disabled>Unduh PDF</button>
   </section>
 </div>
 

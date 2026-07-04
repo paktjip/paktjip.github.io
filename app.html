@@ -198,12 +198,12 @@
   .close-x{ background:none; border:none; font-size:20px; cursor:pointer; color: var(--ink-soft); line-height:1; padding:2px 6px; }
   .ebody{ padding: 16px 24px 8px; max-height: 50vh; overflow-y:auto; }
   .ebody p.hint{ font-size:12.5px; color:var(--ink-soft); margin:0 0 12px; }
-  .sec-row{ display:flex; align-items:center; gap:10px; border:1px solid var(--rule); border-radius: var(--radius); padding:9px 12px; margin-bottom:8px; background: var(--paper); cursor: grab; }
+  .sec-row{ display:flex; align-items:flex-start; gap:10px; border:1px solid var(--rule); border-radius: var(--radius); padding:9px 12px; margin-bottom:8px; background: var(--paper); cursor: grab; }
   .sec-row.dragging{ opacity:.4; }
   .sec-row .handle{ color: var(--rule); font-family:monospace; letter-spacing:2px; user-select:none; }
-  .sec-row label{ flex:1; font-size:13.5px; display:flex; align-items:center; gap:10px; cursor:pointer; }
+  .sec-row label{ flex:1; font-size:13.5px; display:flex; align-items:flex-start; gap:10px; cursor:pointer; }
   .sec-row .tagchip{ font-family:'IBM Plex Mono', monospace; font-size:10px; text-transform:uppercase; background:var(--indigo-deep); color:var(--white); padding:2px 7px; border-radius:3px; flex-shrink:0; }
-  .sec-row .preview{ font-size:11.5px; color: var(--ink-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .sec-row .preview{ font-size:11.5px; color: var(--ink-soft); line-height: 1.5; }
   .efoot{ padding: 14px 24px 22px; display:flex; justify-content:flex-end; gap:10px; border-top:1px solid var(--rule); }
 
   .toast{
@@ -536,7 +536,7 @@ function renderSectionList(){
       <label>
         <input type="checkbox" data-idx="${idx}" ${s.checked ? 'checked' : ''}>
         <span class="tagchip">${s.label}</span>
-        <span class="preview">${escapeHtml(flattenLines(s.lines))}</span>
+        <span class="preview">${linesToHtml(s.lines)}</span>
       </label>
     </div>
   `).join('');

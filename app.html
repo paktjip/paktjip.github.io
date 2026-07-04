@@ -382,27 +382,29 @@ async function scanLibrary(){
   const statusEl = document.getElementById('scanStatus');
   let filenames = [];
 
-  // 1. Try directory listing (Apache/nginx autoindex) of current folder.
+  // 1. Try library-manifest.json first — this is the reliable method on
+  //    static hosts like GitHub Pages, which don't offer directory listing.
   try{
-    const res = await fetch('./', { cache: 'no-store' });
+    const res = await fetch('./library/library-manifest.json', { cache: 'no-store' });
     if(res.ok){
-      const html = await res.text();
-      const doc = new DOMParser().parseFromString(html, 'text/html');
-      const anchors = Array.from(doc.querySelectorAll('a[href]'));
-      filenames = anchors
-        .map(a => decodeURIComponent(a.getAttribute('href')))
-        .filter(href => /\.txt$/i.test(href) && !href.startsWith('http') && !href.includes('/'))
-        .filter((v,i,arr) => arr.indexOf(v) === i);
+      const data = await res.json();
+      if(Array.isArray(data)) filenames = data.filter(f => /\.txt$/i.test(f));
     }
   }catch(e){ /* ignore, fall through */ }
 
-  // 2. Try a manifest.json file (optional, more reliable than autoindex).
+  // 2. Fall back to directory listing (works on Apache/nginx with autoindex
+  //    on, but NOT on GitHub Pages or other static hosts).
   if(filenames.length === 0){
     try{
-      const res = await fetch('./library-manifest.json', { cache: 'no-store' });
+      const res = await fetch('./library/', { cache: 'no-store' });
       if(res.ok){
-        const data = await res.json();
-        if(Array.isArray(data)) filenames = data.filter(f => /\.txt$/i.test(f));
+        const html = await res.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const anchors = Array.from(doc.querySelectorAll('a[href]'));
+        filenames = anchors
+          .map(a => decodeURIComponent(a.getAttribute('href')))
+          .filter(href => /\.txt$/i.test(href) && !href.startsWith('http') && !href.includes('/'))
+          .filter((v,i,arr) => arr.indexOf(v) === i);
       }
     }catch(e){ /* ignore */ }
   }
@@ -417,7 +419,7 @@ async function scanLibrary(){
   const songs = [];
   for(const fname of filenames){
     try{
-      const r = await fetch('./' + encodeURIComponent(fname));
+      const r = await fetch('./library/' + encodeURIComponent(fname));
       const text = await r.text();
       const parsed = parseSong(fname, text);
       songs.push({

@@ -310,6 +310,16 @@ function uid(){ return Math.random().toString(36).slice(2,10); }
 function cap(tag){ return tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase(); }
 function isAnimasiFile(filename){ return /animasi/i.test(filename); }
 function flattenLines(lines){ return lines.filter(l => l.trim() !== '').join(' / '); }
+function linesToHtml(lines){
+  return lines.filter(l => l.trim() !== '').map(l => escapeHtml(l)).join('<br>');
+}
+function cleanTitle(raw){
+  let t = (raw || '').replace(/_/g, ' ').replace(/[()]/g, ' ');
+  t = t.split(/\s+/).filter(w => w && !/^(decoded|animasi)$/i.test(w)).join(' ');
+  t = t.replace(/\s+/g, ' ').trim();
+  t = t.replace(/^-+\s*/, '').replace(/\s*-+$/, '').trim();
+  return t || raw;
+}
 function escapeHtml(str){
   return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
@@ -336,6 +346,7 @@ function parseSong(filename, text){
     title = rawLines[0].replace(/^title\s*:/i,'').trim() || title;
     startIdx = 1;
   }
+  title = cleanTitle(title);
   const sections = [];
   let current = null;
   const counts = {};
@@ -592,7 +603,7 @@ document.getElementById('saveEditor').addEventListener('click', () => {
 
 /* ============================= CART (daftar pujian) ============================= */
 document.getElementById('addBreakBtn').addEventListener('click', () => {
-  state.cart.push({ type: 'break', cartId: uid(), label: 'Sesi Baru' });
+  state.cart.push({ type: 'break', cartId: uid(), label: '' });
   renderCart();
   renderPreview();
 });
@@ -614,7 +625,7 @@ function renderCart(){
       return `
         <div class="cart-item break-item" draggable="true" data-idx="${idx}">
           <span class="icon-btn" style="cursor:grab;">⠿⠿</span>
-          <input type="text" value="${escapeHtml(item.label)}" data-break-idx="${idx}" placeholder="Nama sesi / break">
+          <input type="text" value="${escapeHtml(item.label)}" data-break-idx="${idx}" placeholder="Sesi Baru">
           <button class="icon-btn danger" data-action="remove" data-idx="${idx}" title="Hapus">✕</button>
         </div>`;
     }
@@ -691,13 +702,13 @@ function renderPreview(){
     let songNum = 0;
     state.cart.forEach(item => {
       if(item.type === 'break'){
-        html += `<div class="preview-break">${escapeHtml(item.label || 'Break')}</div>`;
+        html += `<div class="preview-break">${escapeHtml(item.label || 'Sesi Baru')}</div>`;
         return;
       }
       songNum++;
       html += `<div class="preview-song"><h4>${songNum}. ${escapeHtml(item.title)}</h4>`;
       item.sections.forEach(sec => {
-        html += `<div class="preview-sec"><div class="lbl">${escapeHtml(sec.label)}</div><div class="txt">${escapeHtml(flattenLines(sec.lines))}</div></div>`;
+        html += `<div class="preview-sec"><div class="lbl">${escapeHtml(sec.label)}</div><div class="txt">${linesToHtml(sec.lines)}</div></div>`;
       });
       html += `</div>`;
     });
@@ -719,12 +730,13 @@ document.getElementById('exportBtn').addEventListener('click', () => {
 
   let col = 0;
   let y = margin;
+  let contentTop = margin; // y tempat kolom mulai di halaman saat ini (beda di hal.1 karena ada header)
 
   function colX(){ return margin + col * (colWidth + gutter); }
   function ensureSpace(needed){
     if(y + needed > pageHeight - margin){
-      if(col === 0){ col = 1; y = margin; }
-      else { doc.addPage(); col = 0; y = margin; }
+      if(col === 0){ col = 1; y = contentTop; }
+      else { doc.addPage(); col = 0; y = margin; contentTop = margin; }
     }
   }
   function printWrapped(text, size, font='times', style='normal', extraGapAfter=4){
@@ -753,6 +765,7 @@ document.getElementById('exportBtn').addEventListener('click', () => {
     y += 18;
   }
   y += 10;
+  contentTop = y; // kolom kedua di halaman 1 harus mulai setinggi ini, bukan dari margin atas
 
   let songNum = 0;
   state.cart.forEach(item => {
@@ -762,7 +775,7 @@ document.getElementById('exportBtn').addEventListener('click', () => {
       doc.setLineWidth(0.5);
       doc.line(colX(), y, colX() + colWidth, y);
       y += 12;
-      printWrapped((item.label || 'Break').toUpperCase(), 10.5, 'times', 'italic', 4);
+      printWrapped((item.label || 'Sesi Baru').toUpperCase(), 10.5, 'times', 'italic', 4);
       doc.line(colX(), y, colX() + colWidth, y);
       y += 14;
       return;
@@ -774,7 +787,10 @@ document.getElementById('exportBtn').addEventListener('click', () => {
     item.sections.forEach(sec => {
       ensureSpace(bodySize + 4);
       printWrapped(sec.label, 10, 'times', 'bolditalic', 2);
-      printWrapped(flattenLines(sec.lines), bodySize, 'times', 'normal', 6);
+      const secLines = sec.lines.filter(l => l.trim() !== '');
+      secLines.forEach((l, i) => {
+        printWrapped(l, bodySize, 'times', 'normal', i === secLines.length - 1 ? 6 : 0);
+      });
     });
     y += 8;
   });

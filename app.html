@@ -637,16 +637,19 @@ function renderCart(){
         </div>`;
     }
     songNum++;
-    return `
+return `
       <div class="cart-item" draggable="true" data-idx="${idx}">
         <div class="ci-top">
-          <h4><span class="num">${songNum}.</span>${escapeHtml(item.title)}</h4>
+          <div style="display:flex; align-items:flex-start; gap:8px;">
+            <span class="icon-btn" style="cursor:grab; margin-top:-1px;">⠿⠿</span>
+            <h4><span class="num">${songNum}.</span>${escapeHtml(item.title)}</h4>
+          </div>
           <div class="ci-actions">
             <button class="icon-btn" data-action="edit" data-idx="${idx}" title="Atur ulang bagian">✎</button>
             <button class="icon-btn danger" data-action="remove" data-idx="${idx}" title="Hapus">✕</button>
           </div>
         </div>
-        <div class="chips">${item.sections.map(s => `<span class="chip">${s.label}</span>`).join('')}</div>
+        <div class="chips" style="margin-left:26px;">${item.sections.map(s => `<span class="chip">${s.label}</span>`).join('')}</div>
       </div>`;
   }).join('');
 
@@ -700,7 +703,7 @@ function renderPreview(){
   const eventName = document.getElementById('eventName').value.trim() || 'Ibadah';
   const eventDate = formatDateID(document.getElementById('eventDate').value);
 
-  let html = `<div class="ph-title">Daftar Pujian "${escapeHtml(eventName)}"</div>`;
+  let html = `<div class="ph-title">Daftar Pujian ${escapeHtml(eventName)}</div>`;
   html += `<div class="ph-date">${escapeHtml(eventDate)}</div>`;
 
   if(state.cart.length === 0){

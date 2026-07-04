@@ -105,6 +105,12 @@
   .song-row .song-title{
     font-family:'Fraunces', serif; font-weight:600; font-size:15px; color: var(--indigo-deep);
   }
+  .group-tag{
+    font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.04em; text-transform:uppercase;
+    padding:1px 6px; border-radius:3px; margin-left:7px; vertical-align:1px;
+  }
+  .group-tag.lagu{ background: var(--paper-alt); color: var(--ink-soft); }
+  .group-tag.animasi{ background: var(--sage); color: var(--white); }
   .song-row .song-meta{
     font-family:'IBM Plex Mono', monospace; font-size:10px; color: var(--ink-soft); white-space:nowrap;
   }
@@ -231,7 +237,7 @@
       <span>🔎</span>
       <input type="text" id="searchInput" placeholder="Cari judul atau lirik lagu…">
     </div>
-    <div class="hint-small">pencarian juga menelusuri isi lirik</div>
+    <!--div class="hint-small">pencarian juga menelusuri isi lirik</div-->
 
     <div class="tabs" id="tabs">
       <div class="tab active" data-tab="lagu">Lagu <span class="count" id="countLagu">0</span></div>
@@ -456,8 +462,9 @@ function renderTabCounts(){
 function renderSongList(){
   const wrap = document.getElementById('songList');
   const q = state.search.trim().toLowerCase();
+  const searching = !!q;
   const list = state.songs
-    .filter(s => s.group === state.activeTab)
+    .filter(s => searching || s.group === state.activeTab)
     .filter(s => !q || s.title.toLowerCase().includes(q) || s.searchText.includes(q));
 
   if(list.length === 0){
@@ -470,7 +477,7 @@ function renderSongList(){
 
   wrap.innerHTML = list.map(s => `
     <div class="song-row" data-song-id="${s.id}">
-      <span class="song-title">${escapeHtml(s.title)}</span>
+      <span class="song-title">${escapeHtml(s.title)}<span class="group-tag ${s.group}">${s.group === 'animasi' ? 'Animasi' : 'Lagu'}</span></span>
       <span class="song-meta">${s.sections.length} bagian</span>
     </div>
   `).join('');

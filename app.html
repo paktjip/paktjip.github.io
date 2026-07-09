@@ -779,15 +779,16 @@ document.getElementById('exportBtn').addEventListener('click', () => {
 
   let songNum = 0;
   state.cart.forEach(item => {
-    if(item.type === 'break'){
-      ensureSpace(bodySize + 14);
-      doc.setDrawColor(180, 137, 63);
-      doc.setLineWidth(0.5);
-      doc.line(colX(), y, colX() + colWidth, y);
-      y += 12;
-      printWrapped((item.label || 'Sesi Baru').toUpperCase(), 10.5, 'times', 'italic', 4);
-      doc.line(colX(), y, colX() + colWidth, y);
-      y += 14;
+if(item.type === 'break'){
+      ensureSpace(30); 
+	  doc.setFillColor(220, 220, 220);
+      doc.rect(colX(), y, colWidth, 22, 'F');
+      doc.setFont('times', 'bolditalic');
+      doc.setFontSize(11);
+      const breakText = (item.label || 'Sesi Baru').toUpperCase();
+      doc.text(breakText, colX() + (colWidth / 2), y + 15, { align: 'center' });
+      doc.setTextColor(36, 31, 24); 
+      y += 34; 
       return;
     }
     songNum++;

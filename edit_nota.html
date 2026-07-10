@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Editor Nota Excel - PAKTJIP Digital Printing</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Libre+Barcode+39&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
   <style>
@@ -262,7 +262,7 @@
     }
 
     #previewLabel {
-      width: 396pt;
+      width: 700px;
       max-width: 100%;
       text-align: left;
       font-size: 12px;
@@ -274,12 +274,12 @@
     }
 
     #nota {
-      width: 396pt;
+      width: 700px;
       background: #fff;
-      padding: 14pt 16pt 10pt;
+      padding: 12pt 14pt 10pt;
       box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
       font-family: 'Montserrat', sans-serif;
-      color: #1a1a1a;
+      color: #4F6228;
       font-size: 7.5pt;
       line-height: 1.35;
     }
@@ -287,153 +287,213 @@
     #nota .topline {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      border-bottom: 1.2pt solid #1a1a1a;
-      padding-bottom: 5pt;
+      align-items: center;
+      border-bottom: 1.2pt solid #4F6228;
+      padding-bottom: 4pt;
       margin-bottom: 6pt;
     }
 
-    #nota .kop {
-      font-size: 6pt;
-      max-width: 190pt;
-      line-height: 1.4;
+    #nota .kop-container {
+      display: flex;
+      align-items: center;
+      gap: 8pt;
     }
 
-    #nota .kop b {
-      font-size: 8pt;
+    #nota .logo-img {
+      height: 28pt;
       display: block;
-      margin-bottom: 1pt;
+    }
+
+    #nota .kop-details {
+      font-size: 6.5pt;
+      color: #4F6228;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    #nota .barcode {
+      font-family: 'Libre Barcode 39', cursive;
+      font-size: 32pt;
+      line-height: 1;
+      color: #4F6228;
+      text-align: center;
+      margin: 0 auto;
     }
 
     #nota .head-right {
       text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
     }
 
     #nota .head-right .inv-title {
-      font-size: 15pt;
+      font-size: 14pt;
       font-weight: 700;
       letter-spacing: 0.5pt;
+      color: #4F6228;
+      margin-bottom: 2pt;
+      line-height: 1;
     }
 
-    #nota .head-right .reprint {
-      font-size: 8pt;
+    #nota .head-right .ts-line {
+      width: 70pt;
+      border-top: 0.8pt solid #4F6228;
       margin-top: 1pt;
-    }
-
-    #nota .head-right .ts {
+      padding-top: 2pt;
       font-size: 6.5pt;
-      color: #555;
-      margin-top: 1pt;
+      color: #4F6228;
     }
 
     #nota .info {
       display: grid;
-      grid-template-columns: 60pt 1fr 46pt 1fr;
-      gap: 2pt 4pt;
-      margin-bottom: 6pt;
+      grid-template-columns: 55pt 130pt 45pt 1fr;
+      row-gap: 3pt;
+      column-gap: 8pt;
+      margin-bottom: 8pt;
     }
 
     #nota .info .lbl {
-      font-weight: 700;
+      font-weight: bold;
+      color: #4F6228;
+      font-size: 7.5pt;
+    }
+
+    #nota .info .val {
+      font-size: 7.5pt;
+      color: #4F6228;
+    }
+
+    #nota .info .val.note-num {
+      color: #b3261e;
+      font-weight: bold;
     }
 
     #nota table.items {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 6pt;
-      table-layout: fixed;
     }
 
     #nota table.items th {
       background-color: #D7E4BD;
       color: #4F6228;
-      border-top: 1px solid #4F6228;
-      border-bottom: 1px solid #4F6228;
-      border-left: 1px solid #4F6228;
-      text-align: center;
       font-weight: bold;
-      font-size: 8pt;
-      padding: 4pt 3pt;
+      font-size: 7.5pt;
+      padding: 4pt 6pt;
+      border: 0.8pt solid #4F6228;
+      text-align: center;
     }
 
-    #nota table.items th:last-child {
-      border-right: 1px solid #4F6228;
+    #nota table.items td {
+      font-size: 7.5pt;
+      padding: 3pt 6pt;
+      border: 0.5pt solid #4F6228;
+      color: #4F6228;
     }
 
-    #nota table.items th.num,
+    #nota table.items td.center-align {
+      text-align: center;
+    }
+
     #nota table.items td.num {
       text-align: right;
     }
 
-    #nota table.items td {
-      padding: 4.5pt 3pt;
-      vertical-align: middle;
-      word-break: break-word;
-      font-size: 8pt;
-    }
-
     #nota table.items tbody tr.empty td {
-      height: 10pt;
+      height: 12pt;
     }
 
     #nota .totals-container {
-      border-top: 1.5pt solid #1a1a1a;
-      margin-top: 6pt;
-      padding-top: 8pt;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 8pt;
+      border-top: 1.5pt solid #4F6228;
+      padding-top: 6pt;
+      margin-top: 6pt;
     }
 
-    #nota .totals-grid {
-      display: grid;
-      grid-template-columns: 55pt 65pt;
-      gap: 2pt 4pt;
+    #nota .left-totals {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      gap: 3pt;
+      color: #4F6228;
+    }
+
+    #nota .points-line {
       font-size: 7.5pt;
-    }
-
-    #nota .totals-grid .lbl {
-      font-weight: 700;
-      text-align: right;
-    }
-
-    #nota .totals-grid .val {
-      text-align: right;
-    }
-
-    #nota .kasir-box {
-      text-align: center;
-      font-size: 8pt;
-    }
-
-    #nota .kasir-box .signame {
-      margin-top: 24pt;
-      border-bottom: 0.6pt solid #999;
-      display: inline-block;
-      padding-bottom: 1pt;
-      min-width: 90pt;
+      color: #4F6228;
       font-weight: bold;
     }
 
-    #nota .footer {
-      border-top: 1.2pt solid #1a1a1a;
-      margin-top: 8pt;
-      padding-top: 6pt;
+    #nota .promo-line {
+      font-size: 7pt;
+      color: #4F6228;
+    }
+
+    #nota .bank-details {
+      margin-top: 6pt;
       font-size: 6.5pt;
-      color: #333;
-      line-height: 1.4;
+      color: #4F6228;
+      line-height: 1.35;
+      white-space: pre-line;
     }
 
-    #nota .footer .promo {
-      font-weight: 500;
-      margin-bottom: 4pt;
+    #nota .middle-totals {
+      width: 18%;
+      text-align: center;
+      font-size: 7.5pt;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      height: 48pt;
+      color: #4F6228;
     }
 
-    #nota .footer .bank {
-      color: #555;
-      white-space: pre-wrap;
+    #nota .middle-totals .kasir-title {
+      color: #4F6228;
     }
+
+    #nota .middle-totals .kasir-underline {
+      margin-top: 24pt;
+      border-bottom: 0.8pt solid #4F6228;
+      padding-bottom: 1pt;
+      width: 70pt;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #nota .middle-totals .kasir-name {
+      font-weight: bold;
+      color: #4F6228;
+    }
+
+    #nota .right-totals {
+      width: 32%;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      row-gap: 3pt;
+      column-gap: 8pt;
+      font-size: 7.5pt;
+      color: #4F6228;
+    }
+
+    #nota .right-totals .lbl-total {
+      font-weight: bold;
+      color: #4F6228;
+      text-align: left;
+    }
+
+    #nota .right-totals .val-total {
+      text-align: right;
+      color: #4F6228;
+      font-weight: bold;
+    }
+
+
   </style>
 </head>
 
@@ -512,27 +572,29 @@
       <div id="previewLabel">Preview Nota</div>
       <div id="nota">
         <div class="topline">
-          <div class="kop">
-            <b>PAKTJIP Digital Printing</b>
-            Jampiroso Utara 196B Temanggung 56216<br>
-            <span><i class="fab fa-whatsapp"></i> 0821 3721 5808</span> &nbsp;|&nbsp; <span><i
-                class="fas fa-envelope"></i> stempelpaktjip@gmail.com</span>
+          <div class="kop-container">
+            <img class="logo-img" src="data:image/png;base64,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" alt="PAKTJIP Logo">
+            <div class="kop-details">
+              Jampiroso Utara 196B Temanggung 56216<br>
+              <i class="fab fa-whatsapp"></i> 0821 3721 5808 &nbsp;<i class="far fa-envelope"></i> stempelpaktjip@gmail.com
+            </div>
           </div>
+          <div id="outBarcode" class="barcode">*00035*</div>
           <div class="head-right">
             <div class="inv-title">INVOICE</div>
-            <div class="ts" id="outTs"></div>
+            <div class="ts-line" id="outTs">10 Jul 2026 09:54</div>
           </div>
         </div>
 
         <div class="info">
           <div class="lbl">Nota</div>
-          <div id="outNota">INV-2607-00035</div>
+          <div class="val note-num" id="outNota">: INV-2607-00035</div>
           <div class="lbl">Nama</div>
-          <div id="outPelanggan">Bapak Retail</div>
+          <div class="val" id="outPelanggan">: Bapak Retail</div>
           <div class="lbl">Tgl order</div>
-          <div id="outTanggal">01 Jul 2026 11:15</div>
+          <div class="val" id="outTanggal">: 01 Jul 2026 11:15</div>
           <div class="lbl">Alamat</div>
-          <div id="outAlamat">Temanggung tlp -</div>
+          <div class="val" id="outAlamat">: Temanggung tlp -</div>
         </div>
 
         <table class="items">
@@ -540,43 +602,42 @@
             <tr>
               <th style="width:40%;">Pesanan</th>
               <th style="width:12%;">Ukuran</th>
-              <th class="num" style="width:8%;">Jml</th>
-              <th class="num" style="width:14%;">Harga @</th>
-              <th class="num" style="width:10%;">Diskon</th>
-              <th class="num" style="width:16%;">Subtotal</th>
+              <th style="width:8%;">Jml</th>
+              <th style="width:14%;">Harga @</th>
+              <th style="width:10%;">Diskon</th>
+              <th style="width:16%;">Subtotal</th>
             </tr>
           </thead>
           <tbody id="itemsBody"></tbody>
         </table>
 
         <div class="totals-container">
-          <div class="kasir-box">
-            Kasir
-            <br>
-            <div class="signame" id="outKasir">Ica</div>
+          <div class="left-totals">
+            <div id="outPoints" class="points-line">Total point Anda: 16</div>
+            <div class="promo-line">Pesan tanpa antri bisa lewat WhatsApp 0821 3721 5808</div>
+            <div class="bank-details">PEMB. TRANSFER: BRI 3668-01-030209-53-0 a.n. Edi Kurniawan
+              B. Jateng 2-014-15588-3 a.n. Edi Kurniawan
+              BCA 1220094193 a.n. Kristalina Kurnia</div>
           </div>
-          <div class="totals-grid">
-            <div class="lbl">GrandTotal</div>
-            <div class="val" id="outGrand">Rp 0</div>
-            <div class="lbl">Bayar</div>
-            <div class="val" id="outBayar">Rp 0</div>
-            <div class="lbl">Kekurangan</div>
-            <div class="val" id="outKekurangan">Rp 0</div>
-            <div class="lbl">Tempo</div>
-            <div class="val" id="outTempo">Lunas</div>
-            <div class="val" style="grid-column: 1 / span 2; text-align: right; margin-top: 2pt; font-size: 8pt;"
-              id="outCara">Cara bayar Cash</div>
+          <div class="middle-totals">
+            <div class="kasir-title">Kasir</div>
+            <div class="kasir-underline">
+              <span class="kasir-name" id="outKasir">Ica</span>
+            </div>
+          </div>
+          <div class="right-totals">
+            <div class="lbl-total">GrandTotal</div>
+            <div class="val-total" id="outGrand">Rp 0</div>
+            <div class="lbl-total">Bayar</div>
+            <div class="val-total" id="outBayar">Rp 0</div>
+            <div class="lbl-total">Kekurangan</div>
+            <div class="val-total" id="outKekurangan">Rp 0</div>
+            <div class="lbl-total">Tempo</div>
+            <div class="val-total" id="outTempo">Lunas</div>
+            <div class="lbl-total">Cara bayar</div>
+            <div class="val-total" id="outCara">Cash</div>
           </div>
         </div>
-
-        <div class="footer">
-          <div class="promo">Pesan tanpa antri bisa lewat WhatsApp 0821 3721 5808</div>
-          <div class="bank">PEMB. TRANSFER:
-            BRI 3668-01-030209-53-0 a.n. Edi Kurniawan
-            B. Jateng 2-014-15588-3 a.n. Edi Kurniawan
-            BCA 1220094193 a.n. Kristalina Kurnia</div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -905,13 +966,23 @@
       updateNotaPrefix();
       const d = getFormData();
 
-      document.getElementById('outNota').textContent = d.nota;
-      document.getElementById('outPelanggan').textContent = d.pelanggan;
-      document.getElementById('outAlamat').textContent = d.alamat;
-      document.getElementById('outTanggal').textContent = d.tanggalFormatted;
-      document.getElementById('outCara').textContent = 'Cara bayar ' + d.cara;
+      document.getElementById('outNota').textContent = ': ' + d.nota;
+      document.getElementById('outPelanggan').textContent = ': ' + d.pelanggan;
+      document.getElementById('outAlamat').textContent = ': ' + d.alamat;
+      document.getElementById('outTanggal').textContent = ': ' + d.tanggalFormatted;
+      document.getElementById('outCara').textContent = d.cara;
       document.getElementById('outKasir').textContent = d.kasir;
-      document.getElementById('outTs').textContent = 'Dicetak: ' + formatTanggalLengkap(new Date());
+      document.getElementById('outTs').textContent = formatTanggalLengkap(new Date());
+      document.getElementById('outBarcode').textContent = '*' + d.nota.slice(-5) + '*';
+
+      const points = Math.floor(d.grandTotal / 50000);
+      const outPoints = document.getElementById('outPoints');
+      if (points > 0) {
+        outPoints.textContent = 'Total point Anda: ' + points;
+        outPoints.style.display = 'block';
+      } else {
+        outPoints.style.display = 'none';
+      }
 
       const outTempo = document.getElementById('outTempo');
       if (d.tempoFormatted === '-' || d.kekurangan === 0) {
@@ -935,8 +1006,8 @@
         const tr = document.createElement('tr');
         tr.innerHTML = `
       <td>${pesananText}</td>
-      <td>${it.ukuran || '-'}</td>
-      <td class="num">${jml}</td>
+      <td class="center-align">${it.ukuran || '-'}</td>
+      <td class="center-align">${jml}</td>
       <td class="num">${rupiah(harga)}</td>
       <td class="num">${diskon ? rupiah(diskon) : '-'}</td>
       <td class="num">${rupiah(subtotal)}</td>
@@ -1097,6 +1168,17 @@
         ws.getCell('D6').value = `: ${d.alamat}`;
 
         const totalsStart = Math.max(14, itemCount + 12);
+
+        // Update promo & points text in Excel
+        let promoText = '';
+        const pointsVal = Math.floor(d.grandTotal / 50000);
+        if (pointsVal > 0) {
+          promoText = `Total point Anda: ${pointsVal}\n`;
+        }
+        promoText += `Pesan tanpa antri bisa lewat WhatsApp 0821 3721 5808`;
+        const promoCell = ws.getCell(`A${totalsStart}`);
+        promoCell.value = promoText;
+        promoCell.alignment = promoCell.alignment ? { ...promoCell.alignment, wrapText: true } : { wrapText: true };
 
         // Add thick top border line on row totalsStart (columns A to H)
         // Set top borders on totalsStart row to medium, breaking style sharing

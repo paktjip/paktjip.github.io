@@ -1093,6 +1093,21 @@
         await wb.xlsx.load(buf);
         const ws = wb.worksheets[0];
 
+        // Konfigurasi Halaman: F4 / Folio, Portrait, Header Off (Row/Col & Page Headers)
+        ws.pageSetup = ws.pageSetup || {};
+        ws.pageSetup.paperSize = 14;
+        ws.pageSetup.orientation = 'portrait';
+        ws.pageSetup.showRowColHeaders = false;
+
+        ws.headerFooter = {
+          oddHeader: '',
+          oddFooter: '',
+          evenHeader: '',
+          evenFooter: '',
+          firstHeader: '',
+          firstFooter: ''
+        };
+
         const cols = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
         const styleTemplate = {};
         cols.forEach(c => {

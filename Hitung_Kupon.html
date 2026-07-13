@@ -118,7 +118,7 @@
 
         .a4-paper {
             width: 200px;
-            height: 283px;
+            height: 290px;
             border: 2px solid #4a6f4a;
             background-color: white;
             position: relative;
@@ -373,6 +373,51 @@
             cursor: not-allowed;
             border-color: #ddd;
         }
+        
+        /* Segmented paper toggle button */
+        .paper-toggle-btn {
+            flex: 1;
+            border: none;
+            background-color: #fff;
+            color: #333;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .paper-toggle-btn:hover {
+            background-color: #f4f9f4;
+        }
+        .paper-toggle-btn.active {
+            background-color: #4a6f4a;
+            color: #fff;
+        }
+        .paper-toggle-btn.active:hover {
+            background-color: #4a6f4a;
+        }
+
+        /* A3+ Paper Preview */
+        .a3plus-paper {
+            width: 200px;
+            height: 302px;
+            border: 2px solid #4a6f4a;
+            background-color: white;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        /* F4 Paper Preview */
+        .f4-paper {
+            width: 200px;
+            height: 312px;
+            border: 2px solid #4a6f4a;
+            background-color: white;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -403,6 +448,14 @@
             <div class="section-title">Spesifikasi Kupon</div>
             <div class="form-grid">
                 <div class="form-group">
+                    <label>Ukuran Kertas</label>
+                    <div style="display:flex; border:2px solid #ddd; border-radius:8px; overflow:hidden; background-color:#fff; height:46px;">
+                        <button type="button" id="btnPaperA4" class="paper-toggle-btn active">A4</button>
+                        <button type="button" id="btnPaperF4" class="paper-toggle-btn">F4</button>
+                        <button type="button" id="btnPaperA3" class="paper-toggle-btn">A3+</button>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="ukuranKupon">Ukuran Kupon</label>
                     <select id="ukuranKupon" required>
                         <option value="">-- Pilih Ukuran --</option>
@@ -422,7 +475,7 @@
             <!-- Visualisasi Kupon -->
             <div id="visualisasiSection" style="display: none;">
                 <div class="visualisasi-container">
-                    <h3>Visualisasi Ukuran Kupon pada A4</h3>
+                    <h3 id="visualisasiTitle">Visualisasi Ukuran Kupon pada A4</h3>
                     <div class="kupon-preview">
                         <div class="a4-paper" id="a4Paper"></div>
                     </div>
@@ -521,7 +574,7 @@
 
         <footer>
             <strong>Copyright © 2026 PAKTJIP Digital Printing</strong><br>
-           Vibe Coded by Lukas Ardianto &nbsp;·&nbsp; v2.0
+           Vibe Coded by Lukas Ardianto &nbsp;·&nbsp; v3.0
         </footer>
     </div>
 
@@ -540,40 +593,127 @@
         const a4Paper = document.getElementById('a4Paper');
         const kuponInfo = document.getElementById('kuponInfo');
         
+        // Active paper size state
+        let activePaper = 'A4';
+        const btnPaperA4 = document.getElementById('btnPaperA4');
+        const btnPaperF4 = document.getElementById('btnPaperF4');
+        const btnPaperA3 = document.getElementById('btnPaperA3');
+        const visualisasiTitle = document.getElementById('visualisasiTitle');
+        
         // Data visualisasi untuk setiap ukuran
         const visualisasiData = {
-            '1/6': { title: '1/6 (3 Kolom × 2 Baris)', layout: 'layout-1-6', kupon: 6, layoutDesc: '3 kolom × 2 baris', dimensi: '~70 × 141 mm' },
-            '1/8': { title: '1/8 (4 Kolom × 2 Baris)', layout: 'layout-1-8', kupon: 8, layoutDesc: '4 kolom × 2 baris', dimensi: '~52.5 × 141 mm' },
-            '1/10': { title: '1/10 (5 Kolom × 2 Baris)', layout: 'layout-1-10', kupon: 10, layoutDesc: '5 kolom × 2 baris', dimensi: '~42 × 141 mm' },
-            '1/5H': { title: '1/5 Horizontal (5 Baris)', layout: 'layout-1-5h', kupon: 5, layoutDesc: '1 kolom × 5 baris', dimensi: '~210 × 59 mm' },
-            '1/6H': { title: '1/6 Horizontal (6 Baris)', layout: 'layout-1-6h', kupon: 6, layoutDesc: '1 kolom × 6 baris', dimensi: '~210 × 49 mm' }
+            '1/6': { title: '1/6 (3 Kolom × 2 Baris)', layout: 'layout-1-6', kupon: 6, layoutDesc: '3 kolom × 2 baris', dimensi: '~66.6 × 145 mm' },
+            '1/8': { title: '1/8 (4 Kolom × 2 Baris)', layout: 'layout-1-8', kupon: 8, layoutDesc: '4 kolom × 2 baris', dimensi: '~50 × 145 mm' },
+            '1/10': { title: '1/10 (5 Kolom × 2 Baris)', layout: 'layout-1-10', kupon: 10, layoutDesc: '5 kolom × 2 baris', dimensi: '~40 × 145 mm' },
+            '1/5H': { title: '1/5 Horizontal (5 Baris)', layout: 'layout-1-5h', kupon: 5, layoutDesc: '1 kolom × 5 baris', dimensi: '~200 × 58 mm' },
+            '1/6H': { title: '1/6 Horizontal (6 Baris)', layout: 'layout-1-6h', kupon: 6, layoutDesc: '1 kolom × 6 baris', dimensi: '~200 × 48.3 mm' }
+        };
+
+        const visualisasiDataF4 = {
+            '1/6': { title: '1/6 (3 Kolom × 2 Baris)', cols: 3, rows: 2, kupon: 6, dimensi: '~68.3 × 160 mm' },
+            '1/8': { title: '1/8 (4 Kolom × 2 Baris)', cols: 4, rows: 2, kupon: 8, dimensi: '~51.2 × 160 mm' },
+            '1/10': { title: '1/10 (5 Kolom × 2 Baris)', cols: 5, rows: 2, kupon: 10, dimensi: '~41 × 160 mm' },
+            '1/5H': { title: '1/5 Horizontal (5 Baris)', cols: 1, rows: 5, kupon: 5, dimensi: '~205 × 64 mm' },
+            '1/6H': { title: '1/6 Horizontal (6 Baris)', cols: 1, rows: 6, kupon: 6, dimensi: '~205 × 53.3 mm' }
+        };
+
+        const visualisasiDataA3Plus = {
+            '1/6': { title: '1/6 (2 Kolom × 7 Baris)', cols: 2, rows: 7, kupon: 14, dimensi: '~157.5 × 67.8 mm' },
+            '1/8': { title: '1/8 (2 Kolom × 9 Baris)', cols: 2, rows: 9, kupon: 18, dimensi: '~157.5 × 52.7 mm' },
+            '1/10': { title: '1/10 (2 Kolom × 11 Baris)', cols: 2, rows: 11, kupon: 22, dimensi: '~157.5 × 43.1 mm' },
+            '1/5H': { title: '1/5 Horizontal (5 Kolom × 2 Baris)', cols: 5, rows: 2, kupon: 10, dimensi: '~237.5 × 63 mm' },
+            '1/6H': { title: '1/6 Horizontal (6 Kolom × 2 Baris)', cols: 6, rows: 2, kupon: 12, dimensi: '~237.5 × 52.5 mm' }
         };
         
         function showVisualisasi(ukuran) {
-            if (!ukuran || !visualisasiData[ukuran]) {
+            if (!ukuran) {
                 visualisasiSection.style.display = 'none';
                 return;
             }
             
-            const data = visualisasiData[ukuran];
-            a4Paper.innerHTML = '';
-            a4Paper.className = `a4-paper ${data.layout}`;
+            let data;
+            if (activePaper === 'A3+') {
+                data = visualisasiDataA3Plus[ukuran];
+            } else if (activePaper === 'F4') {
+                data = visualisasiDataF4[ukuran];
+            } else {
+                data = visualisasiData[ukuran];
+            }
             
-            for (let i = 1; i <= data.kupon; i++) {
-                const item = document.createElement('div');
-                item.className = 'kupon-item';
-                item.textContent = i;
-                a4Paper.appendChild(item);
+            if (!data) {
+                visualisasiSection.style.display = 'none';
+                return;
+            }
+            
+            a4Paper.innerHTML = '';
+            
+            if (activePaper === 'A3+') {
+                a4Paper.className = 'a3plus-paper';
+                const cols = data.cols;
+                const rows = data.rows;
+                const totalKupon = data.kupon;
+                
+                for (let i = 0; i < totalKupon; i++) {
+                    const colIdx = i % cols;
+                    const rowIdx = Math.floor(i / cols);
+                    const item = document.createElement('div');
+                    item.className = 'kupon-item';
+                    item.style.width = `${100 / cols}%`;
+                    item.style.height = `${100 / rows}%`;
+                    item.style.left = `${colIdx * (100 / cols)}%`;
+                    item.style.top = `${rowIdx * (100 / rows)}%`;
+                    item.textContent = i + 1;
+                    a4Paper.appendChild(item);
+                }
+                
+                if (visualisasiTitle) {
+                    visualisasiTitle.textContent = 'Visualisasi Ukuran Kupon pada A3+';
+                }
+            } else if (activePaper === 'F4') {
+                a4Paper.className = 'f4-paper';
+                const cols = data.cols;
+                const rows = data.rows;
+                const totalKupon = data.kupon;
+                
+                for (let i = 0; i < totalKupon; i++) {
+                    const colIdx = i % cols;
+                    const rowIdx = Math.floor(i / cols);
+                    const item = document.createElement('div');
+                    item.className = 'kupon-item';
+                    item.style.width = `${100 / cols}%`;
+                    item.style.height = `${100 / rows}%`;
+                    item.style.left = `${colIdx * (100 / cols)}%`;
+                    item.style.top = `${rowIdx * (100 / rows)}%`;
+                    item.textContent = i + 1;
+                    a4Paper.appendChild(item);
+                }
+                
+                if (visualisasiTitle) {
+                    visualisasiTitle.textContent = 'Visualisasi Ukuran Kupon pada F4';
+                }
+            } else {
+                a4Paper.className = `a4-paper ${data.layout}`;
+                for (let i = 1; i <= data.kupon; i++) {
+                    const item = document.createElement('div');
+                    item.className = 'kupon-item';
+                    item.textContent = i;
+                    a4Paper.appendChild(item);
+                }
+                
+                if (visualisasiTitle) {
+                    visualisasiTitle.textContent = 'Visualisasi Ukuran Kupon pada A4';
+                }
             }
             
             kuponInfo.innerHTML = `
-                <div class="info-row"><span class="info-label">Dimensi kupon:</span><span class="info-value">${data.dimensi}</span></div>
+                <div class="info-row"><span class="info-label">Dimensi kupon maksimal:</span><span class="info-value">${data.dimensi}</span></div>
             `;
             
             visualisasiSection.style.display = 'block';
         }
         
         const kuponPerLembar = { '1/6': 6, '1/8': 8, '1/10': 10, '1/5H': 5, '1/6H': 6 };
+        const kuponPerLembarA3Plus = { '1/6': 14, '1/8': 18, '1/10': 22, '1/5H': 10, '1/6H': 12 };
         
         function hitungKuponJadi(jumlahKupon, kuponPerLembarValue) {
             const lembarDibutuhkan = Math.ceil(jumlahKupon / kuponPerLembarValue);
@@ -581,7 +721,7 @@
             return { lembarDibutuhkan, kuponJadi };
         }
         
- function hitungPembagianBuku(lembar, ukuran, threshold) {
+        function hitungPembagianBuku(lembar, ukuran, threshold) {
             let hasilBuku = [];
             
             if (lembar > 100) {
@@ -622,6 +762,54 @@
             } else {
                 let bukuCount = ukuran;
                 if (ukuran === 6 || ukuran === 8 || ukuran === 10) {
+                    bukuCount = ukuran / 2;
+                }
+                const kuponPerBuku = (lembar * ukuran) / bukuCount;
+                hasilBuku.push({ jumlah: bukuCount, kuponPerBuku: Math.round(kuponPerBuku) });
+            }
+            
+            return hasilBuku;
+        }
+
+        function hitungPembagianBukuA3(lembar, ukuran, threshold) {
+            let hasilBuku = [];
+            
+            if (lembar > 100) {
+                const kelompokPenuh = Math.floor(lembar / 100);
+                const sisaLembar = lembar % 100;
+                
+                if (sisaLembar === 0) {
+                    hasilBuku.push({ jumlah: kelompokPenuh * ukuran, kuponPerBuku: 100 });
+                } else {
+                    const kelompokPenuhMinusSatu = kelompokPenuh - 1;
+                    
+                    if (kelompokPenuhMinusSatu > 0) {
+                        hasilBuku.push({ jumlah: kelompokPenuhMinusSatu * ukuran, kuponPerBuku: 100 });
+                    }
+                    
+                    const gabungan = 100 + sisaLembar;
+                    
+                    if (gabungan <= threshold) {
+                        hasilBuku.push({ jumlah: ukuran, kuponPerBuku: gabungan });
+                    } else {
+                        const kupon2 = Math.floor(gabungan / 2);
+                        const kupon3 = Math.ceil(gabungan / 2);
+                        
+                        if (gabungan % 2 === 0) {
+                            hasilBuku.push({ jumlah: ukuran * 2, kuponPerBuku: kupon2 });
+                        } else {
+                            hasilBuku.push({ jumlah: ukuran, kuponPerBuku: kupon2 });
+                            hasilBuku.push({ jumlah: ukuran, kuponPerBuku: kupon3 });
+                        }
+                    }
+                }
+            } else if (lembar > 50) {
+                const bukuCount = ukuran;
+                const kuponPerBuku = (lembar * ukuran) / bukuCount;
+                hasilBuku.push({ jumlah: bukuCount, kuponPerBuku: Math.round(kuponPerBuku) });
+            } else {
+                let bukuCount = ukuran;
+                if (ukuran === 14 || ukuran === 18 || ukuran === 22 || ukuran === 10 || ukuran === 12) {
                     bukuCount = ukuran / 2;
                 }
                 const kuponPerBuku = (lembar * ukuran) / bukuCount;
@@ -673,12 +861,18 @@
                 return;
             }
             
-            const kuponPerLembarValue = kuponPerLembar[ukuran];
+            const isA3 = (activePaper === 'A3+');
+            const kuponPerLembarValue = isA3 ? kuponPerLembarA3Plus[ukuran] : kuponPerLembar[ukuran];
             const { lembarDibutuhkan, kuponJadi } = hitungKuponJadi(jumlahKupon, kuponPerLembarValue);
-            const bukuData = hitungPembagianBuku(lembarDibutuhkan, kuponPerLembarValue, threshold);
+            
+            const bukuData = isA3 
+                ? hitungPembagianBukuA3(lembarDibutuhkan, kuponPerLembarValue, threshold)
+                : hitungPembagianBuku(lembarDibutuhkan, kuponPerLembarValue, threshold);
+                
             const totalBiaya = (lembarDibutuhkan * hargaPerLembar) + biayaFinishing;
             
-            document.getElementById('outputUkuran').textContent = ukuran;
+            const displayUkuran = isA3 ? `${ukuran} (A3+)` : (activePaper === 'F4' ? `${ukuran} (F4)` : ukuran);
+            document.getElementById('outputUkuran').textContent = displayUkuran;
             document.getElementById('outputKebutuhan').textContent = jumlahKupon.toLocaleString('id-ID');
             document.getElementById('outputKuponJadi').textContent = kuponJadi.toLocaleString('id-ID');
             document.getElementById('outputLembar').textContent = lembarDibutuhkan.toLocaleString('id-ID') + ' lembar';
@@ -695,7 +889,7 @@
             document.getElementById('outputBuku').innerHTML = 'Jumlah buku: ' + bukuHtml;
             document.getElementById('outputBiaya').textContent = formatRupiah(totalBiaya);
             
-            const teksaSalin = generateTeksaSalin(ukuran, jumlahKupon, kuponJadi, bukuData, formatRupiah(totalBiaya));
+            const teksaSalin = generateTeksaSalin(displayUkuran, jumlahKupon, kuponJadi, bukuData, formatRupiah(totalBiaya));
             copyBtn.setAttribute('data-copy-text', teksaSalin);
             
             outputSection.classList.add('show');
@@ -768,7 +962,8 @@
                 return;
             }
 
-            const kolom = kuponPerLembarCSV[ukuran];
+            const isA3 = (activePaper === 'A3+');
+            const kolom = isA3 ? kuponPerLembarA3Plus[ukuran] : kuponPerLembarCSV[ukuran];
             const baris = Math.ceil(kuponJadi / kolom);
 
             // Baris ringkasan
@@ -804,7 +999,8 @@
             if (!kuponJadi || kuponJadi < 1) { alert('Isi jumlah kupon di form atas terlebih dahulu.'); return; }
             if (!random && (isNaN(startNomor) || startNomor < 0)) { alert('Masukkan nomor awal yang valid.'); return; }
 
-            const kolom = kuponPerLembarCSV[ukuran];
+            const isA3 = (activePaper === 'A3+');
+            const kolom = isA3 ? kuponPerLembarA3Plus[ukuran] : kuponPerLembarCSV[ukuran];
             const baris = Math.ceil(kuponJadi / kolom);
             const total = kolom * baris;
 
@@ -867,7 +1063,8 @@
             const ws = XLSX.utils.aoa_to_sheet(wsData);
             XLSX.utils.book_append_sheet(wb, ws, 'Nomor Kupon');
             const suffix = random ? 'acak' : formatNomor(startNomor, digit);
-            const filename = `nomor_kupon_${ukuran.replace('/', '')}_${suffix}.xlsx`;
+            const cleanUkuran = ukuran.replace('/', '-');
+            const filename = `Kupon_${kuponJadi}pcs_Ukuran ${cleanUkuran}_${activePaper}_${suffix}.xlsx`;
             XLSX.writeFile(wb, filename);
 
             csvFeedback.classList.add('show');
@@ -894,6 +1091,31 @@
             showVisualisasi(this.value);
         });
         jumlahKuponInput.addEventListener('input', updateOutput);
+        
+        function setPaper(paper) {
+            if (activePaper === paper) return;
+            activePaper = paper;
+            btnPaperA4.classList.remove('active');
+            btnPaperF4.classList.remove('active');
+            btnPaperA3.classList.remove('active');
+            
+            if (paper === 'A4') {
+                btnPaperA4.classList.add('active');
+                hargaPerLembarInput.value = 1250;
+            } else if (paper === 'F4') {
+                btnPaperF4.classList.add('active');
+                hargaPerLembarInput.value = 1250;
+            } else {
+                btnPaperA3.classList.add('active');
+                hargaPerLembarInput.value = 3500;
+            }
+            updateOutput();
+            showVisualisasi(ukuranKuponSelect.value);
+        }
+        
+        btnPaperA4.addEventListener('click', () => setPaper('A4'));
+        btnPaperF4.addEventListener('click', () => setPaper('F4'));
+        btnPaperA3.addEventListener('click', () => setPaper('A3+'));
 
         // === ROLE-BASED VISIBILITY (baca dari localStorage index.html) ===
         (function applyRole() {

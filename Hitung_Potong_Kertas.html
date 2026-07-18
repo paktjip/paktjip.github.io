@@ -4,425 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Penghitung Potongan Kertas - PAKTJIP DIGIPRINT</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #a8c5a5 0%, #7fa87c 100%);
-            min-height: 100vh;
-            padding: 20px;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        body.dark-mode {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #e0e0e0;
-        }
-
-        .dark-mode-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: white;
-            border-radius: 30px;
-            padding: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        body.dark-mode .dark-mode-toggle {
-            background: #2a2a3e;
-        }
-
-        .toggle-switch {
-            width: 50px;
-            height: 26px;
-            background: #ccc;
-            border-radius: 13px;
-            position: relative;
-            transition: background 0.3s;
-        }
-
-        .toggle-switch.active {
-            background: #4a6f4a;
-        }
-
-        .toggle-slider {
-            width: 22px;
-            height: 22px;
-            background: white;
-            border-radius: 50%;
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s;
-        }
-
-        .toggle-switch.active .toggle-slider {
-            transform: translateX(24px);
-        }
-
-        .toggle-icon {
-            font-size: 1.2em;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            overflow: hidden;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        body.dark-mode .container {
-            background: #2a2a3e;
-            color: #e0e0e0;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #6b8e6b 0%, #4a6f4a 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        body.dark-mode .header {
-            background: linear-gradient(135deg, #3a4a5a 0%, #2a3a4a 100%);
-        }
-
-        .header h1 {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            color: #d4e8d4;
-            font-size: 1.1em;
-        }
-
-        .content {
-            padding: 30px;
-        }
-
-        .shape-selector {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            justify-content: center;
-        }
-
-        .shape-option {
-            flex: 1;
-            max-width: 200px;
-            padding: 20px;
-            border: 3px solid #ddd;
-            border-radius: 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: white;
-        }
-
-        body.dark-mode .shape-option {
-            background: #1a1a2e;
-            border-color: #444;
-            color: #e0e0e0;
-        }
-
-        .shape-option:hover {
-            border-color: #7fa87c;
-            transform: translateY(-2px);
-        }
-
-        .shape-option.active {
-            border-color: #4a6f4a;
-            background: linear-gradient(135deg, #e8f4e8 0%, #d4e8d4 100%);
-        }
-
-        body.dark-mode .shape-option.active {
-            background: linear-gradient(135deg, #3a4a5a 0%, #2a3a4a 100%);
-            border-color: #6a8a6a;
-        }
-
-        .shape-icon {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .shape-name {
-            font-weight: 600;
-            color: #4a6f4a;
-        }
-
-        .section-title {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #4a6f4a;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e8f4e8;
-        }
-
-        body.dark-mode .section-title {
-            color: #8fc98f;
-            border-bottom-color: #444;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
-            font-size: 0.95em;
-        }
-
-        body.dark-mode label {
-            color: #e0e0e0;
-        }
-
-        input {
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: border-color 0.3s;
-        }
-
-        body.dark-mode input {
-            background: #1a1a2e;
-            border-color: #444;
-            color: #e0e0e0;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #7fa87c;
-        }
-
-        body.dark-mode input:focus {
-            border-color: #6a8a6a;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        button {
-            flex: 1;
-            padding: 15px 30px;
-            font-size: 1.1em;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-        }
-
-        .calculate-button {
-            background: linear-gradient(135deg, #4a6f4a 0%, #6b8e6b 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(74, 111, 74, 0.3);
-        }
-
-        .calculate-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(74, 111, 74, 0.4);
-        }
-
-        .reset-button {
-            background: linear-gradient(135deg, #e8f4e8 0%, #d4e8d4 100%);
-            color: #4a6f4a;
-            border: 2px solid #4a6f4a;
-        }
-
-        .reset-button:hover {
-            background: linear-gradient(135deg, #d4e8d4 0%, #c0dcc0 100%);
-            transform: translateY(-2px);
-        }
-
-        #hasil {
-            margin-top: 30px;
-            padding: 25px;
-            background: linear-gradient(135deg, #e8f4e8 0%, #d4e8d4 100%);
-            border-radius: 12px;
-            display: none;
-        }
-
-        body.dark-mode #hasil {
-            background: linear-gradient(135deg, #2a3a4a 0%, #3a4a5a 100%);
-        }
-
-        #hasil.show {
-            display: block;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .result-main {
-            text-align: center;
-            font-size: 1.5em;
-            font-weight: 600;
-            color: #4a6f4a;
-            margin-bottom: 15px;
-        }
-
-        body.dark-mode .result-main {
-            color: #8fc98f;
-        }
-
-        .result-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        body.dark-mode .result-details {
-            color: #b0b0b0;
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px;
-            background: white;
-            border-radius: 6px;
-        }
-
-        body.dark-mode .result-item {
-            background: #1a1a2e;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .visualization-container {
-            margin-top: 30px;
-            padding: 25px;
-            background: #f8f9f8;
-            border-radius: 12px;
-            display: none;
-        }
-
-        body.dark-mode .visualization-container {
-            background: #1a1a2e;
-        }
-
-        .visualization-container.show {
-            display: block;
-        }
-
-        .visualization-title {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #4a6f4a;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        body.dark-mode .visualization-title {
-            color: #8fc98f;
-        }
-
-        #canvas-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 400px;
-        }
-
-        #layoutCanvas {
-            border: 2px solid #7fa87c;
-            border-radius: 8px;
-            background: white;
-            max-width: 100%;
-            height: auto;
-        }
-
-        body.dark-mode #layoutCanvas {
-            border-color: #6a8a6a;
-        }
-
-        footer {
-            text-align: center;
-            padding: 25px;
-            background: #f8f9f8;
-            color: #666;
-            font-size: 0.9em;
-            line-height: 1.6;
-            border-top: 1px solid #e8f4e8;
-        }
-
-        body.dark-mode footer {
-            background: #1a1a2e;
-            color: #b0b0b0;
-            border-top-color: #444;
-        }
-
-        footer strong {
-            color: #4a6f4a;
-        }
-
-        body.dark-mode footer strong {
-            color: #8fc98f;
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.5em;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .shape-selector {
-                flex-direction: column;
-            }
-
-            .shape-option {
-                max-width: 100%;
-            }
-        }
-    </style>
+        <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="page-potong-kertas">
     <div class="dark-mode-toggle" onclick="toggleDarkMode()">
         <span class="toggle-icon">☀️</span>
         <div class="toggle-switch" id="darkModeSwitch">
@@ -431,7 +15,7 @@
         <span class="toggle-icon">🌙</span>
     </div>
 
-    <div class="container">
+    <div class="container container-xl">
         <div class="header">
             <h1>📐 Penghitung Potongan Kertas</h1>
             <p>Optimasi Pemotongan Kertas & Lingkaran/Oval</p>
@@ -473,6 +57,19 @@
                         <input type="number" id="lebarPotongan" placeholder="Contoh: 14.8" step="0.1" required>
                     </div>
                 </div>
+                <div class="dutch-cut-control">
+                    <span class="control-label">Aktifkan Dutch Cut</span>
+                    <div class="toggle-switch" id="dutchCutSwitch" onclick="toggleDutchCut()">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <div class="tooltip-container">
+                        <span class="help-icon">?</span>
+                        <span class="tooltip-text">
+                            <strong>Dutch Cut</strong> adalah teknik pemotongan campuran (tegak & rebah sekaligus) untuk memaksimalkan jumlah potongan dengan memanfaatkan sisa ruang kertas secara optimal.
+                        </span>
+                    </div>
+                </div>
+				<div class="section-break"></div>
             </div>
 
             <div id="circleInputs" style="display: none;">
@@ -523,6 +120,12 @@
 
     <script>
         let currentShape = 'rectangle';
+        let useDutchCut = false;
+
+        function toggleDutchCut() {
+            useDutchCut = !useDutchCut;
+            document.getElementById('dutchCutSwitch').classList.toggle('active', useDutchCut);
+        }
 
         // Dark mode functionality
         function toggleDarkMode() {
@@ -602,29 +205,45 @@
                     return;
                 }
 
-                // Try paper orientation 1: use as-is (width=inputPanjang, height=inputLebar)
-                const result1 = hitungRectangle(inputPanjang, inputLebar, inputCutPanjang, inputCutLebar, spacing);
-                result1.paperRotated = false;
-                
-                // Try paper orientation 2: rotate paper (width=inputLebar, height=inputPanjang)
-                const result2 = hitungRectangle(inputLebar, inputPanjang, inputCutPanjang, inputCutLebar, spacing);
-                result2.paperRotated = true;
-                
-                console.log('Result1 (no rotation):', result1);
-                console.log('Result2 (rotated):', result2);
-                
-                if (result2.total > result1.total) {
-                    result = result2;
-                } else if (result1.total > result2.total) {
-                    result = result1;
+                if (useDutchCut) {
+                    // Try paper orientation 1: use as-is
+                    const result1 = hitungDutchCut(inputPanjang, inputLebar, inputCutPanjang, inputCutLebar, spacing);
+                    result1.paperRotated = false;
+                    
+                    // Try paper orientation 2: rotate paper
+                    const result2 = hitungDutchCut(inputLebar, inputPanjang, inputCutPanjang, inputCutLebar, spacing);
+                    result2.paperRotated = true;
+                    
+                    if (result2.total > result1.total) {
+                        result = result2;
+                    } else {
+                        result = result1;
+                    }
+                    
+                    result.usedPaperWidth = result.paperWidth;
+                    result.usedPaperHeight = result.paperHeight;
                 } else {
-                    // If equal, prefer non-rotated
-                    result = result1;
+                    // Try paper orientation 1: use as-is (width=inputPanjang, height=inputLebar)
+                    const result1 = hitungRectangle(inputPanjang, inputLebar, inputCutPanjang, inputCutLebar, spacing);
+                    result1.paperRotated = false;
+                    
+                    // Try paper orientation 2: rotate paper (width=inputLebar, height=inputPanjang)
+                    const result2 = hitungRectangle(inputLebar, inputPanjang, inputCutPanjang, inputCutLebar, spacing);
+                    result2.paperRotated = true;
+                    
+                    if (result2.total > result1.total) {
+                        result = result2;
+                    } else if (result1.total > result2.total) {
+                        result = result1;
+                    } else {
+                        // If equal, prefer non-rotated
+                        result = result1;
+                    }
+                    
+                    // Set the actual paper dimensions used
+                    result.usedPaperWidth = result.paperWidth;
+                    result.usedPaperHeight = result.paperHeight;
                 }
-                
-                // Set the actual paper dimensions used
-                result.usedPaperWidth = result.paperWidth;
-                result.usedPaperHeight = result.paperHeight;
                 
                 console.log('Selected result:', result);
                 
@@ -661,6 +280,21 @@
             }
         }
 
+        function generateGridCuts(cols, rows, cutWidth, cutHeight, spacing, offsetX, offsetY) {
+            const cuts = [];
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    cuts.push({
+                        x: offsetX + c * (cutWidth + spacing),
+                        y: offsetY + r * (cutHeight + spacing),
+                        w: cutWidth,
+                        h: cutHeight
+                    });
+                }
+            }
+            return cuts;
+        }
+
         function hitungRectangle(paperWidth, paperHeight, cutWidth, cutHeight, spacing) {
             // paperWidth = horizontal dimension (for columns)
             // paperHeight = vertical dimension (for rows)
@@ -672,8 +306,8 @@
             
             // Mode 1: Use cuts in original orientation
             const mode1 = {
-                columns: Math.floor(paperWidth / cutWithSpacingW),
-                rows: Math.floor(paperHeight / cutWithSpacingH),
+                columns: Math.floor((paperWidth + spacing) / cutWithSpacingW),
+                rows: Math.floor((paperHeight + spacing) / cutWithSpacingH),
                 orientation: 'normal',
                 usedCutWidth: cutWidth,
                 usedCutHeight: cutHeight
@@ -682,8 +316,8 @@
 
             // Mode 2: Rotate cuts 90 degrees
             const mode2 = {
-                columns: Math.floor(paperWidth / cutWithSpacingH),
-                rows: Math.floor(paperHeight / cutWithSpacingW),
+                columns: Math.floor((paperWidth + spacing) / cutWithSpacingH),
+                rows: Math.floor((paperHeight + spacing) / cutWithSpacingW),
                 orientation: 'rotasi 90°',
                 usedCutWidth: cutHeight,
                 usedCutHeight: cutWidth
@@ -692,15 +326,110 @@
 
             const best = mode1.total >= mode2.total ? mode1 : mode2;
             
+            const usedW = best.columns > 0 ? (best.columns * (best.usedCutWidth + spacing) - spacing) : 0;
+            const usedH = best.rows > 0 ? (best.rows * (best.usedCutHeight + spacing) - spacing) : 0;
+            const cuts = generateGridCuts(best.columns, best.rows, best.usedCutWidth, best.usedCutHeight, spacing, 0, 0);
+            
             return {
                 total: best.total,
                 rows: best.rows,
                 columns: best.columns,
                 orientation: best.orientation,
-                sisaPanjang: paperHeight - (best.rows * (best.usedCutHeight + spacing)),
-                sisaLebar: paperWidth - (best.columns * (best.usedCutWidth + spacing)),
+                sisaPanjang: Math.max(0, paperHeight - usedH),
+                sisaLebar: Math.max(0, paperWidth - usedW),
                 cutWidth: best.usedCutWidth,
                 cutHeight: best.usedCutHeight,
+                spacing: spacing,
+                paperWidth: paperWidth,
+                paperHeight: paperHeight,
+                cuts: cuts
+            };
+        }
+
+        function hitungDutchCut(paperWidth, paperHeight, cutWidth, cutHeight, spacing) {
+            // Recursive helper with memoization or limited depth (maxDepth = 2)
+            function solve(W, H, offsetX, offsetY, depth) {
+                if (W < cutWidth && W < cutHeight) return { total: 0, cuts: [] };
+                if (H < cutWidth && H < cutHeight) return { total: 0, cuts: [] };
+
+                // Base case 1: normal grid layout
+                const colsN = Math.floor((W + spacing) / (cutWidth + spacing));
+                const rowsN = Math.floor((H + spacing) / (cutHeight + spacing));
+                const totalN = colsN > 0 && rowsN > 0 ? colsN * rowsN : 0;
+                const cutsN = totalN > 0 ? generateGridCuts(colsN, rowsN, cutWidth, cutHeight, spacing, offsetX, offsetY) : [];
+
+                // Base case 2: rotated grid layout
+                const colsR = Math.floor((W + spacing) / (cutHeight + spacing));
+                const rowsR = Math.floor((H + spacing) / (cutWidth + spacing));
+                const totalR = colsR > 0 && rowsR > 0 ? colsR * rowsR : 0;
+                const cutsR = totalR > 0 ? generateGridCuts(colsR, rowsR, cutHeight, cutWidth, spacing, offsetX, offsetY) : [];
+
+                let best = totalN >= totalR ? { total: totalN, cuts: cutsN } : { total: totalR, cuts: cutsR };
+
+                // Recursive search for guillotine splits
+                if (depth < 2) {
+                    // Try vertical splits along grid column boundaries of Normal orientation
+                    for (let c = 1; c < colsN; c++) {
+                        const splitX = c * (cutWidth + spacing) - spacing;
+                        const left = solve(splitX, H, offsetX, offsetY, depth + 1);
+                        const right = solve(W - splitX - spacing, H, offsetX + splitX + spacing, offsetY, depth + 1);
+                        const combined = left.total + right.total;
+                        if (combined > best.total) {
+                            best = { total: combined, cuts: left.cuts.concat(right.cuts) };
+                        }
+                    }
+                    
+                    // Try vertical splits along grid column boundaries of Rotated orientation
+                    for (let c = 1; c < colsR; c++) {
+                        const splitX = c * (cutHeight + spacing) - spacing;
+                        const left = solve(splitX, H, offsetX, offsetY, depth + 1);
+                        const right = solve(W - splitX - spacing, H, offsetX + splitX + spacing, offsetY, depth + 1);
+                        const combined = left.total + right.total;
+                        if (combined > best.total) {
+                            best = { total: combined, cuts: left.cuts.concat(right.cuts) };
+                        }
+                    }
+
+                    // Try horizontal splits along grid row boundaries of Normal orientation
+                    for (let r = 1; r < rowsN; r++) {
+                        const splitY = r * (cutHeight + spacing) - spacing;
+                        const top = solve(W, splitY, offsetX, offsetY, depth + 1);
+                        const bottom = solve(W, H - splitY - spacing, offsetX, offsetY + splitY + spacing, depth + 1);
+                        const combined = top.total + bottom.total;
+                        if (combined > best.total) {
+                            best = { total: combined, cuts: top.cuts.concat(bottom.cuts) };
+                        }
+                    }
+
+                    // Try horizontal splits along grid row boundaries of Rotated orientation
+                    for (let r = 1; r < rowsR; r++) {
+                        const splitY = r * (cutWidth + spacing) - spacing;
+                        const top = solve(W, splitY, offsetX, offsetY, depth + 1);
+                        const bottom = solve(W, H - splitY - spacing, offsetX, offsetY + splitY + spacing, depth + 1);
+                        const combined = top.total + bottom.total;
+                        if (combined > best.total) {
+                            best = { total: combined, cuts: top.cuts.concat(bottom.cuts) };
+                        }
+                    }
+                }
+
+                return best;
+            }
+
+            const result = solve(paperWidth, paperHeight, 0, 0, 0);
+            
+            // Calculate sisa
+            const maxX = result.cuts.reduce((max, cut) => Math.max(max, cut.x + cut.w), 0);
+            const maxY = result.cuts.reduce((max, cut) => Math.max(max, cut.y + cut.h), 0);
+            const usedW = result.cuts.length > 0 ? maxX : 0;
+            const usedH = result.cuts.length > 0 ? maxY : 0;
+
+            return {
+                total: result.total,
+                cuts: result.cuts,
+                orientation: 'Dutch Cut',
+                sisaPanjang: Math.max(0, paperHeight - usedH),
+                sisaLebar: Math.max(0, paperWidth - usedW),
                 spacing: spacing,
                 paperWidth: paperWidth,
                 paperHeight: paperHeight
@@ -815,7 +544,7 @@
         }
 
         function calculateHexPackingV2(paperWidth, paperHeight, ellipseWidth, ellipseHeight, spacing) {
-            // Alternative hexagonal with different starting position
+            // Alternative hexagonal starting with offset on the first row (rowIndex = 0)
             const circles = [];
             const widthWithSpacing = ellipseWidth + spacing;
             const heightWithSpacing = ellipseHeight + spacing;
@@ -828,10 +557,10 @@
             let y = radius_y;
 
             while (y + radius_y <= paperHeight) {
-                const isOddRow = rowIndex % 2 === 1;
+                const isEvenRow = rowIndex % 2 === 0;
                 
-                // Odd rows get offset
-                const xStart = isOddRow ? radius_x + widthWithSpacing / 2 : radius_x;
+                // Even rows (starting with row 0) get offset, odd rows don't
+                const xStart = isEvenRow ? radius_x + widthWithSpacing / 2 : radius_x;
                 let x = xStart;
 
                 while (x + radius_x <= paperWidth) {
@@ -858,15 +587,15 @@
         }
 
         function calculateOptimalPacking(paperWidth, paperHeight, ellipseWidth, ellipseHeight, spacing) {
-            // Try to maximize by testing different vertical spacings
+            // Try to maximize by testing different vertical spacings (minimum 0.866 to avoid overlap)
             let bestCircles = [];
             let maxCount = 0;
             
             const widthWithSpacing = ellipseWidth + spacing;
             const heightWithSpacing = ellipseHeight + spacing;
             
-            // Try different vertical spacing ratios
-            const spacingRatios = [1.0, 0.95, 0.9, 0.866, 0.85, 0.8];
+            // Try different vertical spacing ratios (minimum 0.866 to prevent physical overlap)
+            const spacingRatios = [1.0, 0.95, 0.9, 0.866];
             
             for (let ratio of spacingRatios) {
                 const circles = [];
@@ -917,11 +646,12 @@
             let detailsHTML = '';
             
             if (shapeType === 'rectangle') {
+                const layoutText = result.orientation === 'Dutch Cut' ? 'Campuran (Dutch Cut)' : `${result.rows} baris × ${result.columns} kolom`;
                 detailsHTML = `
                     <div class="result-details">
                         <div class="result-item">
                             <span><strong>Layout:</strong></span>
-                            <span>${result.rows} baris × ${result.columns} kolom</span>
+                            <span>${layoutText}</span>
                         </div>
                         <div class="result-item">
                             <span><strong>Sisa Panjang:</strong></span>
@@ -980,10 +710,7 @@
             console.log('Drawing canvas:', {
                 paperWidth,
                 paperHeight,
-                rows: result.rows,
-                columns: result.columns,
-                cutWidth: result.cutWidth,
-                cutHeight: result.cutHeight
+                cuts: result.cuts
             });
             
             // Calculate scale to fit canvas nicely (maintain aspect ratio)
@@ -1004,34 +731,29 @@
             ctx.lineWidth = 3;
             ctx.strokeRect(0, 0, canvas.width, canvas.height);
             
-            // Get cut dimensions from result
-            const actualCutWidth = result.cutWidth;
-            const actualCutHeight = result.cutHeight;
-            
             ctx.fillStyle = isDark ? 'rgba(106, 138, 106, 0.3)' : 'rgba(74, 111, 74, 0.3)';
             ctx.strokeStyle = isDark ? '#6a8a6a' : '#4a6f4a';
             ctx.lineWidth = 2;
             
-            // Draw cuts: columns go horizontal, rows go vertical
-            for (let row = 0; row < result.rows; row++) {
-                for (let col = 0; col < result.columns; col++) {
-                    const x = col * (actualCutWidth + spacing) * scale;
-                    const y = row * (actualCutHeight + spacing) * scale;
-                    const w = actualCutWidth * scale;
-                    const h = actualCutHeight * scale;
-                    
-                    ctx.fillRect(x, y, w, h);
-                    ctx.strokeRect(x, y, w, h);
-                }
-            }
-            
-            // Draw waste area
-            if (result.sisaPanjang > 0 || result.sisaLebar > 0) {
-                ctx.fillStyle = isDark ? 'rgba(200, 100, 100, 0.15)' : 'rgba(200, 100, 100, 0.2)';
+            // Draw cuts
+            result.cuts.forEach(cut => {
+                const x = cut.x * scale;
+                const y = cut.y * scale;
+                const w = cut.w * scale;
+                const h = cut.h * scale;
                 
-                // Calculate used dimensions
-                const usedWidth = result.columns * (actualCutWidth + spacing);
-                const usedHeight = result.rows * (actualCutHeight + spacing);
+                ctx.fillRect(x, y, w, h);
+                ctx.strokeRect(x, y, w, h);
+            });
+            
+            // Draw waste area (calculated from bounding box of all cuts)
+            const maxX = result.cuts.reduce((max, cut) => Math.max(max, cut.x + cut.w), 0);
+            const maxY = result.cuts.reduce((max, cut) => Math.max(max, cut.y + cut.h), 0);
+            const usedWidth = result.cuts.length > 0 ? maxX : 0;
+            const usedHeight = result.cuts.length > 0 ? maxY : 0;
+            
+            if (paperWidth - usedWidth > 0 || paperHeight - usedHeight > 0) {
+                ctx.fillStyle = isDark ? 'rgba(200, 100, 100, 0.15)' : 'rgba(200, 100, 100, 0.2)';
                 
                 if (paperWidth - usedWidth > 0) {
                     ctx.fillRect(
@@ -1112,6 +834,8 @@
             document.getElementById('hasil').innerHTML = '';
             document.getElementById('hasil').classList.remove('show');
             document.getElementById('visualizationSection').classList.remove('show');
+            useDutchCut = false;
+            document.getElementById('dutchCutSwitch').classList.remove('active');
         }
     </script>
 </body>

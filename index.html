@@ -4,302 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PAKTJIP Digital Printing</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
- 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #a8c5a5 0%, #7fa87c 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
- 
-        /* Saat konten terbuka: kunci scroll di body, biarkan iframe yang scroll */
-        body.page-open {
-            overflow: hidden;
-            height: 100vh;
-            padding: 0;
-        }
-        body.page-open #app {
-            height: 100vh;
-            max-width: 100%;
-            margin: 0;
-        }
-        body.page-open #content-view {
-            height: 100vh;
-            border-radius: 0;
-            box-shadow: none;
-        }
- 
-        /* ── PASSWORD ── */
-        .password-container {
-            max-width: 400px;
-            margin: 100px auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            overflow: hidden;
-        }
-        .password-header {
-            background: linear-gradient(135deg, #6b8e6b 0%, #4a6f4a 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        .password-header h2 { font-size: 1.8em; }
-        .password-content { padding: 30px; }
-        input[type="password"] {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1em;
-            margin-bottom: 20px;
-            transition: border-color 0.3s;
-        }
-        input[type="password"]:focus { outline: none; border-color: #7fa87c; }
-        .password-button {
-            background: linear-gradient(135deg, #4a6f4a 0%, #6b8e6b 100%);
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 1.1em;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(74,111,74,0.3);
-        }
-        .password-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(74,111,74,0.4); }
-        .password-button:active { transform: translateY(0); }
-        .error-message {
-            color: #d32f2f;
-            font-size: 0.9em;
-            margin-top: -10px;
-            margin-bottom: 15px;
-            display: none;
-            text-align: center;
-            font-weight: 500;
-        }
-        .error-message.show { display: block; animation: shake 0.5s; }
- 
-        /* ── MAIN APP ── */
-        #app { max-width: 900px; margin: 0 auto; display: none; }
-        #app.show { display: block; animation: fadeIn 0.5s ease-out; }
- 
-        /* ── MENU VIEW ── */
-        #menu-view {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            overflow: hidden;
-        }
-        .header {
-            background: linear-gradient(135deg, #6b8e6b 0%, #4a6f4a 100%);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-            position: relative;
-        }
-        .logout-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: rgba(255, 0, 0, 0.15); /* merah transparan */
-    color: #fff;
-    border: 1.5px solid rgba(255, 0, 0, 0.5); /* merah agak terang */
-    border-radius: 8px;
-    padding: 7px 14px;
-    font-size: 0.85em;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: all 0.2s;
-}
-
-.logout-btn:hover {
-    background: rgba(255, 0, 0, 0.3); /* lebih pekat saat hover */
-    border-color: rgba(255, 0, 0, 0.7);
-}
-
-        .header h1 { font-size: 2.2em; margin-bottom: 10px; }
-        .content { padding: 40px 30px; }
-        #links-grid {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 30px;
-        }
-        .category-section { margin-bottom: 20px; }
-        .links-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .menu-btn {
-            background: linear-gradient(135deg, #4a6f4a 0%, #6b8e6b 100%);
-            color: white;
-            padding: 25px;
-            border: none;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(74,111,74,0.3);
-            width: 100%;
-            text-align: left;
-        }
-        .menu-btn:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(74,111,74,0.4); }
-        .menu-btn:active { transform: translateY(-2px); }
-        .menu-btn .emoji { font-size: 2.5em; flex-shrink: 0; }
-        .menu-btn .text  { font-size: 1.1em; font-weight: 600; line-height: 1.4; }
-        .coming-soon {
-            text-align: center;
-            padding: 30px;
-            background: linear-gradient(135deg, #f4f9f4 0%, #e8f4e8 100%);
-            border-radius: 12px;
-            margin-bottom: 30px;
-        }
-        .coming-soon p { color: #4a6f4a; font-size: 1.2em; font-weight: 600; font-style: italic; }
-        footer {
-            text-align: center;
-            padding: 25px;
-            background: #f8f9f8;
-            color: #666;
-            font-size: 0.9em;
-            line-height: 1.6;
-        }
-        footer strong { color: #4a6f4a; }
- 
-        /* ── CONTENT VIEW ── */
-        #content-view {
-            display: none;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            overflow: hidden;
-        }
-        #content-view.show { display: flex; flex-direction: column; animation: fadeIn 0.3s ease-out; }
-        .content-topbar {
-            background: linear-gradient(135deg, #6b8e6b 0%, #4a6f4a 100%);
-            padding: 14px 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-shrink: 0;
-        }
-        #back-btn {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: 2px solid rgba(255,255,255,0.5);
-            border-radius: 8px;
-            padding: 8px 18px;
-            font-size: 0.95em;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        #back-btn:hover { background: rgba(255,255,255,0.35); border-color: white; transform: translateX(-2px); }
-        #page-title {
-            color: white;
-            font-size: 1.1em;
-            font-weight: 600;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        /* Semua iframe tinggal di sini, show/hide via JS */
-        #iframe-container {
-            width: 100%;
-            flex: 1;          /* ambil sisa tinggi setelah topbar */
-            overflow-y: auto; /* scroll ada di sini, bukan di body */
-        }
-        #iframe-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
-        }
- 
-        .category-label {
-            text-align: center;
-            font-size: 0.75em;
-            font-weight: 700;
-            color: #7aaa7a;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin: 28px 0 10px;
-        }
-        .category-label:first-child { margin-top: 0; }
-
-        #logout-topbar-btn {
-background: rgba(255, 0, 0, 0.15); /* merah transparan */
-            color: white;
-    border: 1.5px solid rgba(255, 0, 0, 0.5); 
-            border-radius: 8px;
-            padding: 7px 14px;
-            font-size: 0.85em;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.2s;
-            margin-left: auto;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        #logout-topbar-btn:hover {     background: rgba(255, 0, 0, 0.3); /* lebih pekat saat hover */
-    border-color: rgba(255, 0, 0, 0.7); }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25%  { transform: translateX(-10px); }
-            75%  { transform: translateX(10px); }
-        }
- 
-        /* ── RESPONSIVE ── */
-        @media (max-width: 768px) {
-            .header h1 { font-size: 1.8em; }
-            .links-grid { grid-template-columns: 1fr; }
-            .menu-btn { padding: 20px; }
-            .menu-btn .emoji { font-size: 2em; }
-            .menu-btn .text  { font-size: 1em; }
-        }
-    </style>
+        <link rel="stylesheet" href="css/style.css">
+		        <link rel="icon" href="favicon.png">
 
 
     <script>
         /* ─── CONFIG: tambah fitur baru cukup di sini ─── */
         const MENU_ITEMS = [
             // ── Helpful Tools ──
-            { category: "🛠️ Helpful Tools", emoji: "🔄️", label: "Konversi PDF ke Gambar",               file: "PDF2IMG.html" },
-			{ category: "🛠️ Helpful Tools", emoji: "📄️", label: "Canva PDF Fixer",              		 file: "CanvaPDF.html" },
-            { category: "🛠️ Helpful Tools", emoji: "📐",  label: "Hitung Rasio Ukuran Cetak",            file: "Kalkulator_Ukuran_Cetak.html" },
-            { category: "🛠️ Helpful Tools", emoji: "✂️",  label: "Hitung Potongan Kertas",               file: "Hitung_Potong_Kertas.html" },
-            { category: "🛠️ Helpful Tools", emoji: "📕",  label: "Hitung Ketebalan Punggung Buku",       file: "Hitung_Punggung_Buku.html" },
-			{ category: "🛠️ Helpful Tools",  emoji: "🎫",  label: "Generator Nomor Urut Kupon",                    file: "Hitung_Kupon.html" },
+            { category: "🛠️ Helpful Tools", emoji: "🔄️", label: "Konversi PDF ke Gambar",               file: "pdf_to_img.html" },
+			{ category: "🛠️ Helpful Tools", emoji: "📄️", label: "Canva PDF Fixer",              		 file: "canva_pdf.html" },
+            { category: "🛠️ Helpful Tools", emoji: "📐",  label: "Hitung Rasio Ukuran Cetak",            file: "kalkulator_ukuran_cetak.html" },
+            { category: "🛠️ Helpful Tools", emoji: "✂️",  label: "Hitung Potongan Kertas",               file: "hitung_potong_kertas.html" },
+            { category: "🛠️ Helpful Tools", emoji: "📕",  label: "Hitung Ketebalan Punggung Buku",       file: "hitung_punggung_buku.html" },
+			{ category: "🛠️ Helpful Tools",  emoji: "🎫",  label: "Generator Nomor Urut Kupon",                    file: "hitung_kupon.html" },
 
             // ── Administrasi ──
-            { category: "📋 Administrasi",  emoji: "📖",  label: "Hitung Harga Buku",                    file: "Hitung_Harga_Buku_2026.html" },
-			{ category: "📋 Administrasi",  emoji: "🎫",  label: "Hitung Harga Kupon",                    file: "Hitung_Kupon.html" },
-            { category: "📋 Administrasi",  emoji: "🖼️",  label: "Hitung Harga Spanram",                 file: "HargaSpanram_v2.html" },
-            { category: "📋 Administrasi",  emoji: "⚡",  label: "Hitung Jasa Laser Cutting",            file: "Jasa_Laser_Cutting.html" },
-            { category: "📋 Administrasi",  emoji: "🔑",  label: "Hitung Harga Gantungan Kunci Akrilik", file: "Hitung_Ganci_Akrilik.html" },
-            { category: "📋 Administrasi",  emoji: "✅",  label: "Template Approval Pesanan",            file: "ApprovalPesanan.html" },
+            { category: "📋 Administrasi",  emoji: "📖",  label: "Hitung Harga Buku",                    file: "hitung_harga_buku.html" },
+			{ category: "📋 Administrasi",  emoji: "🎫",  label: "Hitung Harga Kupon",                    file: "hitung_kupon.html" },
+            { category: "📋 Administrasi",  emoji: "🖼️",  label: "Hitung Harga Spanram",                 file: "hitung_harga_spanram.html" },
+            { category: "📋 Administrasi",  emoji: "⚡",  label: "Hitung Jasa Laser Cutting",            file: "hitung_jasa_laser_cutting.html" },
+            { category: "📋 Administrasi",  emoji: "🔑",  label: "Hitung Harga Gantungan Kunci Akrilik", file: "hitung_ganci_akrilik.html" },
+            { category: "📋 Administrasi",  emoji: "✅",  label: "Template Approval Pesanan",            file: "template_approval_pesanan.html" },
 			{ category: "📋 Administrasi",  emoji: "🧾",  label: "Edit Nota",            				file: "edit_nota.html" },
         ];
 
@@ -480,7 +206,7 @@ background: rgba(255, 0, 0, 0.15); /* merah transparan */
         });
     </script>
 </head>
-<body>
+<body class="page-index">
 
     <!-- PASSWORD SCREEN -->
     <div class="password-container">
@@ -514,7 +240,7 @@ background: rgba(255, 0, 0, 0.15); /* merah transparan */
             </div>
             <footer>
                 <strong>Copyright © 2026 PAKTJIP Digital Printing</strong><br>
-                Vibe Coded by Lukas Ardianto using Claude AI
+                Vibe Coded by Lukas Ardianto using Claude AI & Gemini AI
             </footer>
         </div>
 

@@ -208,13 +208,15 @@
         background-image: none;
         /* Matikan gambar dekoratif desktop agar rendering lancar */
         height: 100% !important;
-        align-items: stretch; /* Regangkan ke seluruh layar, hilangkan centering vertikal body */
+        align-items: stretch;
+        /* Regangkan ke seluruh layar, hilangkan centering vertikal body */
       }
 
       .container,
       .invite-wrapper {
         max-height: none;
-        height: 100% !important; /* Paksa agar kartu memenuhi 100% tinggi body */
+        height: 100% !important;
+        /* Paksa agar kartu memenuhi 100% tinggi body */
       }
 
       .container {
@@ -1791,7 +1793,7 @@
         while (base64.length % 4) {
           base64 += '=';
         }
-        return decodeURIComponent(atob(base64).split('').map(function(c) {
+        return decodeURIComponent(atob(base64).split('').map(function (c) {
           return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
       } catch (e) {
@@ -2191,7 +2193,7 @@
       wishesList.addEventListener('touchmove', (e) => {
         const currentY = e.touches[0].clientY;
         const diffY = startY - currentY; // diffY > 0: scrolling down, diffY < 0: scrolling up
-        
+
         const scrollTop = wishesList.scrollTop;
         const scrollHeight = wishesList.scrollHeight;
         const clientHeight = wishesList.clientHeight;

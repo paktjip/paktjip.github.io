@@ -8,9 +8,17 @@
   <meta name="theme-color" content="#3b5d3b">
   <title>Undangan Pernikahan - Lukas & Kezia</title>
   <link
-    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Beth+Ellen&family=Playfair+Display:wght@400;700&family=Lato:wght@300;400&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Lato:wght@300;400&display=swap"
     rel="stylesheet">
   <style>
+    @font-face {
+      font-family: 'Beth Ellen';
+      src: url('BethEllen_Custom.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
     html {
       height: 100%;
     }
@@ -106,7 +114,6 @@
     }
 
     .popup::before {
-      content: '💐';
       font-size: 3em;
       display: block;
       margin-bottom: 20px;
@@ -1376,7 +1383,6 @@
       }
     }
 
-    /* ===== DUPLICATE LIGHTBOX CSS REMOVED ===== */
   </style>
 </head>
 
@@ -1391,6 +1397,7 @@
   <!-- Popup -->
   <div class="overlay" id="overlay">
     <div class="popup">
+	  <h1>💐</h1>
       <h2>Kepada Yth.<br><span id="popup-nama"></span></h2>
       <button onclick="bukaUndangan()">Buka Undangan 💌</button>
       <p style="font-size: 0.85em; color: #888; margin-top: 18px; font-style: italic; line-height: 1.4;">
@@ -1501,7 +1508,7 @@
           <h2>Pemberkatan Pernikahan</h2>
           <div class="couple-container">
             <div class="event-info" style="flex-direction: column; gap: 5px;">
-              <div>📅 Sabtu, 11 Maret 2028</div>
+              <div>📅 Sabtu, 20 November 2027</div>
               <div>📍 Gereja GPdI COTW Temanggung</div>
             </div>
           </div>

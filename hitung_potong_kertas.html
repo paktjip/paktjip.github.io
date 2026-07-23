@@ -138,13 +138,20 @@
         }
 
         // Load dark mode preference
-        window.addEventListener('DOMContentLoaded', () => {
+        function syncDarkModeState() {
             const isDark = localStorage.getItem('darkMode') === 'true';
-            if (isDark) {
-                document.body.classList.add('dark-mode');
-                document.getElementById('darkModeSwitch').classList.add('active');
-            }
+            document.body.classList.toggle('dark-mode', isDark);
+            const sw = document.getElementById('darkModeSwitch');
+            if (sw) sw.classList.toggle('active', isDark);
+        }
+        window.addEventListener('DOMContentLoaded', syncDarkModeState);
+        window.addEventListener('message', (e) => {
+            if (e.data && e.data.type === 'DARK_MODE') syncDarkModeState();
         });
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'darkMode') syncDarkModeState();
+        });
+        setInterval(syncDarkModeState, 300);
 
         // Auto-sync oval width with length for circles
         function syncOvalWidth() {

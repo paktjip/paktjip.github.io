@@ -1275,6 +1275,32 @@
       btn.textContent = 'Download Excel (.xlsx)';
       btn.disabled = false;
     });
+
+    // Dark Mode Auto-Sync
+    (function() {
+        function syncDarkMode() {
+            const isDark = localStorage.getItem('darkMode') === 'true';
+            document.body.classList.toggle('dark-mode', isDark);
+            const sw = document.getElementById('darkModeSwitch');
+            if (sw) sw.classList.toggle('active', isDark);
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', syncDarkMode);
+        } else {
+            syncDarkMode();
+        }
+        window.addEventListener('message', (e) => {
+            if (e.data && e.data.type === 'DARK_MODE') {
+                document.body.classList.toggle('dark-mode', e.data.isDark);
+                const sw = document.getElementById('darkModeSwitch');
+                if (sw) sw.classList.toggle('active', e.data.isDark);
+            }
+        });
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'darkMode') syncDarkMode();
+        });
+        setInterval(syncDarkMode, 300);
+    })();
   </script>
 
 </body>
